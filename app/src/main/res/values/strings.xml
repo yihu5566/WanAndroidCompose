@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">wan android compose</string>
+    <string name="a11y_bottom_navigation_bar">Bottom navigation bar with Having actions </string>
+
 </resources>

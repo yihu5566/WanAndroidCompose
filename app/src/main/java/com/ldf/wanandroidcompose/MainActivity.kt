@@ -1,102 +1,158 @@
 package com.ldf.wanandroidcompose
 
+import android.content.res.Configuration
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.ModalBottomSheetLayout
+import androidx.compose.material.ModalBottomSheetState
+import androidx.compose.material.ModalBottomSheetValue
+import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
+import com.ldf.wanandroidcompose.ui.home.PalletMenu
+import com.ldf.wanandroidcompose.ui.theme.AppThemeState
+import com.ldf.wanandroidcompose.ui.theme.ColorPallet
+import com.ldf.wanandroidcompose.ui.theme.SystemUiController
 import com.ldf.wanandroidcompose.ui.theme.WanAndroidComposeTheme
+import com.ldf.wanandroidcompose.ui.utils.TestTags
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            WanAndroidComposeTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    Greeting(listOf("index", "index"))
+            val systemUiController = remember { SystemUiController(window) }
+            val appTheme = remember { mutableStateOf(AppThemeState()) }
+            BaseView(appTheme.value, systemUiController) {
+                MainAppContent(appTheme)
+            }
+
+        }
+    }
+}
+
+@Composable
+fun BaseView(
+    appThemeState: AppThemeState,
+    systemUiController: SystemUiController?,
+    content: @Composable () -> Unit
+) {
+    WanAndroidComposeTheme(
+        darkTheme = appThemeState.darkTheme,
+        colorPallet = appThemeState.pallet
+    ) {
+        systemUiController?.setStatusBarColor(
+            color = MaterialTheme.colorScheme.onPrimaryContainer,
+            darkIcons = appThemeState.darkTheme
+        )
+        content()
+    }
+}
+
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+fun MainAppContent(appThemeState: MutableState<AppThemeState>) {
+    val homeScreenState = rememberSaveable { mutableStateOf(BottomNavType.HOME) }
+    val bottomNavBarContentDescription = stringResource(id = R.string.a11y_bottom_navigation_bar)
+    val chooseColorBottomModalState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
+    val coroutineScope = rememberCoroutineScope()
+    ModalBottomSheetLayout(
+        sheetState = chooseColorBottomModalState,
+        sheetContent = {
+            //Modal used only when user use talkback for the sake of accessibility
+            PalletMenu(
+                modifier = Modifier.align(Alignment.CenterHorizontally)
+            ) { newPalletSelected ->
+                appThemeState.value = appThemeState.value.copy(pallet = newPalletSelected)
+                coroutineScope.launch {
+                    chooseColorBottomModalState.hide()
                 }
             }
-
-        }
-    }
-}
-
-@Composable
-fun Greeting(listMsg: List<String>) {
-    LazyColumn {
-        items(listMsg.size) { index ->
-            buildItem(index)
-        }
-    }
-
-
-}
-
-@Composable
-fun buildItem(name: Int) {
-    Column {
-        Box(
-            Modifier
-                .height(20.dp)
-                .background(Color(R.color.purple_200))
-        )
-        Row(modifier = Modifier.padding(8.dp)) {
-            Image(
-                painter = painterResource(id = R.drawable.ic_launcher_foreground),
-                contentDescription = "con",
-                Modifier
-                    .size(Dp(17f), Dp(17f))
-                    .clip(CircleShape)
-                    .background(Color(R.color.teal_200), shape = CircleShape)
-                    .border(1.5.dp, MaterialTheme.colorScheme.secondary, CircleShape),
-            )
-            Spacer(modifier = Modifier.width(8.dp))
-
+        }) {
+        //设备配置
+        val config = LocalConfiguration.current
+        val orientation = config.orientation
+        if (orientation == Configuration.ORIENTATION_PORTRAIT) {
             Column {
-                Text(
-                    text = "Hello $name!",
+                HomeScreenContent(
+                    homeScreen = homeScreenState.value,
+                    appThemeState = appThemeState,
+                    chooseColorBottomModalState = chooseColorBottomModalState,
+                    modifier = Modifier.weight(1f)
                 )
-                Text(
-                    text = "Hello $name!",
-                    style = MaterialTheme.typography.bodySmall
+                BottomNavigationContent(
+                    modifier = Modifier
+                        .semantics { contentDescription = bottomNavBarContentDescription }
+                        .testTag(TestTags.BOTTOM_NAV_TEST_TAG),
+                    homeScreenState = homeScreenState
+                )
+            }
+        } else {
+            Row(modifier = Modifier.fillMaxSize()) {
+                NavigationRailContent(
+                    modifier = Modifier
+                        .semantics { contentDescription = bottomNavBarContentDescription }
+                        .testTag(TestTags.BOTTOM_NAV_TEST_TAG),
+                    homeScreenState = homeScreenState
+                )
+                HomeScreenContent(
+                    homeScreen = homeScreenState.value,
+                    appThemeState = appThemeState,
+                    chooseColorBottomModalState = chooseColorBottomModalState,
+                    modifier = Modifier.weight(1f)
                 )
             }
         }
     }
+
+
 }
+
+@Composable
+fun NavigationRailContent(modifier: Modifier, homeScreenState: MutableState<BottomNavType>) {
+
+}
+
+@Composable
+fun BottomNavigationContent(modifier: Modifier, homeScreenState: MutableState<BottomNavType>) {
+
+}
+
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+fun HomeScreenContent(
+    homeScreen: BottomNavType,
+    appThemeState: Any,
+    chooseColorBottomModalState: ModalBottomSheetState,
+    modifier: Modifier
+) {
+    TODO("Not yet implemented")
+}
+
 
 @Preview(showBackground = true)
 @Composable
-fun GreetingPreview() {
-    WanAndroidComposeTheme {
-        Greeting(listOf("index", "index"))
+fun DefaultPreview() {
+    val appThemeState = remember { mutableStateOf(AppThemeState(false, ColorPallet.GREEN)) }
+    BaseView(appThemeState.value, null) {
+        MainAppContent(appThemeState)
     }
 }
