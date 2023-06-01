@@ -1,5 +1,10 @@
 <resources>
     <string name="app_name">wan android compose</string>
     <string name="a11y_bottom_navigation_bar">Bottom navigation bar with Having actions </string>
+    <string name="navigation_item_home">Home </string>
+    <string name="navigation_item_widgets">widget </string>
+    <string name="navigation_item_animation">animate </string>
+    <string name="navigation_item_demoui">demo </string>
+    <string name="navigation_item_profile">profile </string>
 
 </resources>
