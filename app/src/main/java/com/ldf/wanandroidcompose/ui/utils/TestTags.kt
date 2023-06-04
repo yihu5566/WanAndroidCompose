@@ -14,4 +14,13 @@ object TestTags {
     const val BOTTOM_NAV_DEMO_UI_TEST_TAG = "bottom_navigation_demo_ui"
     const val BOTTOM_NAV_TEMPLATE_TEST_TAG = "bottom_navigation_template"
 
+    /*
+        * home screen
+        */
+    const val HOME_SCREEN_ROOT = "home_screen_root"
+    const val HOME_SCREEN_LIST = "home_screen_list"
+
+
+
+
 }

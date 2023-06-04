@@ -10,6 +10,8 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.Colors
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.LocalContentAlpha
 import androidx.compose.material.ModalBottomSheetLayout
@@ -37,13 +39,18 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.guru.fontawesomecomposelib.FaIcon
 import com.guru.fontawesomecomposelib.FaIcons
@@ -185,11 +192,8 @@ fun NavigationRailContent(modifier: Modifier, homeScreenState: MutableState<Bott
         NavigationRailItem(
             icon = {
                 FaIcon(
-                    faIcon = FaIcons.Tools, tint = LocalContentColor
-                        .current.copy(
-                            alpha =
-                            LocalContentAlpha.current
-                        )
+                    faIcon = FaIcons.Tools,
+                    tint = LocalContentColor.current.copy(alpha = LocalContentAlpha.current)
                 )
             },
             selected = homeScreenState.value == BottomNavType.WIDGETS,
@@ -231,10 +235,8 @@ fun NavigationRailContent(modifier: Modifier, homeScreenState: MutableState<Bott
         NavigationRailItem(
             icon = {
                 FaIcon(
-                    faIcon = FaIcons.LaptopCode, tint = LocalContentColor.current.copy(
-                        alpha =
-                        LocalContentAlpha.current
-                    )
+                    faIcon = FaIcons.LaptopCode,
+                    tint = LocalContentColor.current.copy(alpha = LocalContentAlpha.current)
                 )
             },
             selected = homeScreenState.value == BottomNavType.DEMOUI,
@@ -253,11 +255,8 @@ fun NavigationRailContent(modifier: Modifier, homeScreenState: MutableState<Bott
         NavigationRailItem(
             icon = {
                 FaIcon(
-                    faIcon = FaIcons.LayerGroup, tint = LocalContentColor
-                        .current.copy(
-                            alpha =
-                            LocalContentAlpha.current
-                        )
+                    faIcon = FaIcons.LayerGroup,
+                    tint = LocalContentColor.current.copy(alpha = LocalContentAlpha.current)
                 )
             },
             selected = homeScreenState.value == BottomNavType.TEMPLATE,
@@ -284,8 +283,10 @@ fun BottomNavigationContent(modifier: Modifier, homeScreenState: MutableState<Bo
         NavigationBarItem(
             selected = homeScreenState.value == BottomNavType.HOME,
             icon = {
-                FaIcon(
-                    faIcon = FaIcons.Home,
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_tab_home),
+                    modifier = Modifier.size(30.dp),
+                    contentDescription = null,
                     tint = LocalContentColor.current.copy(alpha = LocalContentAlpha.current)
                 )
             },
@@ -296,19 +297,25 @@ fun BottomNavigationContent(modifier: Modifier, homeScreenState: MutableState<Bo
             label = {
                 Text(
                     text = stringResource(id = R.string.navigation_item_home),
-                    style = TextStyle(fontSize = 12.sp)
+                    style = TextStyle(
+                        fontSize = 12.sp,
+                        color = if (homeScreenState.value == BottomNavType.HOME) {
+                            Color.Blue
+                        } else {
+                            Color.Black
+                        }
+                    )
                 )
             },
             modifier = Modifier.testTag(TestTags.BOTTOM_NAV_HOME_TEST_TAG)
         )
         NavigationBarItem(
             icon = {
-                FaIcon(
-                    faIcon = FaIcons.Tools, tint = LocalContentColor
-                        .current.copy(
-                            alpha =
-                            LocalContentAlpha.current
-                        )
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_tab_project),
+                    contentDescription = null,
+                    modifier = Modifier.size(30.dp),
+                    tint = LocalContentColor.current.copy(alpha = LocalContentAlpha.current)
                 )
             },
             selected = homeScreenState.value == BottomNavType.WIDGETS,
@@ -319,18 +326,25 @@ fun BottomNavigationContent(modifier: Modifier, homeScreenState: MutableState<Bo
             label = {
                 Text(
                     text = stringResource(id = R.string.navigation_item_widgets),
-                    style = TextStyle(fontSize = 12.sp)
+                    style = TextStyle(
+                        fontSize = 12.sp,
+                        color = if (homeScreenState.value == BottomNavType.WIDGETS) {
+                            Color.Blue
+                        } else {
+                            Color.Black
+                        }
+                    )
                 )
             },
             modifier = Modifier.testTag(TestTags.BOTTOM_NAV_WIDGETS_TEST_TAG)
         )
         NavigationBarItem(
             icon = {
-                RotateIcon(
-                    state = animate,
-                    asset = Icons.Default.PlayArrow,
-                    angle = 720f,
-                    duration = 2000
+                Icon(
+                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_tab_square),
+                    contentDescription = null,
+                    modifier = Modifier.size(30.dp),
+                    tint = LocalContentColor.current.copy(alpha = LocalContentAlpha.current)
                 )
             },
             selected = homeScreenState.value == BottomNavType.ANIMATION,
@@ -341,7 +355,14 @@ fun BottomNavigationContent(modifier: Modifier, homeScreenState: MutableState<Bo
             label = {
                 Text(
                     text = stringResource(id = R.string.navigation_item_animation),
-                    style = TextStyle(fontSize = 12.sp)
+                    style = TextStyle(
+                        fontSize = 12.sp,
+                        color = if (homeScreenState.value == BottomNavType.ANIMATION) {
+                            Color.Blue
+                        } else {
+                            Color.Black
+                        }
+                    )
                 )
             },
             modifier = Modifier.testTag(TestTags.BOTTOM_NAV_ANIM_TEST_TAG)
@@ -349,11 +370,11 @@ fun BottomNavigationContent(modifier: Modifier, homeScreenState: MutableState<Bo
         )
         NavigationBarItem(
             icon = {
-                FaIcon(
-                    faIcon = FaIcons.LaptopCode, tint = LocalContentColor.current.copy(
-                        alpha =
-                        LocalContentAlpha.current
-                    )
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_tab_wechat),
+                    contentDescription = null,
+                    modifier = Modifier.size(30.dp),
+                    tint = LocalContentColor.current.copy(alpha = LocalContentAlpha.current)
                 )
             },
             selected = homeScreenState.value == BottomNavType.DEMOUI,
@@ -364,19 +385,25 @@ fun BottomNavigationContent(modifier: Modifier, homeScreenState: MutableState<Bo
             label = {
                 Text(
                     text = stringResource(id = R.string.navigation_item_demoui),
-                    style = TextStyle(fontSize = 12.sp)
+                    style = TextStyle(
+                        fontSize = 12.sp,
+                        color = if (homeScreenState.value == BottomNavType.DEMOUI) {
+                            Color.Blue
+                        } else {
+                            Color.Black
+                        }
+                    )
                 )
             },
             modifier = Modifier.testTag(TestTags.BOTTOM_NAV_DEMO_UI_TEST_TAG)
         )
         NavigationBarItem(
             icon = {
-                FaIcon(
-                    faIcon = FaIcons.LayerGroup, tint = LocalContentColor
-                        .current.copy(
-                            alpha =
-                            LocalContentAlpha.current
-                        )
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_tab_mine),
+                    modifier = Modifier.size(30.dp),
+                    contentDescription = null,
+                    tint = LocalContentColor.current.copy(alpha = LocalContentAlpha.current)
                 )
             },
             selected = homeScreenState.value == BottomNavType.TEMPLATE,
@@ -387,7 +414,14 @@ fun BottomNavigationContent(modifier: Modifier, homeScreenState: MutableState<Bo
             label = {
                 Text(
                     text = stringResource(id = R.string.navigation_item_profile),
-                    style = TextStyle(fontSize = 12.sp)
+                    style = TextStyle(
+                        fontSize = 12.sp,
+                        color = if (homeScreenState.value == BottomNavType.TEMPLATE) {
+                            Color.Blue
+                        } else {
+                            Color.Black
+                        }
+                    )
                 )
             },
             modifier = Modifier.testTag(TestTags.BOTTOM_NAV_TEMPLATE_TEST_TAG)

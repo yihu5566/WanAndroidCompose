@@ -1,10 +1,13 @@
 <resources>
     <string name="app_name">wan android compose</string>
     <string name="a11y_bottom_navigation_bar">Bottom navigation bar with Having actions </string>
-    <string name="navigation_item_home">Home </string>
-    <string name="navigation_item_widgets">widget </string>
-    <string name="navigation_item_animation">animate </string>
-    <string name="navigation_item_demoui">demo </string>
-    <string name="navigation_item_profile">profile </string>
+    <string name="navigation_item_home">首页 </string>
+    <string name="navigation_item_widgets">项目</string>
+    <string name="navigation_item_animation">广场</string>
+    <string name="navigation_item_demoui">公众号</string>
+    <string name="navigation_item_profile">我的</string>
+    <string name="cd_dark_theme">黑暗主题</string>
+
+    <string name="cd_change_color">变更主题色</string>
 
 </resources>
