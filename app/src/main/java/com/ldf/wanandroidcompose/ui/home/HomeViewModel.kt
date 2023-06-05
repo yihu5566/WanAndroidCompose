@@ -1,6 +1,7 @@
 package com.ldf.wanandroidcompose.ui.home
 
-import androidx.lifecycle.MutableLiveData
+import androidx.compose.runtime.mutableStateListOf
+import com.blankj.utilcode.util.LogUtils
 import com.ldf.wanandroidcompose.base.BaseViewModel
 import com.ldf.wanandroidcompose.base.ext.handleRequest
 import com.ldf.wanandroidcompose.base.ext.launch
@@ -12,19 +13,25 @@ import com.ldf.wanandroidcompose.data.bean.Banner
  * @Created Time : 2023-06-04  15:09
  * @Description:
  */
+
 class HomeViewModel : BaseViewModel() {
 
     /** Banner列表 */
-    val bannerListLiveData = MutableLiveData<List<Banner>>()
-    override fun start() {
+    val bannerListLiveData = mutableStateListOf<Banner>()
 
+    override fun start() {
+        fetchBanners()
     }
 
     /** 请求首页轮播图 */
     fun fetchBanners() {
         launch({
             handleRequest(HomeDataProvider.getBanner(), {
-                bannerListLiveData.value = it.data
+                bannerListLiveData.addAll(it.data)
+                LogUtils.d(it.errorMsg)
+            }, {
+                LogUtils.d(it.errorMsg)
+                false
             })
         })
     }

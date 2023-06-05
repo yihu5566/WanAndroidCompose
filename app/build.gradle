@@ -76,5 +76,6 @@ dependencies {
     implementation rootProject.ext.dependencies.android_utils
     //图片加载
     implementation rootProject.ext.dependencies.glide
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.5.1'
 
 }

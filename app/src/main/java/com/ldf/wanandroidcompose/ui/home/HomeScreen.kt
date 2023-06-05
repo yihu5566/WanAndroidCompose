@@ -36,9 +36,12 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -54,6 +57,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.Observer
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.blankj.utilcode.util.LogUtils
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.guru.composecookbook.carousel.PagerState
@@ -89,6 +94,9 @@ fun HomeScreen(
 ) {
     val showMenu = remember { mutableStateOf(false) }
     val coroutineScope = rememberCoroutineScope()
+    val homeViewModel = HomeViewModel()
+    //获取轮播图
+    homeViewModel.fetchBanners()
     Scaffold(modifier = Modifier.testTag(TestTags.HOME_SCREEN_ROOT),
         topBar = {
             SmallTopAppBar(
@@ -119,7 +127,8 @@ fun HomeScreen(
                     // we are just passing to till HomeScreen.
                     appThemeState.value = appThemeState.value.copy(pallet = newPalletSelected)
                     showMenu.value = false
-                }
+                },
+                homeViewModel = homeViewModel
             )
         })
 }
@@ -130,41 +139,39 @@ fun HomeScreenContent(
     showMenu: MutableState<Boolean>,
     onPalletChange: (ColorPallet) -> Unit,
     modifier: Modifier = Modifier,
+    homeViewModel: HomeViewModel
 ) {
+    var itemList = remember { homeViewModel.bannerListLiveData }
+    LogUtils.d("列表数据" + itemList.size)
     val context = LocalContext.current
-    val viewModel = HomeViewModel()
-    viewModel.fetchBanners()
-    viewModel.bannerListLiveData.observe(LocalLifecycleOwner.current, Observer {
-
-    })
-
-//    val screenWidth = LocalConfiguration.current.screenWidthDp
-//    val isWiderScreen = screenWidth > 550 // Random number for now
-//    val pagerState: PagerState = run {
-//        remember { PagerState(1, 0, itemList?.size ?: (1 - 1)) }
-//    }
-//    val selectedPage = remember { mutableStateOf(2) }
-//
-//    Box(modifier = Modifier.fillMaxSize()) {
-//        if (isWiderScreen) {
-//            //横屏不处理
-//        } else {
-//            Column {
-//                PrepareFirstPager(pagerState, itemList, selectedPage)
-//                LazyColumn(
-//                    modifier = Modifier.testTag(TestTags.HOME_SCREEN_LIST)
-//                ) {
-//                    items(
-//                        items = itemList,
-//                        itemContent = {
-//                            HomeScreenListView(it, context, isDarkTheme, isWiderScreen)
-//                        }
-//                    )
-//                }
-//            }
-//        }
-//    }
-
+    val screenWidth = LocalConfiguration.current.screenWidthDp
+    val isWiderScreen = screenWidth > 550 // Random number for now
+    if (itemList.size == 0) {
+        return
+    }
+    val pagerState: PagerState = run {
+        remember { PagerState(1, 0, itemList.size - 1) }
+    }
+    val selectedPage = remember { mutableStateOf(2) }
+    Box(modifier = modifier) {
+        if (isWiderScreen) {
+            //横屏不处理
+        } else {
+            Column {
+                PrepareFirstPager(pagerState, itemList, selectedPage)
+                LazyColumn(
+                    modifier = Modifier.testTag(TestTags.HOME_SCREEN_LIST)
+                ) {
+                    items(
+                        items = itemList,
+                        itemContent = {
+                            HomeScreenListView(it, context, isDarkTheme, isWiderScreen)
+                        }
+                    )
+                }
+            }
+        }
+    }
 }
 
 @Composable

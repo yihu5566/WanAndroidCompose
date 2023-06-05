@@ -24,39 +24,39 @@ object HomeDataProvider : BaseRepository(), Api {
     }
 
     override suspend fun getArticleTopList(): ApiResponse<List<Article>> {
-        TODO("Not yet implemented")
+        return apiCall { service.getArticleTopList() }
     }
 
     override suspend fun getArticlePageList(
         pageNo: Int,
         pageSize: Int
     ): ApiResponse<PageResponse<Article>> {
-        TODO("Not yet implemented")
+        return apiCall { service.getArticlePageList(pageNo, pageSize) }
     }
 
     override suspend fun collectArticle(id: Int): ApiResponse<Any?> {
-        TODO("Not yet implemented")
+        return apiCall { service.collectArticle(id) }
     }
 
     override suspend fun unCollectArticle(id: Int): ApiResponse<Any?> {
-        TODO("Not yet implemented")
+        return apiCall { service.unCollectArticle(id) }
     }
 
     override suspend fun getOtherAuthorArticlePageList(
         id: Int,
         page: Int
     ): ApiResponse<OtherAuthor> {
-        TODO("Not yet implemented")
+        return apiCall { service.getOtherAuthorArticlePageList(id, page) }
     }
 
     override suspend fun getHotSearchList(): ApiResponse<List<HotSearch>> {
-        TODO("Not yet implemented")
+        return apiCall { service.getHotSearchList() }
     }
 
     override suspend fun getSearchDataByKey(
         pageNo: Int,
         searchKey: String
     ): ApiResponse<PageResponse<Article>> {
-        TODO("Not yet implemented")
+        return apiCall { service.getSearchDataByKey(pageNo, searchKey) }
     }
 }
