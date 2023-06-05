@@ -4,13 +4,11 @@ import android.content.Context
 import android.os.Build
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -21,27 +19,23 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.IconButton
 import androidx.compose.material.ModalBottomSheetState
 import androidx.compose.material.ModalBottomSheetValue
+import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FiberManualRecord
 import androidx.compose.material.icons.filled.Lens
 import androidx.compose.material.icons.filled.Palette
 import androidx.compose.material.rememberModalBottomSheetState
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SmallTopAppBar
 import androidx.compose.material3.Text
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -49,21 +43,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.lifecycle.Observer
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.blankj.utilcode.util.LogUtils
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.guru.composecookbook.carousel.PagerState
 import com.ldf.wanandroidcompose.R
-import com.ldf.wanandroidcompose.data.HomeScreenItems
+import com.ldf.wanandroidcompose.data.bean.Article
 import com.ldf.wanandroidcompose.data.bean.Banner
 import com.ldf.wanandroidcompose.ui.theme.AppThemeState
 import com.ldf.wanandroidcompose.ui.theme.ColorPallet
@@ -97,10 +87,14 @@ fun HomeScreen(
     val homeViewModel = HomeViewModel()
     //获取轮播图
     homeViewModel.fetchBanners()
+    homeViewModel.fetchArticlePageList(0)
     Scaffold(modifier = Modifier.testTag(TestTags.HOME_SCREEN_ROOT),
         topBar = {
-            SmallTopAppBar(
-                title = { Text(text = "Wan Android") },
+            TopAppBar(
+                backgroundColor = MaterialTheme.colorScheme.primary,
+                title = {
+                    Text(text = "Wan Android", style = MaterialTheme.typography.titleLarge)
+                },
                 actions = {
                     IconButton(
                         onClick = {
@@ -142,7 +136,9 @@ fun HomeScreenContent(
     homeViewModel: HomeViewModel
 ) {
     var itemList = remember { homeViewModel.bannerListLiveData }
+    var itemArticleList = remember { homeViewModel.articleList }
     LogUtils.d("列表数据" + itemList.size)
+    LogUtils.d("列表数据-文章" + itemArticleList.value.size)
     val context = LocalContext.current
     val screenWidth = LocalConfiguration.current.screenWidthDp
     val isWiderScreen = screenWidth > 550 // Random number for now
@@ -163,9 +159,9 @@ fun HomeScreenContent(
                     modifier = Modifier.testTag(TestTags.HOME_SCREEN_LIST)
                 ) {
                     items(
-                        items = itemList,
+                        items = itemArticleList.value.datas,
                         itemContent = {
-                            HomeScreenListView(it, context, isDarkTheme, isWiderScreen)
+                            ArticleItem(it, context, isDarkTheme, isWiderScreen)
                         }
                     )
                 }
@@ -224,54 +220,6 @@ fun CarouselItem(item: Banner) {
                 .padding(24.dp)
                 .align(Alignment.BottomStart),
         )
-    }
-}
-
-@Composable
-fun HomeScreenListView(
-    homeScreenItems: Banner, context: Context, isDarkTheme: Boolean,
-    isWiderScreen: Boolean
-) {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(10.dp)
-            .testTag("button-${homeScreenItems.title}")
-    ) {
-        Row {
-            Text(
-                text = "置顶",
-                modifier = Modifier
-                    .border(width = 1.dp, color = Color.Red, shape = RoundedCornerShape(15))
-                    .padding(5.dp),
-                style = androidx.compose.ui.text.TextStyle(color = Color.Red)
-            )
-            Text(
-                text = "网易",
-                modifier = Modifier
-                    .weight(1f, true)
-                    .padding(5.dp),
-            )
-            Text(
-                text = "一天前",
-            )
-        }
-        Text(
-            text = "android 进阶",
-            color = Color.Black,
-            style = androidx.compose.ui.text.TextStyle(fontSize = 20.sp)
-        )
-        Row {
-            Text(
-                text = "干货推荐/我的博客",
-                modifier = Modifier.weight(1f, true)
-            )
-            Icon(
-                painter = painterResource(id = R.drawable.ic_tab_square),
-                contentDescription = null,
-            )
-        }
-        Divider(modifier = Modifier.padding(top = 5.dp, bottom = 5.dp))
     }
 }
 

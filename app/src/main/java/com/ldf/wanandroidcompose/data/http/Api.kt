@@ -4,6 +4,7 @@ import com.btpj.lib_base.data.bean.*
 import com.ldf.wanandroidcompose.data.bean.ApiResponse
 import com.ldf.wanandroidcompose.data.bean.Article
 import com.ldf.wanandroidcompose.data.bean.Banner
+import com.ldf.wanandroidcompose.data.bean.PageResponse
 import retrofit2.http.*
 
 /**

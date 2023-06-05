@@ -2,7 +2,7 @@ package com.ldf.wanandroidcompose.data
 
 import com.btpj.lib_base.data.bean.HotSearch
 import com.btpj.lib_base.data.bean.OtherAuthor
-import com.btpj.lib_base.data.bean.PageResponse
+import com.ldf.wanandroidcompose.data.bean.PageResponse
 import com.ldf.wanandroidcompose.data.bean.ApiResponse
 import com.ldf.wanandroidcompose.data.bean.Article
 import com.ldf.wanandroidcompose.data.bean.Banner

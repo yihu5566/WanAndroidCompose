@@ -1,6 +1,7 @@
 package com.btpj.lib_base.data.bean
 
 import com.ldf.wanandroidcompose.data.bean.Article
+import com.ldf.wanandroidcompose.data.bean.PageResponse
 
 /**
  * 其他文章作者信息实体
