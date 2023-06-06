@@ -1,6 +1,6 @@
 package com.ldf.wanandroidcompose.data
 
-import com.btpj.lib_base.data.bean.HotSearch
+import com.ldf.wanandroidcompose.data.bean.HotSearch
 import com.btpj.lib_base.data.bean.OtherAuthor
 import com.ldf.wanandroidcompose.data.bean.PageResponse
 import com.ldf.wanandroidcompose.data.bean.ApiResponse

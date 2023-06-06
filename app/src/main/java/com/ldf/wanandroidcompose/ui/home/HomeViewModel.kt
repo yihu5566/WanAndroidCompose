@@ -2,7 +2,6 @@ package com.ldf.wanandroidcompose.ui.home
 
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.MutableLiveData
 import com.blankj.utilcode.util.LogUtils
 import com.ldf.wanandroidcompose.data.bean.PageResponse
@@ -31,7 +30,7 @@ class HomeViewModel : BaseViewModel() {
     /** Banner列表 */
     val bannerListLiveData = mutableStateListOf<Banner>()
 
-//    private val _articlePageListLiveData = MutableLiveData<PageResponse<Article>>()
+    val articlePageListLiveData = MutableLiveData<PageResponse<Article>>()
     val articleList =
         mutableStateOf<PageResponse<Article>>(PageResponse(0, listOf(), 0, false, 0, 0, 0))
 
@@ -70,8 +69,8 @@ class HomeViewModel : BaseViewModel() {
                                 response2.await().data
                             )
                             // 加了Dispatchers.IO现在是子线程,需要使用postValue的方式
-//                            _articlePageListLiveData.postValue(list.data)
-                            articleList.value = list.data
+                            articlePageListLiveData.postValue(list.data)
+//                            articleList.value = list.data
                         })
                     })
                 }
@@ -79,8 +78,8 @@ class HomeViewModel : BaseViewModel() {
                 handleRequest(
                     HomeDataProvider.getArticlePageList(pageNo, PAGE_SIZE),
                     {
-//                        _articlePageListLiveData.value = it.data
-                        articleList.value = it.data
+                        articlePageListLiveData.value = it.data
+//                        articleList.value = it.data
                     })
             }
         })

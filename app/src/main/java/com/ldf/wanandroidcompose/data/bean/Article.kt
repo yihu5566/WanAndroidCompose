@@ -1,7 +1,6 @@
 package com.ldf.wanandroidcompose.data.bean
 
 import android.os.Parcelable
-import com.btpj.lib_base.data.bean.Tag
 import kotlinx.parcelize.Parcelize
 
 /**

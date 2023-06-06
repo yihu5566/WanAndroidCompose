@@ -77,5 +77,10 @@ dependencies {
     //图片加载
     implementation rootProject.ext.dependencies.glide
     implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.5.1'
+    // ACCOMPANIST
+    implementation "com.google.accompanist:accompanist-placeholder-material:0.18.0"
+    implementation "com.google.accompanist:accompanist-swiperefresh:0.18.0"
+    // LOTTIE
+    implementation "com.airbnb.android:lottie-compose:4.1.0"
 
 }

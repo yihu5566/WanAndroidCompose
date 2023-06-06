@@ -1,5 +1,7 @@
 package com.btpj.lib_base.data.bean
 
+import com.ldf.wanandroidcompose.data.bean.Classify
+
 /**
  * @author LTP  2022/4/7
  */

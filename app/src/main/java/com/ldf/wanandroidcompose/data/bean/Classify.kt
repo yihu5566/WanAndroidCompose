@@ -1,4 +1,4 @@
-package com.btpj.lib_base.data.bean
+package com.ldf.wanandroidcompose.data.bean
 
 data class Classify(
     val author: String,

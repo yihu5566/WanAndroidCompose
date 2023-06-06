@@ -12,8 +12,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.IconButton
@@ -53,7 +51,6 @@ import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.guru.composecookbook.carousel.PagerState
 import com.ldf.wanandroidcompose.R
-import com.ldf.wanandroidcompose.data.bean.Article
 import com.ldf.wanandroidcompose.data.bean.Banner
 import com.ldf.wanandroidcompose.ui.theme.AppThemeState
 import com.ldf.wanandroidcompose.ui.theme.ColorPallet
@@ -136,9 +133,7 @@ fun HomeScreenContent(
     homeViewModel: HomeViewModel
 ) {
     var itemList = remember { homeViewModel.bannerListLiveData }
-    var itemArticleList = remember { homeViewModel.articleList }
     LogUtils.d("列表数据" + itemList.size)
-    LogUtils.d("列表数据-文章" + itemArticleList.value.size)
     val context = LocalContext.current
     val screenWidth = LocalConfiguration.current.screenWidthDp
     val isWiderScreen = screenWidth > 550 // Random number for now
@@ -155,16 +150,7 @@ fun HomeScreenContent(
         } else {
             Column {
                 PrepareFirstPager(pagerState, itemList, selectedPage)
-                LazyColumn(
-                    modifier = Modifier.testTag(TestTags.HOME_SCREEN_LIST)
-                ) {
-                    items(
-                        items = itemArticleList.value.datas,
-                        itemContent = {
-                            ArticleItem(it, context, isDarkTheme, isWiderScreen)
-                        }
-                    )
-                }
+                SwipeRefreshList(homeViewModel, context, isDarkTheme, isWiderScreen, 0.1f)
             }
         }
     }
@@ -185,7 +171,7 @@ fun PrepareFirstPager(
         CarouselItem(item)
     }
 
-    Row() {
+    Row {
         items.forEachIndexed { index, _ ->
             CarouselDot(
                 selected = index == selectedPage.value,
