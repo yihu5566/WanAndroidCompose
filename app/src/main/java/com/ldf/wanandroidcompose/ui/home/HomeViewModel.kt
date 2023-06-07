@@ -1,8 +1,15 @@
 package com.ldf.wanandroidcompose.ui.home
 
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.blankj.utilcode.util.LogUtils
 import com.ldf.wanandroidcompose.data.bean.PageResponse
 import com.ldf.wanandroidcompose.base.BaseViewModel
@@ -11,8 +18,10 @@ import com.ldf.wanandroidcompose.base.ext.launch
 import com.ldf.wanandroidcompose.data.HomeDataProvider
 import com.ldf.wanandroidcompose.data.bean.Article
 import com.ldf.wanandroidcompose.data.bean.Banner
+import com.ldf.wanandroidcompose.ui.utils.CommonPagingSource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 
 /**
@@ -27,13 +36,27 @@ class HomeViewModel : BaseViewModel() {
         const val PAGE_SIZE = 10
     }
 
+    //首页列表状态
+    val homeLazyListState: LazyListState = LazyListState()
+
     /** Banner列表 */
     val bannerListLiveData = mutableStateListOf<Banner>()
 
-    val articlePageListLiveData = MutableLiveData<PageResponse<Article>>()
-    val articleList =
-        mutableStateOf<PageResponse<Article>>(PageResponse(0, listOf(), 0, false, 0, 0, 0))
+    //首页列表
+    val homeListData: Flow<PagingData<Article>>
+        get() = _homeListData
 
+    private val _homeListData = Pager(PagingConfig(pageSize = PAGE_SIZE)) {
+        CommonPagingSource { nextPage: Int ->
+            HomeDataProvider.getArticlePageList(nextPage, PAGE_SIZE).data
+        }
+    }.flow.cachedIn(viewModelScope)
+
+
+    //置顶文章列表数据
+    private val _articleTopList = MutableLiveData<List<Article>>()
+    val articleTopList: LiveData<List<Article>>
+        get() = _articleTopList
 
     override fun start() {
         fetchBanners()
@@ -52,38 +75,11 @@ class HomeViewModel : BaseViewModel() {
         })
     }
 
-    fun fetchArticlePageList(pageNo: Int = 0) {
+    fun fetchTopArticleList() {
         launch({
-            if (pageNo == 0) {
-                // 使用async需要单独加作用域,不然没网时会崩溃
-                withContext(Dispatchers.IO) {
-                    // 第一页会同时请求置顶文章列表接口和分页文章列表的接口，使用async进行并行请求速度更快（默认是串行的）
-                    val response1 = async { HomeDataProvider.getArticlePageList(pageNo, PAGE_SIZE) }
-                    val response2 = async { HomeDataProvider.getArticleTopList() }
-
-                    handleRequest(response1.await(), {
-                        val list = response1.await()
-                        handleRequest(response2.await(), {
-                            (list.data.datas as ArrayList<Article>).addAll(
-                                0,
-                                response2.await().data
-                            )
-                            // 加了Dispatchers.IO现在是子线程,需要使用postValue的方式
-                            articlePageListLiveData.postValue(list.data)
-//                            articleList.value = list.data
-                        })
-                    })
-                }
-            } else {
-                handleRequest(
-                    HomeDataProvider.getArticlePageList(pageNo, PAGE_SIZE),
-                    {
-                        articlePageListLiveData.value = it.data
-//                        articleList.value = it.data
-                    })
-            }
+            handleRequest(HomeDataProvider.getArticleTopList(), {
+                _articleTopList.postValue(it.data)
+            })
         })
     }
-
-
 }

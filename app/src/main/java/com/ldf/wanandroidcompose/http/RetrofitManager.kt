@@ -7,6 +7,7 @@ import com.franmontiel.persistentcookiejar.cache.SetCookieCache
 import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor
 import com.ldf.wanandroidcompose.ConfigCommon
 import com.ldf.wanandroidcompose.base.App.Companion.appContext
+import com.ldf.wanandroidcompose.http.interceptor.StatusInterceptor
 import okhttp3.Cache
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -38,7 +39,7 @@ object RetrofitManager {
     private val client: OkHttpClient
         get() = OkHttpClient.Builder()
             // 请求过滤器
-            .addInterceptor(logInterceptor)
+            .addInterceptor(StatusInterceptor())
             //设置缓存配置,缓存最大10M,设置了缓存之后可缓存请求的数据到data/data/包名/cache/net_cache目录中
             .cache(Cache(File(appContext.cacheDir, "net_cache"), 10 * 1024 * 1024))
             //添加缓存拦截器 可传入缓存天数

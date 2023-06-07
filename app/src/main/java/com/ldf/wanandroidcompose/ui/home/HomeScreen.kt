@@ -84,7 +84,7 @@ fun HomeScreen(
     val homeViewModel = HomeViewModel()
     //获取轮播图
     homeViewModel.fetchBanners()
-    homeViewModel.fetchArticlePageList(0)
+//    homeViewModel.fetchArticlePageList(0)
     Scaffold(modifier = Modifier.testTag(TestTags.HOME_SCREEN_ROOT),
         topBar = {
             TopAppBar(
@@ -150,7 +150,7 @@ fun HomeScreenContent(
         } else {
             Column {
                 PrepareFirstPager(pagerState, itemList, selectedPage)
-                SwipeRefreshList(homeViewModel, context, isDarkTheme, isWiderScreen, 0.1f)
+                SwipeRefreshList(homeViewModel, context, isDarkTheme, isWiderScreen)
             }
         }
     }

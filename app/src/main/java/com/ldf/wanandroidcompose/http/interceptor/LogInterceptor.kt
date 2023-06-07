@@ -13,4 +13,4 @@ val logInterceptor = HttpLoggingInterceptor(object : HttpLoggingInterceptor.Logg
         // 使用自己的日志工具接管
         LogUtils.d(message)
     }
-}).setLevel(if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY else HttpLoggingInterceptor.Level.BASIC)
+}).setLevel(if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY else HttpLoggingInterceptor.Level.BODY)
