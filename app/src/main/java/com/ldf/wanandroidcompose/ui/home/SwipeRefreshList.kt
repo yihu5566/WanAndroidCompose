@@ -9,27 +9,25 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.FloatingActionButton
-import androidx.compose.material.Icon
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowUpward
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
 import com.blankj.utilcode.util.LogUtils
+import com.blankj.utilcode.util.TimeUtils
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.ldf.wanandroidcompose.ui.utils.TestTags
+import java.util.Timer
+import kotlin.concurrent.timerTask
 
 /**
  * @Author : dongfang
@@ -44,7 +42,7 @@ fun SwipeRefreshList(
     isWiderScreen: Boolean,
 ) {
     homeViewModel.fetchTopArticleList()
-//    val articleTopData = homeViewModel.articleTopList.observeAsState()
+    val articleTopData = homeViewModel.articleTopList.observeAsState()
     //列表数据
     val pagingItems = homeViewModel.homeListData.collectAsLazyPagingItems()
     //刷新状态记录
@@ -54,18 +52,31 @@ fun SwipeRefreshList(
             swipeableState.isRefreshing = true
             pagingItems.refresh()
             LogUtils.d("下拉刷新拉")
+            Timer().schedule(timerTask {
+                swipeableState.isRefreshing = false
+            }, 3000)
         }) {
             LazyColumn(
                 modifier = Modifier.testTag(TestTags.HOME_SCREEN_LIST),
                 state = homeViewModel.homeLazyListState
             ) {
+                articleTopData.value?.let {
+                    items(it) {
+                        ArticleItem(it, context, isDarkTheme, isWiderScreen){
+
+                        }
+                    }
+                }
 
                 items(
                     items = pagingItems,
                     key = { it.id }
                 ) { it ->
-                    ArticleItem(it!!, context, isDarkTheme, isWiderScreen)
+                    it?.let {
+                        ArticleItem(it, context, isDarkTheme, isWiderScreen)
+                    }
                 }
+
                 when (val state = pagingItems.loadState.refresh) { //FIRST LOAD
                     is LoadState.Error -> {
                         //TODO Error Item
@@ -120,21 +131,5 @@ fun SwipeRefreshList(
                 }
             }
         }
-    }
-}
-
-
-@Composable
-fun ScrollToTopButton(onClick: () -> Unit, modifier: Modifier) {
-    FloatingActionButton(
-        onClick = onClick,
-        backgroundColor = MaterialTheme.colorScheme.primary,
-        modifier = modifier
-    ) {
-        Icon(
-            imageVector = Icons.Default.ArrowUpward,
-            contentDescription = "Scroll to top",
-            tint = MaterialTheme.colorScheme.onPrimary
-        )
     }
 }

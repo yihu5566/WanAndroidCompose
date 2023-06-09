@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
@@ -60,6 +61,10 @@ class HomeViewModel : BaseViewModel() {
 
     override fun start() {
         fetchBanners()
+    }
+
+    fun sleepThreeTime(){
+
     }
 
     /** 请求首页轮播图 */

@@ -5,6 +5,7 @@ import android.text.Html
 import android.widget.TextView
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -49,7 +50,9 @@ fun ArticleItem(
     itemBean: Article,
     context: Context,
     isWiderScreen: Boolean,
-    isWiderScreen1: Boolean
+    isWiderScreen1: Boolean,
+    onClick: () -> Unit = {}
+
 ) {
     Column(
         modifier = Modifier
@@ -57,6 +60,7 @@ fun ArticleItem(
             .padding(10.dp)
             .testTag("button-${itemBean.title}")
             .background(color = Color.White)
+            .clickable(onClick = onClick)
     ) {
         Row {
             if (itemBean.author.isNotEmpty()) {

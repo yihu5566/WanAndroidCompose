@@ -67,6 +67,8 @@ dependencies {
     androidTestImplementation 'androidx.compose.ui:ui-test-junit4'
     debugImplementation 'androidx.compose.ui:ui-tooling'
     debugImplementation 'androidx.compose.ui:ui-test-manifest'
+    implementation "androidx.navigation:navigation-compose:2.4.0-alpha05"
+
     // 网络相关
     api rootProject.ext.dependencies.retrofit
     api rootProject.ext.dependencies.converterGson
@@ -86,5 +88,13 @@ dependencies {
     implementation 'androidx.paging:paging-compose:1.0.0-alpha14'
     implementation "androidx.paging:paging-runtime-ktx:3.1.0-rc01"
     implementation 'androidx.paging:paging-common-ktx:3.1.1'
+    /**
+     * compose提供有viewModel等其他方便的函数
+     * 以下为Compose扩展库
+     */
+    implementation "androidx.lifecycle:lifecycle-viewmodel-compose:1.0.0-alpha07"
+    //提供observeAsState等方法
+    implementation "androidx.compose.runtime:runtime-livedata:1.0.5"
+
 
 }
