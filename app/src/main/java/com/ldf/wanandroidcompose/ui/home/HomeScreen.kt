@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.IconButton
-import androidx.compose.material.ModalBottomSheetState
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
@@ -46,6 +45,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.blankj.utilcode.util.LogUtils
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
@@ -76,8 +76,8 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
+    navHostController: NavHostController,
     appThemeState: MutableState<AppThemeState>,
-    chooseColorBottomModalState: ModalBottomSheetState
 ) {
     val showMenu = remember { mutableStateOf(false) }
     val coroutineScope = rememberCoroutineScope()
@@ -104,7 +104,7 @@ fun HomeScreen(
                             contentDescription = stringResource(id = R.string.cd_dark_theme)
                         )
                     }
-                    ChangeColorIconButton(coroutineScope, chooseColorBottomModalState, showMenu)
+                    ChangeColorIconButton(coroutineScope, showMenu)
                 }
             )
         },
@@ -246,14 +246,13 @@ fun PalletMenu(
 @Composable
 fun ChangeColorIconButton(
     coroutineScope: CoroutineScope,
-    chooseColorBottomModalState: ModalBottomSheetState,
     showMenu: MutableState<Boolean>
 ) {
     val accessibilityManager = LocalContext.current.getSystemService(Context.ACCESSIBILITY_SERVICE)
             as android.view.accessibility.AccessibilityManager
     IconButton(onClick = {
         if (accessibilityManager.isEnabled && accessibilityManager.isTouchExplorationEnabled) {
-            coroutineScope.launch { chooseColorBottomModalState.show() }
+            coroutineScope.launch {}
         } else {
             showMenu.value = !showMenu.value
         }
@@ -294,5 +293,5 @@ fun PreviewHomeScreen() {
     val chooseColorBottomModalState =
         rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
 
-    HomeScreen(state, chooseColorBottomModalState)
+//    HomeScreen(null, state)
 }

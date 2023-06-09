@@ -1,7 +1,8 @@
-package com.ldf.wanandroidcompose.ui.animate
+package com.ldf.wanandroidcompose.ui.wechat
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.navigation.NavHostController
 
 /**
  * @Author : dongfang
@@ -9,6 +10,6 @@ import androidx.compose.runtime.Composable
  * @Description:
  */
 @Composable
-fun AnimationScreen() {
+fun WechatScreen(navHostController: NavHostController) {
     Text(text = "我是widget")
 }

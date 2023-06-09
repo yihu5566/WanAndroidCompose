@@ -82,6 +82,10 @@ dependencies {
     // ACCOMPANIST
     implementation "com.google.accompanist:accompanist-placeholder-material:0.18.0"
     implementation "com.google.accompanist:accompanist-swiperefresh:0.18.0"
+    implementation "com.google.accompanist:accompanist-insets-ui:0.18.0"
+    //控制UI栏
+    implementation "com.google.accompanist:accompanist-systemuicontroller:0.18.0"
+
     // LOTTIE
     implementation "com.airbnb.android:lottie-compose:4.1.0"
     //Paging 3.0

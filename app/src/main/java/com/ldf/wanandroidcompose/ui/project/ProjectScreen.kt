@@ -1,4 +1,4 @@
-package com.ldf.wanandroidcompose.ui.widget
+package com.ldf.wanandroidcompose.ui.project
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -9,6 +9,6 @@ import androidx.compose.runtime.Composable
  * @Description:
  */
 @Composable
-fun WidgetScreen() {
+fun ProjectScreen() {
     Text(text = "我是widget")
 }
