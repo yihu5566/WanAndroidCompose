@@ -1,4 +1,4 @@
-package com.ldf.wanandroidcompose.ui.home
+package com.ldf.wanandroidcompose.ui.project
 
 import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
@@ -8,11 +8,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -25,26 +23,25 @@ import com.blankj.utilcode.util.LogUtils
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.ldf.wanandroidcompose.ui.utils.TestTags
-import com.ldf.wanandroidcompose.ui.viewmodel.HomeViewModel
+import com.ldf.wanandroidcompose.ui.viewmodel.ProjectViewModel
 import java.util.Timer
 import kotlin.concurrent.timerTask
 
 /**
+ *
  * @Author : dongfang
- * @Created Time : 2023-06-06  13:50
+ * @Created Time : 2023/6/12  16:55
  * @Description:
+ *
  */
 @Composable
-fun SwipeRefreshList(
-    homeViewModel: HomeViewModel,
+fun ProjectSwipeRefreshList(
+    viewModel: ProjectViewModel,
     context: Context,
-    isDarkTheme: Boolean,
-    isWiderScreen: Boolean,
 ) {
-    homeViewModel.fetchTopArticleList()
-    val articleTopData = homeViewModel.articleTopList.observeAsState()
+
     //列表数据
-    val pagingItems = homeViewModel.homeListData.collectAsLazyPagingItems()
+    val pagingItems = viewModel.projectListData.collectAsLazyPagingItems()
     //刷新状态记录
     val swipeableState = rememberSwipeRefreshState(false)
     Box(modifier = Modifier) {
@@ -58,22 +55,15 @@ fun SwipeRefreshList(
         }) {
             LazyColumn(
                 modifier = Modifier.testTag(TestTags.HOME_SCREEN_LIST),
-                state = homeViewModel.homeLazyListState
+                state = viewModel.projectLazyListState
             ) {
-                articleTopData.value?.let {
-                    items(it) {
-                        ArticleItem(it, context, isDarkTheme, isWiderScreen){
-
-                        }
-                    }
-                }
 
                 items(
                     items = pagingItems,
                     key = { it.id }
                 ) { it ->
                     it?.let {
-                        ArticleItem(it, context, isDarkTheme, isWiderScreen)
+                        projectItemWidget(it, context)
                     }
                 }
 

@@ -60,6 +60,7 @@ import com.ldf.wanandroidcompose.ui.theme.orange500
 import com.ldf.wanandroidcompose.ui.theme.purple
 import com.ldf.wanandroidcompose.ui.theme.typography
 import com.ldf.wanandroidcompose.ui.utils.TestTags
+import com.ldf.wanandroidcompose.ui.viewmodel.HomeViewModel
 import com.ldf.wanandroidcompose.ui.widget.carousel.CarouselDot
 import com.ldf.wanandroidcompose.ui.widget.carousel.Pager
 import kotlinx.coroutines.CoroutineScope
@@ -84,30 +85,29 @@ fun HomeScreen(
     val homeViewModel = HomeViewModel()
     //获取轮播图
     homeViewModel.fetchBanners()
-//    homeViewModel.fetchArticlePageList(0)
     Scaffold(modifier = Modifier.testTag(TestTags.HOME_SCREEN_ROOT),
-        topBar = {
-            TopAppBar(
-                backgroundColor = MaterialTheme.colorScheme.primary,
-                title = {
-                    Text(text = "Wan Android", style = MaterialTheme.typography.titleLarge)
-                },
-                actions = {
-                    IconButton(
-                        onClick = {
-                            appThemeState.value = appThemeState
-                                .value.copy(darkTheme = !appThemeState.value.darkTheme)
-                        }
-                    ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_sleep),
-                            contentDescription = stringResource(id = R.string.cd_dark_theme)
-                        )
-                    }
-                    ChangeColorIconButton(coroutineScope, showMenu)
-                }
-            )
-        },
+//        topBar = {
+//            TopAppBar(
+//                backgroundColor = MaterialTheme.colorScheme.primary,
+//                title = {
+//                    Text(text = "Wan Android", style = MaterialTheme.typography.titleLarge)
+//                },
+//                actions = {
+//                    IconButton(
+//                        onClick = {
+//                            appThemeState.value = appThemeState
+//                                .value.copy(darkTheme = !appThemeState.value.darkTheme)
+//                        }
+//                    ) {
+//                        Icon(
+//                            painter = painterResource(id = R.drawable.ic_sleep),
+//                            contentDescription = stringResource(id = R.string.cd_dark_theme)
+//                        )
+//                    }
+//                    ChangeColorIconButton(coroutineScope, showMenu)
+//                }
+//            )
+//        },
         content = { paddingValues ->
             HomeScreenContent(
                 isDarkTheme = appThemeState.value.darkTheme,
@@ -145,13 +145,9 @@ fun HomeScreenContent(
     }
     val selectedPage = remember { mutableStateOf(2) }
     Box(modifier = modifier) {
-        if (isWiderScreen) {
-            //横屏不处理
-        } else {
-            Column {
-                PrepareFirstPager(pagerState, itemList, selectedPage)
-                SwipeRefreshList(homeViewModel, context, isDarkTheme, isWiderScreen)
-            }
+        Column {
+            PrepareFirstPager(pagerState, itemList, selectedPage)
+            SwipeRefreshList(homeViewModel, context, isDarkTheme, isWiderScreen)
         }
     }
 }

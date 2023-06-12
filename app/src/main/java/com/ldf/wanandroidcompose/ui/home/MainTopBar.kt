@@ -7,7 +7,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.ldf.wanandroidcompose.KeyNavigationRoute
-import com.ldf.wanandroidcompose.ui.project.ProjectViewModel
+import com.ldf.wanandroidcompose.ui.viewmodel.ProjectViewModel
 import com.ldf.wanandroidcompose.ui.theme.Nav
 import com.ldf.wanandroidcompose.ui.widget.AppBar
 

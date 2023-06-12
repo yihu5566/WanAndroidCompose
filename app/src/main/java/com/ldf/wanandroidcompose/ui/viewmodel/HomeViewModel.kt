@@ -1,29 +1,23 @@
-package com.ldf.wanandroidcompose.ui.home
+package com.ldf.wanandroidcompose.ui.viewmodel
 
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.blankj.utilcode.util.LogUtils
-import com.ldf.wanandroidcompose.data.bean.PageResponse
 import com.ldf.wanandroidcompose.base.BaseViewModel
 import com.ldf.wanandroidcompose.base.ext.handleRequest
 import com.ldf.wanandroidcompose.base.ext.launch
-import com.ldf.wanandroidcompose.data.HomeDataProvider
+import com.ldf.wanandroidcompose.data.WanAndroidDataProvider
 import com.ldf.wanandroidcompose.data.bean.Article
 import com.ldf.wanandroidcompose.data.bean.Banner
 import com.ldf.wanandroidcompose.ui.utils.CommonPagingSource
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.withContext
 
 /**
  * @Author : dongfang
@@ -49,7 +43,7 @@ class HomeViewModel : BaseViewModel() {
 
     private val _homeListData = Pager(PagingConfig(pageSize = PAGE_SIZE)) {
         CommonPagingSource { nextPage: Int ->
-            HomeDataProvider.getArticlePageList(nextPage, PAGE_SIZE).data
+            WanAndroidDataProvider.getArticlePageList(nextPage, PAGE_SIZE).data
         }
     }.flow.cachedIn(viewModelScope)
 
@@ -70,7 +64,7 @@ class HomeViewModel : BaseViewModel() {
     /** 请求首页轮播图 */
     fun fetchBanners() {
         launch({
-            handleRequest(HomeDataProvider.getBanner(), {
+            handleRequest(WanAndroidDataProvider.getBanner(), {
                 bannerListLiveData.addAll(it.data)
                 LogUtils.d(it.errorMsg)
             }, {
@@ -82,7 +76,7 @@ class HomeViewModel : BaseViewModel() {
 
     fun fetchTopArticleList() {
         launch({
-            handleRequest(HomeDataProvider.getArticleTopList(), {
+            handleRequest(WanAndroidDataProvider.getArticleTopList(), {
                 _articleTopList.postValue(it.data)
             })
         })

@@ -14,6 +14,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.ldf.wanandroidcompose.ui.home.HomeScreen
 import com.ldf.wanandroidcompose.ui.profile.ProfileScreen
+import com.ldf.wanandroidcompose.ui.project.ProjectScreen
+import com.ldf.wanandroidcompose.ui.search.SearchScreen
 import com.ldf.wanandroidcompose.ui.square.SquareScreen
 import com.ldf.wanandroidcompose.ui.theme.AppThemeState
 import com.ldf.wanandroidcompose.ui.theme.Nav
@@ -52,9 +54,9 @@ fun NavigationHost(
                 HomeScreen(navHostController, appThemeState)
 
                 //点击两次返回才关闭app
-//                    BackHandler {
-//                        TwoBackFinish().execute(context, onFinish)
-//                    }
+                BackHandler {
+                    TwoBackFinish().execute(context, onFinish)
+                }
             }
             //项目页面
             composable(Nav.BottomNavScreen.ProjectScreen.route) {
@@ -62,7 +64,7 @@ fun NavigationHost(
                 //系统颜色的状态栏
                 StatsBarUtil().StatsBarColor(false)
 
-                ProfileScreen(navHostController)
+                ProjectScreen(navHostController)
 
                 //点击两次返回才关闭app
                 BackHandler {
@@ -110,8 +112,16 @@ fun NavigationHost(
                 }
             }
         }
-    }
+        //搜索页面
+        composable(route = KeyNavigationRoute.SEARCH.route) {
+            //系统颜色的状态栏
+            StatsBarUtil().StatsBarColor(false)
 
+            SearchScreen(navHostController)
+
+            BackHandler { navHostController.navigateUp() }
+        }
+    }
 }
 
 

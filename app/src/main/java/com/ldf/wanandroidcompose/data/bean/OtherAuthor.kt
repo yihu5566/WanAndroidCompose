@@ -1,4 +1,4 @@
-package com.btpj.lib_base.data.bean
+package com.ldf.wanandroidcompose.data.bean
 
 import com.ldf.wanandroidcompose.data.bean.Article
 import com.ldf.wanandroidcompose.data.bean.CoinInfo
