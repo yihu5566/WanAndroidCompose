@@ -1,6 +1,7 @@
 package com.ldf.wanandroidcompose.ui.project
 
 import android.content.Context
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -38,13 +39,19 @@ import kotlin.concurrent.timerTask
 fun ProjectSwipeRefreshList(
     viewModel: ProjectViewModel,
     context: Context,
+    onClick: () -> Unit
 ) {
 
     //列表数据
     val pagingItems = viewModel.projectListData.collectAsLazyPagingItems()
     //刷新状态记录
     val swipeableState = rememberSwipeRefreshState(false)
-    Box(modifier = Modifier) {
+    Box(
+        modifier = Modifier
+            .clickable(onClick = onClick)
+            .padding(bottom = 6.dp, top = 6.dp)
+            .padding(start = 8.dp, end = 8.dp)
+    ) {
         SwipeRefresh(state = swipeableState, onRefresh = {
             swipeableState.isRefreshing = true
             pagingItems.refresh()

@@ -6,6 +6,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.blankj.utilcode.util.ToastUtils
 import com.ldf.wanandroidcompose.ui.theme.Nav
 import com.ldf.wanandroidcompose.ui.viewmodel.ProjectViewModel
 
@@ -35,5 +36,7 @@ fun ProjectScreen(navHostController: NavHostController) {
         projectListData.refresh()
     }
     // 列表数据
-    ProjectSwipeRefreshList(projectViewModel, context)
+    ProjectSwipeRefreshList(projectViewModel, context, {
+        ToastUtils.showLong("点击项目详情")
+    })
 }

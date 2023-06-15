@@ -5,8 +5,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -47,7 +49,14 @@ fun projectItemWidget(itemBean: Article, context: Context) {
             Text(text = TimeUtils.millis2String(itemBean.publishTime))
         }
         Row {
-            GlideImage(model = itemBean.envelopePic, contentDescription = "")
+            GlideImage(
+                model = itemBean.envelopePic,
+                contentDescription = "",
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .width(130.dp)
+                    .padding(end = 4.dp)
+            )
             Column {
                 androidx.compose.material.Text(
                     text = itemBean.title,

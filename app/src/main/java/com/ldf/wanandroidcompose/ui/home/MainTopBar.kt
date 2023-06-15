@@ -1,12 +1,26 @@
 package com.ldf.wanandroidcompose.ui.home
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.ScrollableTabRow
+import androidx.compose.material.Tab
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.State
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.ldf.wanandroidcompose.KeyNavigationRoute
+import com.ldf.wanandroidcompose.data.bean.ProjectTitle
 import com.ldf.wanandroidcompose.ui.viewmodel.ProjectViewModel
 import com.ldf.wanandroidcompose.ui.theme.Nav
 import com.ldf.wanandroidcompose.ui.widget.AppBar
@@ -29,16 +43,12 @@ fun MainTopBar(bottomNavScreen: Nav.BottomNavScreen, navHostController: NavHostC
         }
         //项目
         Nav.BottomNavScreen.ProjectScreen -> {
-
             val projectViewModel: ProjectViewModel = viewModel()
-
             //请求项目列表数据
-//            projectViewModel.getProjectTreeData()
-
-//            val projectTreeData = projectViewModel.projectTreeData.observeAsState()
-
+            projectViewModel.fetchProjectTitleList()
+            val projectTreeData = projectViewModel.projectTreeData.observeAsState()
             //顶部指示器
-//            ProjectTab(Nav.projectTopBarIndex, projectTreeData)
+            ProjectTab(Nav.projectTopBarIndex, projectTreeData)
         }
         //广场
         Nav.BottomNavScreen.SquareScreen -> {
@@ -65,3 +75,37 @@ fun MainTopBar(bottomNavScreen: Nav.BottomNavScreen, navHostController: NavHostC
         }
     }
 }
+
+@Composable
+fun ProjectTab(projectTopBarIndex: MutableState<Int>, projectTreeData: State<List<ProjectTitle>?>) {
+
+    if (projectTreeData.value == null) {
+        Box(
+            modifier = Modifier
+                .background(MaterialTheme.colors.primary)
+                .fillMaxWidth()
+                .height(54.dp)
+        )
+        return
+    }
+
+    ScrollableTabRow(
+        selectedTabIndex = projectTopBarIndex.value,
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(54.dp),
+        edgePadding = 0.dp,
+        backgroundColor = MaterialTheme.colors.primary
+    ) {
+        projectTreeData.value!!.forEachIndexed { index, projectTitle ->
+            Tab(
+                selected = index == projectTopBarIndex.value,
+                onClick = {
+                    projectTopBarIndex.value = index
+                }) {
+                Text(projectTitle.name)
+            }
+        }
+    }
+}
+

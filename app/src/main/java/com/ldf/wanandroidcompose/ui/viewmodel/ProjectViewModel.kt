@@ -8,6 +8,8 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import androidx.test.internal.util.LogUtil
+import com.blankj.utilcode.util.LogUtils
 import com.ldf.wanandroidcompose.base.BaseViewModel
 import com.ldf.wanandroidcompose.base.ext.handleRequest
 import com.ldf.wanandroidcompose.base.ext.launch
@@ -35,7 +37,7 @@ class ProjectViewModel : BaseViewModel() {
     }
 
     override fun start() {
-        fetchProjectTitleList()
+
     }
 
     //项目页面列表状态
@@ -54,7 +56,7 @@ class ProjectViewModel : BaseViewModel() {
         get() = _projectTreeData
 
     /** 请求项目标题列表 */
-    private fun fetchProjectTitleList() {
+    fun fetchProjectTitleList() {
         launch({
             handleRequest(
                 WanAndroidDataProvider.getProjectTitleList(),
@@ -66,8 +68,9 @@ class ProjectViewModel : BaseViewModel() {
     val projectListData: Flow<PagingData<Article>>
         get() = _projectListData
 
-    private val _projectListData = Pager(PagingConfig(pageSize = ProjectViewModel.PAGE_SIZE)) {
+    private val _projectListData = Pager(PagingConfig(pageSize = PAGE_SIZE)) {
         CommonPagingSource { nextPage: Int ->
+            LogUtils.d("分页$nextPage===cid$indexCid")
             WanAndroidDataProvider.getProjectPageList(nextPage, PAGE_SIZE, indexCid).data
         }
     }.flow.cachedIn(viewModelScope)
