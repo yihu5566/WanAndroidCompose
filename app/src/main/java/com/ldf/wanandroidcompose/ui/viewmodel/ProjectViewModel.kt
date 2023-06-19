@@ -19,6 +19,7 @@ import com.ldf.wanandroidcompose.data.bean.PageResponse
 import com.ldf.wanandroidcompose.data.bean.ProjectTitle
 import com.ldf.wanandroidcompose.ui.theme.Nav
 import com.ldf.wanandroidcompose.ui.utils.CommonPagingSource
+import com.ldf.wanandroidcompose.ui.widget.StoreData
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -33,7 +34,7 @@ class ProjectViewModel : BaseViewModel() {
 
     companion object {
         /** 每页显示的条目大小 */
-        const val PAGE_SIZE = 10
+        const val PAGE_SIZE = 20
     }
 
     override fun start() {
@@ -48,7 +49,7 @@ class ProjectViewModel : BaseViewModel() {
 
     //选中分类的cid
     private val indexCid
-        get() = _projectTreeData.value?.get(Nav.projectTopBarIndex.value)?.id ?: 0
+        get() = StoreData.projectTopBarListData.value?.get(Nav.projectTopBarIndex.value)?.id ?: 0
 
     //项目页面顶部指示器
     private val _projectTreeData = MutableLiveData<List<ProjectTitle>>()
@@ -60,7 +61,10 @@ class ProjectViewModel : BaseViewModel() {
         launch({
             handleRequest(
                 WanAndroidDataProvider.getProjectTitleList(),
-                { _projectTreeData.value = it.data })
+                {
+                    _projectTreeData.postValue(it.data)
+                    StoreData.projectTopBarListData.postValue(it.data)
+                })
         })
     }
 

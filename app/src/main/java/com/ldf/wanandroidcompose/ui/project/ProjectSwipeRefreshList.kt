@@ -1,7 +1,6 @@
 package com.ldf.wanandroidcompose.ui.project
 
 import android.content.Context
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,13 +17,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
-import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.items
 import com.blankj.utilcode.util.LogUtils
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
+import com.ldf.wanandroidcompose.data.bean.Article
 import com.ldf.wanandroidcompose.ui.utils.TestTags
 import com.ldf.wanandroidcompose.ui.viewmodel.ProjectViewModel
+import com.ldf.wanandroidcompose.ui.widget.SimpleCard
 import java.util.Timer
 import kotlin.concurrent.timerTask
 
@@ -39,16 +40,13 @@ import kotlin.concurrent.timerTask
 fun ProjectSwipeRefreshList(
     viewModel: ProjectViewModel,
     context: Context,
+    pagingItems: LazyPagingItems<Article>,
     onClick: () -> Unit
 ) {
-
-    //列表数据
-    val pagingItems = viewModel.projectListData.collectAsLazyPagingItems()
     //刷新状态记录
     val swipeableState = rememberSwipeRefreshState(false)
     Box(
         modifier = Modifier
-            .clickable(onClick = onClick)
             .padding(bottom = 6.dp, top = 6.dp)
             .padding(start = 8.dp, end = 8.dp)
     ) {
@@ -70,7 +68,9 @@ fun ProjectSwipeRefreshList(
                     key = { it.id }
                 ) { it ->
                     it?.let {
-                        projectItemWidget(it, context)
+                        SimpleCard {
+                            projectItemWidget(it, context, onClick)
+                        }
                     }
                 }
 

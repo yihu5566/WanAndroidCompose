@@ -6,6 +6,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.blankj.utilcode.util.LogUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.ldf.wanandroidcompose.ui.theme.Nav
 import com.ldf.wanandroidcompose.ui.viewmodel.ProjectViewModel
@@ -18,25 +19,26 @@ import com.ldf.wanandroidcompose.ui.viewmodel.ProjectViewModel
 @Composable
 fun ProjectScreen(navHostController: NavHostController) {
     val projectViewModel: ProjectViewModel = viewModel()
+    LogUtils.d("初始化项目界面————————》")
     //项目列表数据
     val projectListData = projectViewModel.projectListData.collectAsLazyPagingItems()
     val context = LocalContext.current
-
     //TopBar的Index改变
     LaunchedEffect(Nav.projectTopBarIndex.value) {
 
         if (Nav.projectTopBarIndex.value == projectViewModel.saveChangeProjectIndex) return@LaunchedEffect
 
         projectViewModel.apply {
+            LogUtils.d("刷新拉")
+
             //保存改变过index和offset的指示器Index
             saveChangeProjectIndex = Nav.projectTopBarIndex.value
             projectLazyListState.scrollToItem(0, 0)
+            projectListData.refresh()
         }
-
-        projectListData.refresh()
     }
     // 列表数据
-    ProjectSwipeRefreshList(projectViewModel, context, {
+    ProjectSwipeRefreshList(projectViewModel, context, projectListData, {
         ToastUtils.showLong("点击项目详情")
     })
 }
