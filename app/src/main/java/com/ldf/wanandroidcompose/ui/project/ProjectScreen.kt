@@ -8,8 +8,11 @@ import androidx.navigation.NavHostController
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.blankj.utilcode.util.LogUtils
 import com.blankj.utilcode.util.ToastUtils
+import com.ldf.wanandroidcompose.KeyNavigationRoute
+import com.ldf.wanandroidcompose.data.bean.Article
 import com.ldf.wanandroidcompose.ui.theme.Nav
 import com.ldf.wanandroidcompose.ui.viewmodel.ProjectViewModel
+import com.ldf.wanandroidcompose.ui.widget.SimpleCard
 
 /**
  * @Author : dongfang
@@ -38,7 +41,14 @@ fun ProjectScreen(navHostController: NavHostController) {
         }
     }
     // 列表数据
-    ProjectSwipeRefreshList(projectViewModel, context, projectListData, {
-        ToastUtils.showLong("点击项目详情")
-    })
+    ProjectSwipeRefreshList(
+        projectViewModel.projectLazyListState,
+        projectListData
+    ) { index: Int, data: Article ->
+        SimpleCard {
+            projectItemWidget(data, context) {
+                navHostController.navigate("${KeyNavigationRoute.WEBVIEW.route}?url=${data.link}")
+            }
+        }
+    }
 }

@@ -2,9 +2,9 @@ package com.ldf.wanandroidcompose.ui.home
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ScrollableTabRow
 import androidx.compose.material.Tab
@@ -21,8 +21,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.ldf.wanandroidcompose.KeyNavigationRoute
 import com.ldf.wanandroidcompose.data.bean.ProjectTitle
-import com.ldf.wanandroidcompose.ui.viewmodel.ProjectViewModel
 import com.ldf.wanandroidcompose.ui.theme.Nav
+import com.ldf.wanandroidcompose.ui.viewmodel.ProjectViewModel
 import com.ldf.wanandroidcompose.ui.widget.AppBar
 
 /**
@@ -102,7 +102,8 @@ fun ProjectTab(projectTopBarIndex: MutableState<Int>, projectTreeData: State<Lis
                 selected = index == projectTopBarIndex.value,
                 onClick = {
                     projectTopBarIndex.value = index
-                }) {
+                }, modifier = Modifier.padding(vertical = 10.dp)
+            ) {
                 Text(projectTitle.name)
             }
         }

@@ -49,8 +49,3 @@ val typography = Typography(
     ),
 
 )
-
-// Set of Material typography styles to start with
-val materialTypography = Typography(
-
-)

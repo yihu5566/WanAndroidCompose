@@ -1,6 +1,6 @@
 package com.ldf.wanandroidcompose.ui.wechat
 
-import androidx.compose.material3.Text
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 

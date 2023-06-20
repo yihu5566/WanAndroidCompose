@@ -1,7 +1,6 @@
 package com.ldf.wanandroidcompose.ui.home
 
 import android.content.Context
-import android.os.Build
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -12,24 +11,23 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ModalBottomSheetValue
-import androidx.compose.material.TopAppBar
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FiberManualRecord
 import androidx.compose.material.icons.filled.Lens
 import androidx.compose.material.icons.filled.Palette
 import androidx.compose.material.rememberModalBottomSheetState
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -41,17 +39,20 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.blankj.utilcode.util.LogUtils
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.guru.composecookbook.carousel.PagerState
+import com.ldf.wanandroidcompose.KeyNavigationRoute
 import com.ldf.wanandroidcompose.R
+import com.ldf.wanandroidcompose.data.bean.Article
 import com.ldf.wanandroidcompose.data.bean.Banner
+import com.ldf.wanandroidcompose.ui.project.ProjectSwipeRefreshList
 import com.ldf.wanandroidcompose.ui.theme.AppThemeState
 import com.ldf.wanandroidcompose.ui.theme.ColorPallet
 import com.ldf.wanandroidcompose.ui.theme.blue500
@@ -61,6 +62,7 @@ import com.ldf.wanandroidcompose.ui.theme.purple
 import com.ldf.wanandroidcompose.ui.theme.typography
 import com.ldf.wanandroidcompose.ui.utils.TestTags
 import com.ldf.wanandroidcompose.ui.viewmodel.HomeViewModel
+import com.ldf.wanandroidcompose.ui.widget.SimpleCard
 import com.ldf.wanandroidcompose.ui.widget.carousel.CarouselDot
 import com.ldf.wanandroidcompose.ui.widget.carousel.Pager
 import kotlinx.coroutines.CoroutineScope
@@ -74,7 +76,7 @@ import kotlinx.coroutines.launch
  */
 
 
-@OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterialApi::class, ExperimentalMaterialApi::class)
 @Composable
 fun HomeScreen(
     navHostController: NavHostController,
@@ -110,27 +112,18 @@ fun HomeScreen(
 //        },
         content = { paddingValues ->
             HomeScreenContent(
-                isDarkTheme = appThemeState.value.darkTheme,
-                showMenu = showMenu,
                 modifier = Modifier.padding(paddingValues),
-                onPalletChange = { newPalletSelected ->
-                    // Events can be and should be passed to as upper layer as possible here
-                    // we are just passing to till HomeScreen.
-                    appThemeState.value = appThemeState.value.copy(pallet = newPalletSelected)
-                    showMenu.value = false
-                },
-                homeViewModel = homeViewModel
+                homeViewModel = homeViewModel,
+                navHostController
             )
         })
 }
 
 @Composable
 fun HomeScreenContent(
-    isDarkTheme: Boolean,
-    showMenu: MutableState<Boolean>,
-    onPalletChange: (ColorPallet) -> Unit,
     modifier: Modifier = Modifier,
-    homeViewModel: HomeViewModel
+    homeViewModel: HomeViewModel,
+    navHostController: NavHostController
 ) {
     var itemList = remember { homeViewModel.bannerListLiveData }
     LogUtils.d("列表数据" + itemList.size)
@@ -144,10 +137,31 @@ fun HomeScreenContent(
         remember { PagerState(1, 0, itemList.size - 1) }
     }
     val selectedPage = remember { mutableStateOf(2) }
+    homeViewModel.fetchTopArticleList()
+    val articleTopData = homeViewModel.articleTopList.observeAsState()
+    //列表数据
+    val pagingItems = homeViewModel.homeListData.collectAsLazyPagingItems()
     Box(modifier = modifier) {
         Column {
             PrepareFirstPager(pagerState, itemList, selectedPage)
-            SwipeRefreshList(homeViewModel, context, isDarkTheme, isWiderScreen)
+            ProjectSwipeRefreshList(
+                homeViewModel.homeLazyListState,
+                pagingItems, {
+                    articleTopData.value?.let { it ->
+                        items(it) {
+                            ArticleItem(it) {
+                                navHostController.navigate("${KeyNavigationRoute.WEBVIEW.route}?url=${it.link}")
+                            }
+                        }
+                    }
+                }
+            ) { _: Int, data: Article ->
+                SimpleCard {
+                    ArticleItem(data) {
+                        navHostController.navigate("${KeyNavigationRoute.WEBVIEW.route}?url=${data.link}")
+                    }
+                }
+            }
         }
     }
 }
@@ -171,7 +185,7 @@ fun PrepareFirstPager(
         items.forEachIndexed { index, _ ->
             CarouselDot(
                 selected = index == selectedPage.value,
-                MaterialTheme.colorScheme.primary,
+                MaterialTheme.colors.primary,
                 Icons.Filled.Lens
             )
         }
@@ -214,7 +228,7 @@ fun PalletMenu(
         Column(
             horizontalAlignment = Alignment.Start,
             modifier = modifier
-                .background(MaterialTheme.colorScheme.background)
+                .background(MaterialTheme.colors.background)
                 .animateContentSize(),
         ) {
             MenuItem(green500, "Green") {
@@ -228,11 +242,6 @@ fun PalletMenu(
             }
             MenuItem(blue500, "Blue") {
                 onPalletChange.invoke(ColorPallet.BLUE)
-            }
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                MenuItem(dynamicLightColorScheme(LocalContext.current).primary, "Dynamic") {
-                    onPalletChange.invoke(ColorPallet.WALLPAPER)
-                }
             }
         }
     }

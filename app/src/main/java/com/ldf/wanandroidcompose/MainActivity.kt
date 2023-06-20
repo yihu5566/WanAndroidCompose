@@ -8,10 +8,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.Scaffold
 import androidx.compose.material.rememberModalBottomSheetState
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
@@ -20,9 +20,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.core.view.WindowCompat
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.insets.navigationBarsHeight
 import com.google.accompanist.insets.statusBarsHeight
 import com.ldf.wanandroidcompose.ui.home.BottomNavigationContent
@@ -37,37 +39,29 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+            //设置为沉浸式状态栏
+            WindowCompat.setDecorFitsSystemWindows(window, false)
             val systemUiController = remember { SystemUiController(window) }
             val appTheme = remember { mutableStateOf(AppThemeState()) }
-            BaseView(appTheme.value, systemUiController) {
-                MainAppContent(appTheme, onFinish = { finish() })
+            WanAndroidComposeTheme(
+                darkTheme = appTheme.value.darkTheme,
+                colorPallet = appTheme.value.pallet
+            ) {
+                systemUiController?.setStatusBarColor(
+                    color = MaterialTheme.colors.onSecondary,
+                    darkIcons = appTheme.value.darkTheme
+                )
+                ProvideWindowInsets {
+                    MainAppContent(appTheme, onFinish = { finish() })
+                }
             }
         }
-    }
-}
-
-@Composable
-fun BaseView(
-    appThemeState: AppThemeState,
-    systemUiController: SystemUiController?,
-    content: @Composable () -> Unit
-) {
-    WanAndroidComposeTheme(
-        darkTheme = appThemeState.darkTheme,
-        colorPallet = appThemeState.pallet
-    ) {
-        systemUiController?.setStatusBarColor(
-            color = MaterialTheme.colorScheme.onPrimaryContainer,
-            darkIcons = appThemeState.darkTheme
-        )
-        content()
     }
 }
 
 /**
  * 内容
  */
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun MainAppContent(
     appThemeState: MutableState<AppThemeState>,
@@ -78,49 +72,62 @@ fun MainAppContent(
     val navBackStackEntry by navHostController.currentBackStackEntryAsState()
     //返回当前route
     val currentRoute = navBackStackEntry?.destination?.route ?: Nav.BottomNavScreen.HomeScreen.route
-    val homeScreenState = rememberSaveable { mutableStateOf(BottomNavType.HOME) }
-    val chooseColorBottomModalState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
-    Scaffold(
-        contentColor = MaterialTheme.colorScheme.background,
-        topBar = {
-            Column {
-                //内容不挡住状态栏 如果不设置颜色这里会自己适配，但可能产生闪烁
-                Spacer(
-                    modifier = Modifier
-                        .background(androidx.compose.material.MaterialTheme.colors.primary)
-                        .statusBarsHeight()
-                        .fillMaxWidth()
-                )
+    if (isMainScreen(currentRoute)) {
 
-                MainTopBar(Nav.bottomNavRoute.value, navHostController)
+        Scaffold(
+            contentColor = MaterialTheme.colors.background,
+            topBar = {
+                Column {
+                    //内容不挡住状态栏 如果不设置颜色这里会自己适配，但可能产生闪烁
+                    Spacer(
+                        modifier = Modifier
+                            .background(MaterialTheme.colors.primary)
+                            .statusBarsHeight()
+                            .fillMaxWidth()
+                    )
+
+                    MainTopBar(Nav.bottomNavRoute.value, navHostController)
+                }
+            },
+            bottomBar = {
+                Column {
+                    BottomNavigationContent(
+                        Nav.bottomNavRoute.value,
+                        navHostController
+                    )
+                    //内容不挡住导航栏 如果不设置颜色这里会自己适配，但可能产生闪烁
+                    Spacer(
+                        modifier = Modifier
+                            .background(MaterialTheme.colors.primary)
+                            .navigationBarsHeight()
+                            .fillMaxWidth()
+                    )
+                }
+            },
+            content = {
+                NavigationHost(appThemeState, navHostController, it, onFinish)
             }
-        },
-        bottomBar = {
-            Column {
-                BottomNavigationContent(
-                    Nav.bottomNavRoute.value,
-                    navHostController
-                )
-                //内容不挡住导航栏 如果不设置颜色这里会自己适配，但可能产生闪烁
-                Spacer(
-                    modifier = Modifier
-                        .background(androidx.compose.material.MaterialTheme.colors.primary)
-                        .navigationBarsHeight()
-                        .fillMaxWidth()
-                )
-            }
-        },
-        content = {
-            NavigationHost(appThemeState, navHostController, it, onFinish)
-        }
-    )
+        )
+    } else
+        NavigationHost(appThemeState, navHostController = navHostController, onFinish = onFinish)
+}
+
+/**
+ * 是否是首页的内容
+ */
+fun isMainScreen(route: String): Boolean = when (route) {
+    Nav.BottomNavScreen.HomeScreen.route,
+    Nav.BottomNavScreen.ProjectScreen.route,
+    Nav.BottomNavScreen.SquareScreen.route,
+    Nav.BottomNavScreen.PublicNumScreen.route,
+    Nav.BottomNavScreen.MineScreen.route -> true
+
+    else -> false
 }
 
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
     val appThemeState = remember { mutableStateOf(AppThemeState(false, ColorPallet.GREEN)) }
-    BaseView(appThemeState.value, null) {
-        MainAppContent(appThemeState, onFinish = {})
-    }
+    MainAppContent(appThemeState, onFinish = {})
 }

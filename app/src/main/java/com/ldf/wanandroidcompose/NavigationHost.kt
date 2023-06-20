@@ -11,6 +11,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.navArgument
 import androidx.navigation.navigation
 import com.ldf.wanandroidcompose.ui.home.HomeScreen
 import com.ldf.wanandroidcompose.ui.profile.ProfileScreen
@@ -21,6 +22,7 @@ import com.ldf.wanandroidcompose.ui.theme.AppThemeState
 import com.ldf.wanandroidcompose.ui.theme.Nav
 import com.ldf.wanandroidcompose.ui.utils.StatsBarUtil
 import com.ldf.wanandroidcompose.ui.utils.TwoBackFinish
+import com.ldf.wanandroidcompose.ui.webview.WebViewCompose
 import com.ldf.wanandroidcompose.ui.wechat.WechatScreen
 
 /**
@@ -119,6 +121,19 @@ fun NavigationHost(
 
             SearchScreen(navHostController)
 
+            BackHandler { navHostController.navigateUp() }
+        }
+        //H5页面
+        composable(
+            route = "${KeyNavigationRoute.WEBVIEW.route}?url={url}", arguments = listOf(
+                navArgument("url") { defaultValue = "https://www.wanandroid.com/" })
+        ) { backStackEntry ->
+            //系统颜色的状态栏
+            StatsBarUtil().StatsBarColor(false)
+            WebViewCompose(
+                navHostController,
+                backStackEntry.arguments?.getString("url") ?: "https://www.wanandroid.com"
+            )
             BackHandler { navHostController.navigateUp() }
         }
     }

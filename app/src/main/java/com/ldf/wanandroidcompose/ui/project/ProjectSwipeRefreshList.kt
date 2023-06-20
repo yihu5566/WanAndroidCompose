@@ -1,6 +1,5 @@
 package com.ldf.wanandroidcompose.ui.project
 
-import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -8,24 +7,22 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Text
+import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
-import androidx.paging.compose.items
+import androidx.paging.compose.itemsIndexed
 import com.blankj.utilcode.util.LogUtils
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
-import com.ldf.wanandroidcompose.data.bean.Article
-import com.ldf.wanandroidcompose.ui.utils.TestTags
-import com.ldf.wanandroidcompose.ui.viewmodel.ProjectViewModel
-import com.ldf.wanandroidcompose.ui.widget.SimpleCard
 import java.util.Timer
 import kotlin.concurrent.timerTask
 
@@ -33,15 +30,16 @@ import kotlin.concurrent.timerTask
  *
  * @Author : dongfang
  * @Created Time : 2023/6/12  16:55
+ * @param itemContent 单独的列表项
  * @Description:
  *
  */
 @Composable
-fun ProjectSwipeRefreshList(
-    viewModel: ProjectViewModel,
-    context: Context,
-    pagingItems: LazyPagingItems<Article>,
-    onClick: () -> Unit
+fun <T : Any> ProjectSwipeRefreshList(
+    state: LazyListState = rememberLazyListState(),
+    pagingItems: LazyPagingItems<T>,
+    itemContent: LazyListScope.() -> Unit = {},
+    content: @Composable (index: Int, data: T) -> Unit
 ) {
     //刷新状态记录
     val swipeableState = rememberSwipeRefreshState(false)
@@ -59,22 +57,13 @@ fun ProjectSwipeRefreshList(
             }, 3000)
         }) {
             LazyColumn(
-                modifier = Modifier.testTag(TestTags.HOME_SCREEN_LIST),
-                state = viewModel.projectLazyListState
+                state = state
             ) {
-
-                items(
-                    items = pagingItems,
-                    key = { it.id }
-                ) { it ->
-                    it?.let {
-                        SimpleCard {
-                            projectItemWidget(it, context, onClick)
-                        }
-                    }
+                itemContent()
+                itemsIndexed(pagingItems) { index, data ->
+                    content(index, data!!)
                 }
-
-                when (val state = pagingItems.loadState.refresh) { //FIRST LOAD
+                when (pagingItems.loadState.refresh) { //FIRST LOAD
                     is LoadState.Error -> {
                         //TODO Error Item
                         //state.error to get error message
@@ -103,7 +92,7 @@ fun ProjectSwipeRefreshList(
                     }
                 }
 
-                when (val state = pagingItems.loadState.append) { // Pagination
+                when (pagingItems.loadState.append) { // Pagination
                     is LoadState.Error -> {
                         //TODO Pagination Error Item
                         //state.error to get error message
