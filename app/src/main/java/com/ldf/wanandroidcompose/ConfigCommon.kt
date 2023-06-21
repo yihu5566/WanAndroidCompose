@@ -6,6 +6,6 @@ package com.ldf.wanandroidcompose
  * @Description:
  */
 object ConfigCommon {
-    public const val DEFAULT_IP_ADDRESS_REMOTE = "https://www.wanandroid.com"     // 外网
+    const val DEFAULT_IP_ADDRESS_REMOTE = "https://www.wanandroid.com"     // 外网
 
 }

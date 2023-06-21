@@ -14,6 +14,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.navArgument
 import androidx.navigation.navigation
 import com.ldf.wanandroidcompose.ui.home.HomeScreen
+import com.ldf.wanandroidcompose.ui.profile.LoginScreen
 import com.ldf.wanandroidcompose.ui.profile.ProfileScreen
 import com.ldf.wanandroidcompose.ui.project.ProjectScreen
 import com.ldf.wanandroidcompose.ui.search.SearchScreen
@@ -114,6 +115,15 @@ fun NavigationHost(
                 }
             }
         }
+        //登录页面
+        composable(route = KeyNavigationRoute.LOGIN.route) {
+            //系统颜色的状态栏
+            StatsBarUtil().StatsBarColor(false)
+
+            LoginScreen(navHostController)
+
+            BackHandler { navHostController.navigateUp() }
+        }
         //搜索页面
         composable(route = KeyNavigationRoute.SEARCH.route) {
             //系统颜色的状态栏
@@ -173,6 +183,4 @@ enum class KeyNavigationRoute(
     //搜索
     SEARCH("search"),
 
-    //学习 - 动画
-    LEARN_ANIMATION("learn_animation")
 }

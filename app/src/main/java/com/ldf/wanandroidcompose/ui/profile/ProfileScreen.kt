@@ -21,7 +21,6 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
@@ -30,6 +29,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.ldf.wanandroidcompose.KeyNavigationRoute
 import com.ldf.wanandroidcompose.R
 
 /**
@@ -44,13 +44,13 @@ fun ProfileScreen(navHost: NavHostController) {
             .background(MaterialTheme.colors.primary)
             .fillMaxSize()
     ) {
-        TopWidget()
-        BottomWidget()
+        TopWidget(navHost)
+        BottomWidget(navHost)
     }
 }
 
 @Composable
-fun BottomWidget() {
+fun BottomWidget(navHost: NavHostController) {
     Spacer(modifier = Modifier.height(60.dp))
     Surface(
         color = MaterialTheme.colors.background,
@@ -59,7 +59,9 @@ fun BottomWidget() {
         shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)
     ) {
         Column(modifier = Modifier.padding(top = 10.dp)) {
-            ProfileItem(painterResource(R.mipmap.ic_jifen), "我的积分", 10) {}
+            ProfileItem(painterResource(R.mipmap.ic_jifen), "我的积分", 10) {
+                navHost.navigate(KeyNavigationRoute.LOGIN.route)
+            }
             ProfileItem(painterResource(R.drawable.ic_collect), "我的收藏") {}
             ProfileItem(painterResource(R.mipmap.ic_wenzhang), "我的文章") {}
             ProfileItem(painterResource(R.mipmap.ic_shezhi), "系统设置") {}
@@ -69,7 +71,7 @@ fun BottomWidget() {
 }
 
 @Composable
-fun TopWidget(name: String = "请先登录") {
+fun TopWidget(navHost: NavHostController, name: String = "请先登录") {
     Row(
         modifier = Modifier
             .fillMaxWidth()
