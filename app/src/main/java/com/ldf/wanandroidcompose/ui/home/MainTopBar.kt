@@ -20,9 +20,11 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.ldf.wanandroidcompose.KeyNavigationRoute
+import com.ldf.wanandroidcompose.data.bean.Classify
 import com.ldf.wanandroidcompose.data.bean.ProjectTitle
 import com.ldf.wanandroidcompose.ui.theme.Nav
 import com.ldf.wanandroidcompose.ui.viewmodel.ProjectViewModel
+import com.ldf.wanandroidcompose.ui.viewmodel.PublicNumViewModel
 import com.ldf.wanandroidcompose.ui.widget.AppBar
 
 /**
@@ -53,20 +55,20 @@ fun MainTopBar(bottomNavScreen: Nav.BottomNavScreen, navHostController: NavHostC
         //广场
         Nav.BottomNavScreen.SquareScreen -> {
             //顶部指示器
-//            SquareTab(Nav.squareTopBarIndex)
+            SquareTab(Nav.squareTopBarIndex)
         }
         //公众号
         Nav.BottomNavScreen.PublicNumScreen -> {
 
-//            val publicNumViewModel: PublicNumViewModel = viewModel()
+            val publicNumViewModel: PublicNumViewModel = viewModel()
 //
 //            //请求公众号列表数据
-//            publicNumViewModel.getPublicNumChapterData()
+            publicNumViewModel.fetchWechatTitleList()
 //
-//            val publicNumChapterData = publicNumViewModel.publicNumChapter.observeAsState()
+            val publicNumChapterData = publicNumViewModel.wechatTreeData.observeAsState()
 //
 //            //顶部指示器
-//            PublicNumTab(Nav.publicNumIndex, publicNumChapterData)
+            PublicNumTab(Nav.publicNumIndex, publicNumChapterData)
 
         }
         //我的
@@ -74,6 +76,65 @@ fun MainTopBar(bottomNavScreen: Nav.BottomNavScreen, navHostController: NavHostC
             AppBar(elevation = 0.dp)
         }
     }
+}
+
+@Composable
+fun PublicNumTab(publicNumIndex: MutableState<Int>, publicNumChapterData: State<List<Classify>?>) {
+    if (publicNumChapterData.value == null) {
+        Box(
+            modifier = Modifier
+                .background(MaterialTheme.colors.primary)
+                .fillMaxWidth()
+                .height(54.dp)
+        )
+        return
+    }
+
+    ScrollableTabRow(
+        selectedTabIndex = publicNumIndex.value,
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(54.dp),
+        edgePadding = 0.dp,
+        backgroundColor = MaterialTheme.colors.primary
+    ) {
+        publicNumChapterData.value!!.forEachIndexed { index, projectTitle ->
+            Tab(
+                selected = index == publicNumIndex.value,
+                onClick = {
+                    publicNumIndex.value = index
+                }, modifier = Modifier.padding(vertical = 10.dp)
+            ) {
+                Text(projectTitle.name)
+            }
+        }
+    }
+
+}
+
+val squareTopBarList = listOf<String>("广场", "每日一问", "体系", "导航")
+
+@Composable
+fun SquareTab(squareTopBarIndex: MutableState<Int>) {
+    //顶部指示器
+    ScrollableTabRow(
+        selectedTabIndex = squareTopBarIndex.value,
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(54.dp),
+        backgroundColor = MaterialTheme.colors.primary
+    ) {
+        squareTopBarList.forEachIndexed { index, item ->
+            Tab(
+                text = { Text(item) },
+                selected = index == squareTopBarIndex.value,
+                onClick = {
+                    squareTopBarIndex.value = index
+                }
+            )
+        }
+    }
+
 }
 
 @Composable

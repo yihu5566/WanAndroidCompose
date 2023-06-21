@@ -1,6 +1,7 @@
 package com.ldf.wanandroidcompose.ui.widget
 
 import androidx.lifecycle.MutableLiveData
+import com.ldf.wanandroidcompose.data.bean.Classify
 import com.ldf.wanandroidcompose.data.bean.ProjectTitle
 
 /**
@@ -12,6 +13,6 @@ object StoreData {
     val projectTopBarListData = MutableLiveData<List<ProjectTitle>>()
 
     //公众号页面顶部指示器数据
-    val publicNumTopBarListData = MutableLiveData<List<String>>()
+    val publicNumTopBarListData = MutableLiveData<List<Classify>>()
 
 }

@@ -6,9 +6,11 @@ import com.ldf.wanandroidcompose.data.bean.PageResponse
 import com.ldf.wanandroidcompose.data.bean.ApiResponse
 import com.ldf.wanandroidcompose.data.bean.Article
 import com.ldf.wanandroidcompose.data.bean.Banner
+import com.ldf.wanandroidcompose.data.bean.Classify
 import com.ldf.wanandroidcompose.data.bean.ProjectTitle
 import com.ldf.wanandroidcompose.data.http.Api
 import com.ldf.wanandroidcompose.data.http.ProjectApi
+import com.ldf.wanandroidcompose.data.http.WeChatApi
 import com.ldf.wanandroidcompose.http.BaseRepository
 import com.ldf.wanandroidcompose.http.RetrofitManager
 
@@ -17,10 +19,11 @@ import com.ldf.wanandroidcompose.http.RetrofitManager
  * @Created Time : 2023-06-04  11:35
  * @Description:
  */
-object WanAndroidDataProvider : BaseRepository(), Api, ProjectApi {
+object WanAndroidDataProvider : BaseRepository(), Api, ProjectApi, WeChatApi {
 
     private val service by lazy { RetrofitManager.getService(Api::class.java) }
     private val serviceProjectApi by lazy { RetrofitManager.getService(ProjectApi::class.java) }
+    private val serviceWeChatApi by lazy { RetrofitManager.getService(WeChatApi::class.java) }
 
     override suspend fun getBanner(): ApiResponse<List<Banner>> {
         return apiCall { service.getBanner() }
@@ -43,6 +46,18 @@ object WanAndroidDataProvider : BaseRepository(), Api, ProjectApi {
 
     override suspend fun unCollectArticle(id: Int): ApiResponse<Any?> {
         return apiCall { service.unCollectArticle(id) }
+    }
+
+    override suspend fun getAuthorTitleList(): ApiResponse<List<Classify>> {
+        return apiCall { serviceWeChatApi.getAuthorTitleList() }
+    }
+
+    override suspend fun getAuthorArticlePageList(
+        authorId: Int,
+        pageNo: Int,
+        pageSize: Int
+    ): ApiResponse<PageResponse<Article>> {
+        return apiCall { serviceWeChatApi.getAuthorArticlePageList(authorId, pageNo, pageSize) }
     }
 
     override suspend fun getOtherAuthorArticlePageList(

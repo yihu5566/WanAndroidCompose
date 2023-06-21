@@ -17,21 +17,22 @@ object Nav {
         @DrawableRes val id: Int
     ) {
         object HomeScreen :
-            BottomNavScreen("home", R.string.navigation_item_home, R.mipmap.ic_tab_home)
+            BottomNavScreen("home", R.string.navigation_item_home, R.drawable.ic_tab_home)
 
         object ProjectScreen :
-            BottomNavScreen("project", R.string.navigation_item_project, R.mipmap.ic_tab_project)
+            BottomNavScreen("project", R.string.navigation_item_project, R.drawable.ic_tab_project)
 
         object SquareScreen :
-            BottomNavScreen("square", R.string.navigation_item_square, R.mipmap.ic_tab_square)
+            BottomNavScreen("square", R.string.navigation_item_square, R.drawable.ic_tab_square)
 
         object PublicNumScreen : BottomNavScreen(
             "publicNum",
             R.string.navigation_item_public_num,
-            R.mipmap.ic_tab_wechat
+            R.drawable.ic_tab_wechat
         )
+
         object MineScreen :
-            BottomNavScreen("mine", R.string.navigation_item_profile, R.mipmap.ic_tab_mine)
+            BottomNavScreen("mine", R.string.navigation_item_profile, R.drawable.ic_tab_mine)
     }
 
     //记录BottomNav当前的Item
