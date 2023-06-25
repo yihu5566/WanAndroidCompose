@@ -85,9 +85,10 @@ dependencies {
     //控制UI栏
     implementation "com.google.accompanist:accompanist-systemuicontroller:0.18.0"
 
-    // LOTTIE
+    // airbnb
     implementation "com.airbnb.android:lottie-compose:4.1.0"
     implementation "com.airbnb.android:lottie:4.1.0"
+    implementation "com.airbnb.android:mavericks-compose:3.0.3"
 
     //Paging 3.0
     implementation 'androidx.paging:paging-compose:1.0.0-alpha14'
@@ -100,6 +101,8 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-viewmodel-compose:1.0.0-alpha07"
     //提供observeAsState等方法
     implementation "androidx.compose.runtime:runtime-livedata:1.0.5"
+    //持久化存储
+    implementation "androidx.datastore:datastore-preferences:1.0.0-alpha05"
 
 
 }

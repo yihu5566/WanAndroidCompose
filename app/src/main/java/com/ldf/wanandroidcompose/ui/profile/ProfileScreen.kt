@@ -21,6 +21,9 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
@@ -28,9 +31,13 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import com.blankj.utilcode.util.LogUtils
 import com.ldf.wanandroidcompose.KeyNavigationRoute
 import com.ldf.wanandroidcompose.R
+import com.ldf.wanandroidcompose.base.App
+import com.ldf.wanandroidcompose.ui.utils.LocalDataManage
 
 /**
  * @Author : dongfang
@@ -39,19 +46,28 @@ import com.ldf.wanandroidcompose.R
  */
 @Composable
 fun ProfileScreen(navHost: NavHostController) {
+
+    val loginViewModel: LoginViewModel = viewModel()
+
+
     Column(
         modifier = Modifier
             .background(MaterialTheme.colors.primary)
             .fillMaxSize()
     ) {
-        TopWidget(navHost)
-        BottomWidget(navHost)
+        //监听 刷新个人信息数据
+        LaunchedEffect(App.appViewModel.userEvent.value) {
+            //获取个人积分数据
+            loginViewModel.getUserInfoIntegral()
+            loginViewModel.getUserInfo()
+        }
+        TopWidget(navHost, loginViewModel)
+        BottomWidget(navHost, loginViewModel)
     }
 }
 
 @Composable
-fun BottomWidget(navHost: NavHostController) {
-    Spacer(modifier = Modifier.height(60.dp))
+fun BottomWidget(navHost: NavHostController, loginViewModel: LoginViewModel) {
     Surface(
         color = MaterialTheme.colors.background,
         modifier = Modifier
@@ -59,24 +75,38 @@ fun BottomWidget(navHost: NavHostController) {
         shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)
     ) {
         Column(modifier = Modifier.padding(top = 10.dp)) {
-            ProfileItem(painterResource(R.mipmap.ic_jifen), "我的积分", 10) {
-                navHost.navigate(KeyNavigationRoute.LOGIN.route)
+            val observeAsState = loginViewModel.userIntegralData.observeAsState()
+            ProfileItem(
+                painterResource(R.mipmap.ic_jifen),
+                "我的积分",
+                observeAsState.value?.coinCount ?: -1
+            ) {
             }
             ProfileItem(painterResource(R.drawable.ic_collect), "我的收藏") {}
             ProfileItem(painterResource(R.mipmap.ic_wenzhang), "我的文章") {}
-            ProfileItem(painterResource(R.mipmap.ic_shezhi), "系统设置") {}
+            ProfileItem(painterResource(R.mipmap.ic_shezhi), "系统设置") {
+                loginViewModel.logout()
+            }
+
         }
     }
 
 }
 
 @Composable
-fun TopWidget(navHost: NavHostController, name: String = "请先登录") {
+fun TopWidget(navHost: NavHostController, loginViewModel: LoginViewModel) {
+    val user = loginViewModel.userData.observeAsState()
+    val observeAsState = loginViewModel.userIntegralData.observeAsState()
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(start = 20.dp)
+            .padding(start = 20.dp, bottom = 60.dp)
             .height(80.dp)
+            .clickable {
+                if (user.value == null) {
+                    navHost.navigate(KeyNavigationRoute.LOGIN.route)
+                }
+            }
     ) {
         Surface(
             shape = CircleShape,
@@ -91,12 +121,15 @@ fun TopWidget(navHost: NavHostController, name: String = "请先登录") {
                 .fillMaxHeight(),
             verticalArrangement = Arrangement.SpaceEvenly
         ) {
-            Text(name, fontWeight = FontWeight.Bold, fontSize = 20.sp)
+            Text(
+                observeAsState.value?.username ?: "请登录",
+                fontWeight = FontWeight.Bold,
+                fontSize = 20.sp
+            )
             Row {
-                Text(text = "id:")
+                Text(text = "id:${observeAsState.value?.userId ?: ""}")
                 Spacer(modifier = Modifier.width(10.dp))
-                Text(text = "排名:")
-
+                Text(text = "排名:${observeAsState.value?.rank ?: ""}")
             }
         }
     }

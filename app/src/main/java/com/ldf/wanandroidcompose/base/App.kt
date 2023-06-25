@@ -5,6 +5,7 @@ import android.content.Context
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStore
 import androidx.lifecycle.ViewModelStoreOwner
+import com.ldf.wanandroidcompose.ui.utils.LocalDataManage
 import kotlin.properties.Delegates
 
 /**
@@ -21,6 +22,7 @@ class App : Application(), ViewModelStoreOwner {
         var appContext: Context by Delegates.notNull()
 
         lateinit var appViewModel: AppViewModel
+
     }
 
     override fun onCreate() {
@@ -28,6 +30,7 @@ class App : Application(), ViewModelStoreOwner {
         appContext = applicationContext
         mAppViewModelStore = ViewModelStore()
         appViewModel = getAppViewModelProvider().get(AppViewModel::class.java)
+        LocalDataManage.init(appContext)
     }
 
     /** 获取一个全局的ViewModel */

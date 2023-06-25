@@ -7,8 +7,15 @@ import com.ldf.wanandroidcompose.data.bean.ApiResponse
 import com.ldf.wanandroidcompose.data.bean.Article
 import com.ldf.wanandroidcompose.data.bean.Banner
 import com.ldf.wanandroidcompose.data.bean.Classify
+import com.ldf.wanandroidcompose.data.bean.CoinInfo
+import com.ldf.wanandroidcompose.data.bean.CollectArticle
+import com.ldf.wanandroidcompose.data.bean.CollectUrl
+import com.ldf.wanandroidcompose.data.bean.IntegralRecord
 import com.ldf.wanandroidcompose.data.bean.ProjectTitle
+import com.ldf.wanandroidcompose.data.bean.Share
+import com.ldf.wanandroidcompose.data.bean.User
 import com.ldf.wanandroidcompose.data.http.Api
+import com.ldf.wanandroidcompose.data.http.ProfileApi
 import com.ldf.wanandroidcompose.data.http.ProjectApi
 import com.ldf.wanandroidcompose.data.http.WeChatApi
 import com.ldf.wanandroidcompose.http.BaseRepository
@@ -19,11 +26,12 @@ import com.ldf.wanandroidcompose.http.RetrofitManager
  * @Created Time : 2023-06-04  11:35
  * @Description:
  */
-object WanAndroidDataProvider : BaseRepository(), Api, ProjectApi, WeChatApi {
+object WanAndroidDataProvider : BaseRepository(), Api, ProjectApi, WeChatApi, ProfileApi {
 
     private val service by lazy { RetrofitManager.getService(Api::class.java) }
     private val serviceProjectApi by lazy { RetrofitManager.getService(ProjectApi::class.java) }
     private val serviceWeChatApi by lazy { RetrofitManager.getService(WeChatApi::class.java) }
+    private val serviceProfileApi by lazy { RetrofitManager.getService(ProfileApi::class.java) }
 
     override suspend fun getBanner(): ApiResponse<List<Banner>> {
         return apiCall { service.getBanner() }
@@ -42,6 +50,59 @@ object WanAndroidDataProvider : BaseRepository(), Api, ProjectApi, WeChatApi {
 
     override suspend fun collectArticle(id: Int): ApiResponse<Any?> {
         return apiCall { service.collectArticle(id) }
+    }
+
+    override suspend fun login(username: String, pwd: String): ApiResponse<User> {
+        return apiCall { serviceProfileApi.login(username, pwd) }
+    }
+
+    override suspend fun logout(): ApiResponse<Any?> {
+        return apiCall { serviceProfileApi.logout() }
+    }
+
+    override suspend fun register(
+        username: String,
+        pwd: String,
+        pwdSure: String
+    ): ApiResponse<Any?> {
+        return apiCall { serviceProfileApi.register(username, pwd, pwdSure) }
+    }
+
+    override suspend fun getUserIntegral(): ApiResponse<CoinInfo> {
+        return apiCall { serviceProfileApi.getUserIntegral() }
+    }
+
+    override suspend fun getIntegralRankPageList(pageNo: Int): ApiResponse<PageResponse<CoinInfo>> {
+        return apiCall { serviceProfileApi.getIntegralRankPageList(pageNo) }
+    }
+
+    override suspend fun getIntegralRecordPageList(pageNo: Int): ApiResponse<PageResponse<IntegralRecord>> {
+        return apiCall { serviceProfileApi.getIntegralRecordPageList(pageNo) }
+
+    }
+
+    override suspend fun getCollectUrlList(): ApiResponse<List<CollectUrl>> {
+        return apiCall { serviceProfileApi.getCollectUrlList() }
+    }
+
+    override suspend fun getMyShareArticlePageList(pageNo: Int): ApiResponse<Share> {
+        return apiCall { serviceProfileApi.getMyShareArticlePageList(pageNo) }
+    }
+
+    override suspend fun addArticle(title: String, link: String): ApiResponse<Any?> {
+        return apiCall { serviceProfileApi.addArticle(title, link) }
+    }
+
+    override suspend fun deleteShareArticle(id: Int): ApiResponse<Any?> {
+        return apiCall { serviceProfileApi.deleteShareArticle(id) }
+    }
+
+    override suspend fun unCollectUrl(id: Int): ApiResponse<Any?> {
+        return apiCall { serviceProfileApi.unCollectUrl(id) }
+    }
+
+    override suspend fun getCollectArticlePageList(pageNo: Int): ApiResponse<PageResponse<CollectArticle>> {
+        return apiCall { serviceProfileApi.getCollectArticlePageList(pageNo) }
     }
 
     override suspend fun unCollectArticle(id: Int): ApiResponse<Any?> {
