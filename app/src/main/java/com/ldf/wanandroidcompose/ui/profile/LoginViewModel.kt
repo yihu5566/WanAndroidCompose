@@ -65,17 +65,7 @@ class LoginViewModel : BaseViewModel() {
         })
     }
 
-    fun logout() {
-        launch({
-            handleRequest(WanAndroidDataProvider.logout(), successBlock = {
-                LogUtils.d("---登出成功----")
-                RetrofitManager.cookieJar.clear()
-                App.appViewModel.userEvent.value = null
-                LocalDataManage.clear()
-                _userIntegralData.postValue(null)
-            })
-        })
-    }
+
 
     fun getUserInfo() {
         launch({

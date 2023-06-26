@@ -286,17 +286,3 @@ fun MenuItem(color: Color, name: String, onPalletChange: () -> Unit) {
         Text(text = name, modifier = Modifier.padding(8.dp))
     }
 }
-
-
-@OptIn(ExperimentalMaterialApi::class)
-@Preview
-@Composable
-fun PreviewHomeScreen() {
-    val state = remember {
-        mutableStateOf(AppThemeState(false, ColorPallet.GREEN))
-    }
-    val chooseColorBottomModalState =
-        rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
-
-//    HomeScreen(null, state)
-}

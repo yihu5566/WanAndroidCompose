@@ -48,7 +48,6 @@ object LocalDataManage {
 
     suspend fun getUser(): Flow<User?> {
         LogUtils.d("----->>>获取用户信息")
-
         return dataStore.data
             .catch {
                 if (it is IOException) {

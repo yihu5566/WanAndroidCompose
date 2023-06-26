@@ -21,6 +21,14 @@ import androidx.compose.material.OutlinedButton
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Chat
+import androidx.compose.material.icons.rounded.Login
+import androidx.compose.material.icons.rounded.Password
+import androidx.compose.material.icons.rounded.People
+import androidx.compose.material.icons.rounded.RemoveRedEye
+import androidx.compose.material.icons.rounded.Satellite
+import androidx.compose.material.icons.rounded.ShoppingCart
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -112,7 +120,7 @@ fun LoginScreen(navHostController: NavHostController) {
                     value = userName,
                     leadingIcon = {
                         Icon(
-                            painter = painterResource(R.mipmap.ic_wenzhang),
+                            Icons.Rounded.People,
                             contentDescription = ""
                         )
                     },
@@ -138,13 +146,13 @@ fun LoginScreen(navHostController: NavHostController) {
                     value = password,
                     leadingIcon = {
                         Icon(
-                            painter = painterResource(R.mipmap.ic_wenzhang),
+                            Icons.Rounded.Password,
                             contentDescription = ""
                         )
                     },
                     trailingIcon = {
                         Icon(
-                            painter = painterResource(R.mipmap.ic_shezhi),
+                            Icons.Rounded.RemoveRedEye,
                             contentDescription = "",
                             modifier = Modifier.clickable {
                                 passwordVisualTransformation =
@@ -232,7 +240,8 @@ fun LoginScreen(navHostController: NavHostController) {
                         .height(50.dp)
                 ) {
                     Icon(
-                        painterResource(R.mipmap.ic_shezhi), "",
+                        Icons.Rounded.Chat,
+                        "",
                         tint = LocalContentColor.current.copy(alpha = LocalContentAlpha.current),
                     )
                     Text(

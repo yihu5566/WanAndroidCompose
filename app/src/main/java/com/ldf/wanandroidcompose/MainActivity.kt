@@ -47,7 +47,7 @@ class MainActivity : ComponentActivity() {
                 darkTheme = appTheme.value.darkTheme,
                 colorPallet = appTheme.value.pallet
             ) {
-                systemUiController?.setStatusBarColor(
+                systemUiController.setStatusBarColor(
                     color = MaterialTheme.colors.onSecondary,
                     darkIcons = appTheme.value.darkTheme
                 )

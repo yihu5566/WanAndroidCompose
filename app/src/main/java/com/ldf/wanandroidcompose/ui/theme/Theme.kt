@@ -110,13 +110,13 @@ private val LightOrangeColorPalette = lightColors(
 )
 
 enum class ColorPallet {
-    PURPLE, GREEN, ORANGE, BLUE, WALLPAPER
+    PURPLE, GREEN, ORANGE, BLUE
 }
 
 @Composable
 fun WanAndroidComposeTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    colorPallet: ColorPallet = ColorPallet.WALLPAPER,
+    colorPallet: ColorPallet = ColorPallet.GREEN,
     content: @Composable () -> Unit,
 ) {
     val colors = when (colorPallet) {

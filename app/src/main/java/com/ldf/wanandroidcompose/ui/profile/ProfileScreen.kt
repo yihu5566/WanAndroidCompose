@@ -34,6 +34,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.blankj.utilcode.util.LogUtils
+import com.blankj.utilcode.util.ToastUtils
 import com.ldf.wanandroidcompose.KeyNavigationRoute
 import com.ldf.wanandroidcompose.R
 import com.ldf.wanandroidcompose.base.App
@@ -74,6 +75,8 @@ fun BottomWidget(navHost: NavHostController, loginViewModel: LoginViewModel) {
             .fillMaxSize(),
         shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)
     ) {
+        val user = loginViewModel.userData.observeAsState()
+
         Column(modifier = Modifier.padding(top = 10.dp)) {
             val observeAsState = loginViewModel.userIntegralData.observeAsState()
             ProfileItem(
@@ -82,12 +85,19 @@ fun BottomWidget(navHost: NavHostController, loginViewModel: LoginViewModel) {
                 observeAsState.value?.coinCount ?: -1
             ) {
             }
-            ProfileItem(painterResource(R.drawable.ic_collect), "我的收藏") {}
-            ProfileItem(painterResource(R.mipmap.ic_wenzhang), "我的文章") {}
-            ProfileItem(painterResource(R.mipmap.ic_shezhi), "系统设置") {
-                loginViewModel.logout()
+            ProfileItem(painterResource(R.drawable.ic_collect), "我的收藏") {
+                if (user.value == null) {
+                    ToastUtils.showLong("请先登录！！")
+                }
             }
-
+            ProfileItem(painterResource(R.mipmap.ic_wenzhang), "我的文章") {
+                if (user.value == null) {
+                    ToastUtils.showLong("请先登录！！")
+                }
+            }
+            ProfileItem(painterResource(R.mipmap.ic_shezhi), "系统设置") {
+                navHost.navigate(KeyNavigationRoute.SETTING.route)
+            }
         }
     }
 
@@ -133,58 +143,5 @@ fun TopWidget(navHost: NavHostController, loginViewModel: LoginViewModel) {
             }
         }
     }
-
-
 }
 
-@Composable
-fun ProfileItem(
-    painter: Painter = painterResource(R.drawable.ic_collect),
-    title: String,
-    num: Int = -1,
-    onClick: () -> Unit
-) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 10.dp, vertical = 10.dp)
-            .height(30.dp)
-            .clickable(onClick = onClick),
-    ) {
-        Icon(
-            painter,
-            modifier = Modifier
-                .padding(start = 8.dp)
-                .size(16.dp),
-            tint = MaterialTheme.colors.secondaryVariant,
-            contentDescription = null
-        )
-        Text(
-            text = title,
-            style = MaterialTheme.typography.body1,
-            modifier = Modifier.padding(start = 10.dp)
-        )
-        Spacer(modifier = Modifier.weight(1f))
-        if (num != -1) {
-            Text(
-                text = "当前积分:",
-                style = MaterialTheme.typography.subtitle1,
-                modifier = Modifier.padding(start = 10.dp)
-            )
-            Text(
-                text = "$num",
-                style = TextStyle(color = MaterialTheme.colors.primary, fontSize = 16.sp),
-                modifier = Modifier.padding(start = 10.dp)
-            )
-        }
-
-        Icon(
-            painterResource(R.mipmap.ic_right),
-            modifier = Modifier
-                .padding(start = 8.dp)
-                .size(16.dp), contentDescription = null
-        )
-
-    }
-
-}
