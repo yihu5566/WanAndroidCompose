@@ -74,7 +74,7 @@ class PublicNumViewModel : BaseViewModel() {
     private val _wechatListData = Pager(PagingConfig(pageSize = PAGE_SIZE)) {
         CommonPagingSource { nextPage: Int ->
             LogUtils.d("分页$nextPage===cid$indexCid")
-            WanAndroidDataProvider.getAuthorArticlePageList(nextPage, PAGE_SIZE, indexCid).data
+            WanAndroidDataProvider.getAuthorArticlePageList(indexCid, nextPage, PAGE_SIZE).data
         }
     }.flow.cachedIn(viewModelScope)
 

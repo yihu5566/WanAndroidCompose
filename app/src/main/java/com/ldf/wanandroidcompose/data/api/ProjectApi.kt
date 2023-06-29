@@ -1,10 +1,9 @@
-package com.ldf.wanandroidcompose.data.http
+package com.ldf.wanandroidcompose.data.api
 
 import com.ldf.wanandroidcompose.data.bean.ApiResponse
 import com.ldf.wanandroidcompose.data.bean.Article
 import com.ldf.wanandroidcompose.data.bean.PageResponse
 import com.ldf.wanandroidcompose.data.bean.ProjectTitle
-import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query

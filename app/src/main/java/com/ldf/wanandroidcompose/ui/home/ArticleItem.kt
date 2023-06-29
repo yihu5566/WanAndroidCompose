@@ -15,6 +15,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -24,10 +25,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.text.HtmlCompat
 import com.ldf.wanandroidcompose.R
 import com.ldf.wanandroidcompose.data.bean.Article
+import com.ldf.wanandroidcompose.data.bean.Tag
 
 /**
  * @Author : dongfang
@@ -38,7 +41,15 @@ import com.ldf.wanandroidcompose.data.bean.Article
 @Preview
 @Composable
 fun PreviewArticleItem() {
-//    ArticleItem(null, LocalContext.current, true, true)
+    ArticleItem(
+        Article(
+            niceDate = "2020-2-2 20:00",
+            tags = listOf(Tag("kk", "")),
+            fresh = true,
+            author = "yihu",
+            type = 1
+        )
+    )
 }
 
 @Composable
@@ -51,7 +62,6 @@ fun ArticleItem(
         modifier = Modifier
             .fillMaxWidth()
             .padding(10.dp)
-            .testTag("button-${itemBean.title}")
             .background(color = Color.White)
             .clickable(onClick = onClick)
     ) {
@@ -69,7 +79,7 @@ fun ArticleItem(
                     text = "置顶",
                     modifier = Modifier
                         .border(width = 1.dp, color = Color.Red, shape = RoundedCornerShape(15))
-                        .padding(3.dp),
+                        .padding(2.dp),
                     style = TextStyle(color = Color.Red)
                 )
             }
@@ -79,7 +89,7 @@ fun ArticleItem(
                     text = "新",
                     modifier = Modifier
                         .border(width = 1.dp, color = Color.Red, shape = RoundedCornerShape(15))
-                        .padding(3.dp),
+                        .padding(2.dp),
                     style = TextStyle(color = Color.Red)
                 )
             }
@@ -94,8 +104,8 @@ fun ArticleItem(
 
             Text(
                 text = itemBean.niceDate,
-                modifier = Modifier
-                    .padding(5.dp),
+                modifier = Modifier.padding(5.dp),
+                style = MaterialTheme.typography.h6.copy(color = Color.Gray, fontSize = 10.sp)
             )
         }
         AndroidView(

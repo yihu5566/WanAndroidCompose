@@ -14,10 +14,10 @@ import com.ldf.wanandroidcompose.data.bean.IntegralRecord
 import com.ldf.wanandroidcompose.data.bean.ProjectTitle
 import com.ldf.wanandroidcompose.data.bean.Share
 import com.ldf.wanandroidcompose.data.bean.User
-import com.ldf.wanandroidcompose.data.http.Api
-import com.ldf.wanandroidcompose.data.http.ProfileApi
-import com.ldf.wanandroidcompose.data.http.ProjectApi
-import com.ldf.wanandroidcompose.data.http.WeChatApi
+import com.ldf.wanandroidcompose.data.api.Api
+import com.ldf.wanandroidcompose.data.api.ProfileApi
+import com.ldf.wanandroidcompose.data.api.ProjectApi
+import com.ldf.wanandroidcompose.data.api.WeChatApi
 import com.ldf.wanandroidcompose.http.BaseRepository
 import com.ldf.wanandroidcompose.http.RetrofitManager
 

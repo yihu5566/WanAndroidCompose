@@ -1,4 +1,4 @@
-package com.ldf.wanandroidcompose.data.http
+package com.ldf.wanandroidcompose.data.api
 
 import com.ldf.wanandroidcompose.data.bean.ApiResponse
 import com.ldf.wanandroidcompose.data.bean.CoinInfo

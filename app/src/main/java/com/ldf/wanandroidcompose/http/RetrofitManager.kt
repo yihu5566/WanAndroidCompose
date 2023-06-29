@@ -1,11 +1,9 @@
 package com.ldf.wanandroidcompose.http
 
 import com.ldf.wanandroidcompose.http.interceptor.CacheInterceptor
-import com.ldf.wanandroidcompose.http.interceptor.logInterceptor
 import com.franmontiel.persistentcookiejar.PersistentCookieJar
 import com.franmontiel.persistentcookiejar.cache.SetCookieCache
 import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor
-import com.ldf.wanandroidcompose.ConfigCommon
 import com.ldf.wanandroidcompose.base.App.Companion.appContext
 import com.ldf.wanandroidcompose.http.interceptor.StatusInterceptor
 import okhttp3.Cache

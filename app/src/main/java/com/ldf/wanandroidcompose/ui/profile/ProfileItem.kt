@@ -43,7 +43,7 @@ fun ProfileItem(
             modifier = Modifier
                 .padding(start = 8.dp)
                 .size(16.dp),
-            tint = MaterialTheme.colors.secondaryVariant,
+            tint = MaterialTheme.colors.primaryVariant,
             contentDescription = null
         )
         Text(
