@@ -1,15 +1,18 @@
 package com.ldf.wanandroidcompose.ui.profile
 
+import android.widget.Space
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -32,9 +35,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import com.blankj.utilcode.util.AppUtils
 import com.blankj.utilcode.util.LogUtils
 import com.ldf.wanandroidcompose.ui.theme.AppThemeState
 import com.ldf.wanandroidcompose.ui.theme.ColorPallet
@@ -42,7 +47,10 @@ import com.ldf.wanandroidcompose.ui.theme.blue500
 import com.ldf.wanandroidcompose.ui.theme.green500
 import com.ldf.wanandroidcompose.ui.theme.orange500
 import com.ldf.wanandroidcompose.ui.theme.purple
+import com.ldf.wanandroidcompose.ui.utils.CacheDataManager
+import com.ldf.wanandroidcompose.ui.utils.CommonConstant
 import com.ldf.wanandroidcompose.ui.utils.HeadingSection
+import com.ldf.wanandroidcompose.ui.utils.LocalDataManage
 import com.ldf.wanandroidcompose.ui.utils.TitleText
 import com.ldf.wanandroidcompose.ui.widget.AppBar
 import com.ldf.wanandroidcompose.ui.widget.BaseScreen
@@ -79,12 +87,13 @@ fun SettingCenterScreen(
 ) {
 
     LogUtils.d("padding${paddingValues.calculateTopPadding()}")
+    val context = LocalContext.current
     //清除缓存弹窗
     var cacheDataState by remember { mutableStateOf(false) }
     if (cacheDataState) {
         //弹窗,关闭之后重新设置为false,下次可以继续监听
         SimpleAlertDialog("温馨提示", "确定清理缓存吗", confirmStr = "清理", confirmClick = {
-//            CacheDataManager.clearAllCache(context)
+            CacheDataManager.clearAllCache(context)
         }) { cacheDataState = false }
     }
 
@@ -106,20 +115,23 @@ fun SettingCenterScreen(
     }
     LazyColumn(modifier = Modifier.fillMaxSize()) {
         item {
-            TitleText(Modifier.wrapContentWidth(), "基本设置")
-            HeadingSection(Modifier.wrapContentWidth(), "清除缓存", "22M") {
+            TitleText(title = "基本设置")
+            HeadingSection(
+                title = "清除缓存",
+                subtitle = CacheDataManager.getTotalCacheSize(context)
+            ) {
                 cacheDataState = true
             }
-            HeadingSection(Modifier.wrapContentWidth(), "退出", "退出登录") {
+            HeadingSection(title = "退出", subtitle = "退出登录") {
                 exitLoginState = true
             }
             Divider()
         }
 
         item {
-            TitleText(Modifier.wrapContentWidth(), "其他设置")
-            Row {
-                HeadingSection(Modifier.wrapContentWidth(), "主题", "设置主题颜色") {
+            TitleText(title = "其他设置")
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                HeadingSection(Modifier.weight(1f), "主题", "设置主题颜色") {
                     themeColorState = true
                 }
                 Surface(
@@ -128,8 +140,25 @@ fun SettingCenterScreen(
                     color = MaterialTheme.colors.primary,
                     content = {}
                 )
+                Spacer(modifier = Modifier.width(20.dp))
             }
             Divider()
+        }
+        item {
+            TitleText(title = "关于")
+            HeadingSection(
+                title = "版本",
+                subtitle = "当前版本：${AppUtils.getAppVersionName()}"
+            )
+            HeadingSection(
+                title = "作者",
+                subtitle = "yihu5566"
+            )
+            HeadingSection(
+                title = "GitHub地址",
+                subtitle = "https://github.com/yihu5566/WanAndroidCompose"
+            )
+            HeadingSection(title = "版权声明", subtitle = "仅供个人及非商业用途使用")
         }
 
     }
@@ -156,7 +185,8 @@ private fun ThemeSelectedScreen(appThemeState: MutableState<AppThemeState>) {
                 border = BorderStroke(1.dp, MaterialTheme.colors.secondaryVariant),
                 modifier = modifier.clickable(onClick = {
                     //保存主题颜色
-                    appThemeState.value.pallet = theme
+                    appThemeState.value = appThemeState.value.copy(pallet = theme)
+                    LocalDataManage.saveSyncStringData(CommonConstant.THEME, theme.name)
                 }),
                 shape = CircleShape,
                 color =

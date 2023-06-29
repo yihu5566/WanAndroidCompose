@@ -8,4 +8,6 @@ package com.ldf.wanandroidcompose.ui.utils
 object CommonConstant {
     //是否登录
     const val IS_LOGIN = "is_login"
+    const val USER = "user"
+    const val THEME = "theme"
 }

@@ -2,6 +2,7 @@ package com.ldf.wanandroidcompose.ui.profile
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.blankj.utilcode.util.GsonUtils
 import com.blankj.utilcode.util.LogUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.ldf.wanandroidcompose.base.App
@@ -12,6 +13,7 @@ import com.ldf.wanandroidcompose.data.WanAndroidDataProvider
 import com.ldf.wanandroidcompose.data.bean.CoinInfo
 import com.ldf.wanandroidcompose.data.bean.User
 import com.ldf.wanandroidcompose.http.RetrofitManager
+import com.ldf.wanandroidcompose.ui.utils.CommonConstant
 import com.ldf.wanandroidcompose.ui.utils.LocalDataManage
 import kotlinx.coroutines.flow.map
 
@@ -45,8 +47,7 @@ class LoginViewModel : BaseViewModel() {
         }
         launch({
             handleRequest(WanAndroidDataProvider.login(userName, pwd), successBlock = {
-                LocalDataManage.saveLastUserName(userName)
-                LocalDataManage.saveUser(it.data)
+                LocalDataManage.saveStringData(CommonConstant.USER, GsonUtils.toJson(it.data))
                 App.appViewModel.userEvent.value = it.data
                 successCall.invoke()
             }, errorBlock = {
@@ -66,11 +67,11 @@ class LoginViewModel : BaseViewModel() {
     }
 
 
-
     fun getUserInfo() {
         launch({
-            LocalDataManage.getUser().map {
-                _userData.postValue(it)
+            LocalDataManage.getData(CommonConstant.USER, "").map {
+                val user = GsonUtils.fromJson(it, User::class.java)
+                _userData.postValue(user)
             }
         })
     }

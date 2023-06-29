@@ -102,7 +102,7 @@ dependencies {
     //提供observeAsState等方法
     implementation "androidx.compose.runtime:runtime-livedata:1.0.5"
     //持久化存储
-    implementation "androidx.datastore:datastore-preferences:1.0.0-alpha05"
+    implementation "androidx.datastore:datastore-preferences:1.0.0"
 
 
 }

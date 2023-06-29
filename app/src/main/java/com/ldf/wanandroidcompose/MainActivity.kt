@@ -7,17 +7,13 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.Scaffold
-import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.view.WindowCompat
@@ -34,15 +30,24 @@ import com.ldf.wanandroidcompose.ui.theme.ColorPallet
 import com.ldf.wanandroidcompose.ui.theme.Nav
 import com.ldf.wanandroidcompose.ui.theme.SystemUiController
 import com.ldf.wanandroidcompose.ui.theme.WanAndroidComposeTheme
+import com.ldf.wanandroidcompose.ui.utils.CommonConstant
+import com.ldf.wanandroidcompose.ui.utils.LocalDataManage
 
 class MainActivity : ComponentActivity() {
+    private val themeName =
+        LocalDataManage.getSyncData(CommonConstant.THEME, ColorPallet.GREEN.name)
+    private val themeSelect = mutableStateOf(AppThemeState())
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val switchTheme = switchTheme(themeName)
+        themeSelect.value.pallet = switchTheme
+
         setContent {
             //设置为沉浸式状态栏
             WindowCompat.setDecorFitsSystemWindows(window, false)
             val systemUiController = remember { SystemUiController(window) }
-            val appTheme = remember { mutableStateOf(AppThemeState()) }
+            val appTheme = remember { themeSelect }
             WanAndroidComposeTheme(
                 darkTheme = appTheme.value.darkTheme,
                 colorPallet = appTheme.value.pallet
@@ -56,6 +61,28 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+    }
+
+    fun switchTheme(themeName: String): ColorPallet {
+        var saveTheme: ColorPallet
+        when (themeName) {
+            ColorPallet.PURPLE.name -> {
+                saveTheme = ColorPallet.PURPLE
+            }
+
+            ColorPallet.ORANGE.name -> {
+                saveTheme = ColorPallet.ORANGE
+            }
+
+            ColorPallet.BLUE.name -> {
+                saveTheme = ColorPallet.BLUE
+            }
+
+            else -> {
+                saveTheme = ColorPallet.GREEN
+            }
+        }
+        return saveTheme
     }
 }
 

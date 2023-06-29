@@ -84,6 +84,9 @@ fun BottomWidget(navHost: NavHostController, loginViewModel: LoginViewModel) {
                 "我的积分",
                 observeAsState.value?.coinCount ?: -1
             ) {
+                if (user.value == null) {
+                    ToastUtils.showLong("请先登录！！")
+                }
             }
             ProfileItem(painterResource(R.drawable.ic_collect), "我的收藏") {
                 if (user.value == null) {

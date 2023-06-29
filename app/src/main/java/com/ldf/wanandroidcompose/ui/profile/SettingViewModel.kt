@@ -7,6 +7,7 @@ import com.ldf.wanandroidcompose.base.ext.handleRequest
 import com.ldf.wanandroidcompose.base.ext.launch
 import com.ldf.wanandroidcompose.data.WanAndroidDataProvider
 import com.ldf.wanandroidcompose.http.RetrofitManager
+import com.ldf.wanandroidcompose.ui.utils.CommonConstant
 import com.ldf.wanandroidcompose.ui.utils.LocalDataManage
 
 /**
@@ -24,7 +25,7 @@ class SettingViewModel : BaseViewModel() {
                 LogUtils.d("---登出成功----")
                 RetrofitManager.cookieJar.clear()
                 App.appViewModel.userEvent.value = null
-                LocalDataManage.clear()
+                LocalDataManage.saveSyncStringData(CommonConstant.USER, "")
                 logoutSuccess.invoke()
             })
         })
