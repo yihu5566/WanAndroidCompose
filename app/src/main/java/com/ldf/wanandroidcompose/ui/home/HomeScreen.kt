@@ -58,7 +58,6 @@ import com.ldf.wanandroidcompose.ui.theme.ColorPallet
 import com.ldf.wanandroidcompose.ui.theme.blue500
 import com.ldf.wanandroidcompose.ui.theme.green500
 import com.ldf.wanandroidcompose.ui.theme.orange500
-import com.ldf.wanandroidcompose.ui.theme.purple
 import com.ldf.wanandroidcompose.ui.theme.typography
 import com.ldf.wanandroidcompose.ui.utils.TestTags
 import com.ldf.wanandroidcompose.ui.viewmodel.HomeViewModel

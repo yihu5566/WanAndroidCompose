@@ -21,6 +21,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -64,7 +65,7 @@ fun ArticleItem(
         modifier = Modifier
             .fillMaxWidth()
             .padding(10.dp)
-            .background(color = Color.White)
+            .background(color = MaterialTheme.colors.background)
             .clickable(onClick = onClick)
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -109,10 +110,12 @@ fun ArticleItem(
                 style = MaterialTheme.typography.h6.copy(color = Color.Gray, fontSize = 10.sp)
             )
         }
+        var textColor = MaterialTheme.colors.onSecondary.toArgb()
         AndroidView(
             factory = { context -> TextView(context) },
             update = {
                 it.text = HtmlCompat.fromHtml(itemBean.title, HtmlCompat.FROM_HTML_MODE_COMPACT)
+                it.setTextColor(textColor)
             }
         )
 
@@ -126,6 +129,7 @@ fun ArticleItem(
                         itemBean.superChapterName + '·' + itemBean.chapterName,
                         HtmlCompat.FROM_HTML_MODE_COMPACT
                     )
+                    it.setTextColor(textColor)
                 }
             )
             Spacer(modifier = Modifier.weight(weight = 1f, true))

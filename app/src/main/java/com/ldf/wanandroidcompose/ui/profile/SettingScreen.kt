@@ -22,6 +22,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
+import androidx.compose.material.Switch
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Lock
@@ -44,7 +45,7 @@ import com.ldf.wanandroidcompose.ui.theme.ColorPallet
 import com.ldf.wanandroidcompose.ui.theme.blue500
 import com.ldf.wanandroidcompose.ui.theme.green500
 import com.ldf.wanandroidcompose.ui.theme.orange500
-import com.ldf.wanandroidcompose.ui.theme.purple
+import com.ldf.wanandroidcompose.ui.theme.purple500
 import com.ldf.wanandroidcompose.ui.utils.CacheDataManager
 import com.ldf.wanandroidcompose.ui.utils.CommonConstant
 import com.ldf.wanandroidcompose.ui.utils.HeadingSection
@@ -140,6 +141,14 @@ fun SettingCenterScreen(
                 )
                 Spacer(modifier = Modifier.width(20.dp))
             }
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                var dark = if (appThemeState.value.darkTheme) "夜间" else "白天"
+                HeadingSection(Modifier.weight(1f), "夜间模式", dark)
+                Switch(checked = appThemeState.value.darkTheme, onCheckedChange = {
+                    appThemeState.value = appThemeState.value.copy(darkTheme = it)
+                })
+            }
+
             Divider()
         }
         item {
@@ -194,7 +203,7 @@ private fun ThemeSelectedScreen(appThemeState: MutableState<AppThemeState>) {
                     }
 
                     ColorPallet.PURPLE.name -> {
-                        purple
+                        purple500
                     }
 
                     ColorPallet.ORANGE.name -> {

@@ -11,7 +11,7 @@ import androidx.compose.ui.graphics.Color
 private val DarkGreenColorPalette = darkColors(
     primary = green200,
     primaryVariant = green700,
-    secondary = teal200,
+    secondary = green500,
     background = Color.Black,
     surface = Color.Black,
     onPrimary = Color.Black,
@@ -24,7 +24,7 @@ private val DarkGreenColorPalette = darkColors(
 private val DarkPurpleColorPalette = darkColors(
     primary = purple200,
     primaryVariant = purple700,
-    secondary = teal200,
+    secondary = purple500,
     background = Color.Black,
     surface = Color.Black,
     onPrimary = Color.Black,
@@ -37,7 +37,7 @@ private val DarkPurpleColorPalette = darkColors(
 private val DarkBlueColorPalette = darkColors(
     primary = blue200,
     primaryVariant = blue700,
-    secondary = teal200,
+    secondary = blue500,
     background = Color.Black,
     surface = Color.Black,
     onPrimary = Color.Black,
@@ -50,7 +50,7 @@ private val DarkBlueColorPalette = darkColors(
 private val DarkOrangeColorPalette = darkColors(
     primary = orange200,
     primaryVariant = orange700,
-    secondary = teal200,
+    secondary = orange500,
     background = Color.Black,
     surface = Color.Black,
     onPrimary = Color.Black,
@@ -70,11 +70,12 @@ private val LightGreenColorPalette = lightColors(
     onPrimary = Color.White,
     onSecondary = Color.Black,
     onBackground = Color.Black,
-    onSurface = Color.Black
+    onSurface = Color.Black,
+    error = Color.Red,
 )
 
 private val LightPurpleColorPalette = lightColors(
-    primary = purple,
+    primary = purple500,
     primaryVariant = purple700,
     secondary = teal200,
     background = Color.White,
@@ -82,7 +83,8 @@ private val LightPurpleColorPalette = lightColors(
     onPrimary = Color.White,
     onSecondary = Color.Black,
     onBackground = Color.Black,
-    onSurface = Color.Black
+    onSurface = Color.Black,
+    error = Color.Red,
 )
 
 private val LightBlueColorPalette = lightColors(
@@ -94,7 +96,8 @@ private val LightBlueColorPalette = lightColors(
     onPrimary = Color.White,
     onSecondary = Color.Black,
     onBackground = Color.Black,
-    onSurface = Color.Black
+    onSurface = Color.Black,
+    error = Color.Red,
 )
 
 private val LightOrangeColorPalette = lightColors(
@@ -106,7 +109,8 @@ private val LightOrangeColorPalette = lightColors(
     onPrimary = Color.White,
     onSecondary = Color.Black,
     onBackground = Color.Black,
-    onSurface = Color.Black
+    onSurface = Color.Black,
+    error = Color.Red,
 )
 
 enum class ColorPallet {
@@ -124,7 +128,6 @@ fun WanAndroidComposeTheme(
         ColorPallet.PURPLE -> if (darkTheme) DarkPurpleColorPalette else LightPurpleColorPalette
         ColorPallet.ORANGE -> if (darkTheme) DarkOrangeColorPalette else LightOrangeColorPalette
         ColorPallet.BLUE -> if (darkTheme) DarkBlueColorPalette else LightBlueColorPalette
-        else -> if (darkTheme) DarkBlueColorPalette else LightBlueColorPalette
     }
     MaterialTheme(
         colors = colors,
