@@ -18,6 +18,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
@@ -47,7 +48,8 @@ fun PreviewArticleItem() {
             tags = listOf(Tag("kk", "")),
             fresh = true,
             author = "yihu",
-            type = 1
+            type = 1,
+            title = "oooooo", superChapterName = "d", chapterName = "fff", collect = true
         )
     )
 }
@@ -65,7 +67,7 @@ fun ArticleItem(
             .background(color = Color.White)
             .clickable(onClick = onClick)
     ) {
-        Row {
+        Row(verticalAlignment = Alignment.CenterVertically) {
             if (itemBean.author.isNotEmpty()) {
                 Text(
                     text = itemBean.author,
@@ -78,8 +80,8 @@ fun ArticleItem(
                 Text(
                     text = "置顶",
                     modifier = Modifier
-                        .border(width = 1.dp, color = Color.Red, shape = RoundedCornerShape(15))
-                        .padding(2.dp),
+                        .border(width = 1.dp, color = Color.Red, shape = RoundedCornerShape(10))
+                        .padding(end = 3.dp, start = 3.dp),
                     style = TextStyle(color = Color.Red)
                 )
             }
@@ -88,8 +90,8 @@ fun ArticleItem(
                 Text(
                     text = "新",
                     modifier = Modifier
-                        .border(width = 1.dp, color = Color.Red, shape = RoundedCornerShape(15))
-                        .padding(2.dp),
+                        .border(width = 1.dp, color = Color.Red, shape = RoundedCornerShape(10))
+                        .padding(end = 3.dp, start = 3.dp),
                     style = TextStyle(color = Color.Red)
                 )
             }
@@ -97,11 +99,10 @@ fun ArticleItem(
                 Text(
                     text = itemBean.tags[0].name,
                     modifier = Modifier
-                        .weight(1f, true)
                         .padding(5.dp),
                 )
             }
-
+            Spacer(modifier = Modifier.weight(1f, true))
             Text(
                 text = itemBean.niceDate,
                 modifier = Modifier.padding(5.dp),
@@ -117,7 +118,7 @@ fun ArticleItem(
 
         Spacer(modifier = Modifier.height(height = 10.dp))
 
-        Row {
+        Row(verticalAlignment = Alignment.CenterVertically) {
             AndroidView(
                 factory = { context -> TextView(context) },
                 update = {
@@ -128,11 +129,18 @@ fun ArticleItem(
                 }
             )
             Spacer(modifier = Modifier.weight(weight = 1f, true))
-            Icon(
-                painter = painterResource(id = R.drawable.ic_un_collect),
-                contentDescription = null,
-            )
+            if (itemBean.collect) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_collect),
+                    contentDescription = null,
+                )
+            } else {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_un_collect),
+                    tint = MaterialTheme.colors.primaryVariant,
+                    contentDescription = null,
+                )
+            }
         }
-        Divider(modifier = Modifier.padding(top = 5.dp, bottom = 5.dp))
     }
 }

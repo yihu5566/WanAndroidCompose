@@ -17,7 +17,10 @@ import com.ldf.wanandroidcompose.data.bean.User
 import com.ldf.wanandroidcompose.data.api.Api
 import com.ldf.wanandroidcompose.data.api.ProfileApi
 import com.ldf.wanandroidcompose.data.api.ProjectApi
+import com.ldf.wanandroidcompose.data.api.SquareApi
 import com.ldf.wanandroidcompose.data.api.WeChatApi
+import com.ldf.wanandroidcompose.data.bean.MySystem
+import com.ldf.wanandroidcompose.data.bean.Navigation
 import com.ldf.wanandroidcompose.http.BaseRepository
 import com.ldf.wanandroidcompose.http.RetrofitManager
 
@@ -26,9 +29,10 @@ import com.ldf.wanandroidcompose.http.RetrofitManager
  * @Created Time : 2023-06-04  11:35
  * @Description:
  */
-object WanAndroidDataProvider : BaseRepository(), Api, ProjectApi, WeChatApi, ProfileApi {
+object WanAndroidDataProvider : BaseRepository(), Api, ProjectApi, WeChatApi, ProfileApi,SquareApi {
 
     private val service by lazy { RetrofitManager.getService(Api::class.java) }
+    private val serviceSquareApi by lazy { RetrofitManager.getService(SquareApi::class.java) }
     private val serviceProjectApi by lazy { RetrofitManager.getService(ProjectApi::class.java) }
     private val serviceWeChatApi by lazy { RetrofitManager.getService(WeChatApi::class.java) }
     private val serviceProfileApi by lazy { RetrofitManager.getService(ProfileApi::class.java) }
@@ -46,6 +50,27 @@ object WanAndroidDataProvider : BaseRepository(), Api, ProjectApi, WeChatApi, Pr
         pageSize: Int
     ): ApiResponse<PageResponse<Article>> {
         return apiCall { service.getArticlePageList(pageNo, pageSize) }
+    }
+
+    override suspend fun getSquarePageList(
+        pageNo: Int,
+        pageSize: Int
+    ): ApiResponse<PageResponse<Article>> {
+        return apiCall { serviceSquareApi.getSquarePageList(pageNo, pageSize) }
+    }
+
+    override suspend fun getAskPageList(
+        pageNo: Int
+    ): ApiResponse<PageResponse<Article>> {
+        return apiCall { serviceSquareApi.getAskPageList(pageNo) }
+    }
+
+    override suspend fun getTreeList(): ApiResponse<List<MySystem>> {
+        return apiCall { serviceSquareApi.getTreeList() }
+    }
+
+    override suspend fun getNavigationList(): ApiResponse<List<Navigation>> {
+        return apiCall { serviceSquareApi.getNavigationList() }
     }
 
     override suspend fun collectArticle(id: Int): ApiResponse<Any?> {

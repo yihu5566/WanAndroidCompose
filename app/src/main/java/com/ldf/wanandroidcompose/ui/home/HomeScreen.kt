@@ -88,28 +88,6 @@ fun HomeScreen(
     //获取轮播图
     homeViewModel.fetchBanners()
     Scaffold(modifier = Modifier.testTag(TestTags.HOME_SCREEN_ROOT),
-//        topBar = {
-//            TopAppBar(
-//                backgroundColor = MaterialTheme.colorScheme.primary,
-//                title = {
-//                    Text(text = "Wan Android", style = MaterialTheme.typography.titleLarge)
-//                },
-//                actions = {
-//                    IconButton(
-//                        onClick = {
-//                            appThemeState.value = appThemeState
-//                                .value.copy(darkTheme = !appThemeState.value.darkTheme)
-//                        }
-//                    ) {
-//                        Icon(
-//                            painter = painterResource(id = R.drawable.ic_sleep),
-//                            contentDescription = stringResource(id = R.string.cd_dark_theme)
-//                        )
-//                    }
-//                    ChangeColorIconButton(coroutineScope, showMenu)
-//                }
-//            )
-//        },
         content = { paddingValues ->
             HomeScreenContent(
                 modifier = Modifier.padding(paddingValues),
@@ -149,8 +127,10 @@ fun HomeScreenContent(
                 pagingItems, {
                     articleTopData.value?.let { it ->
                         items(it) {
-                            ArticleItem(it) {
-                                navHostController.navigate("${KeyNavigationRoute.WEBVIEW.route}?url=${it.link}")
+                            SimpleCard {
+                                ArticleItem(it) {
+                                    navHostController.navigate("${KeyNavigationRoute.WEBVIEW.route}?url=${it.link}")
+                                }
                             }
                         }
                     }

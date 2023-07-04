@@ -46,11 +46,10 @@ fun WechatScreen(navHostController: NavHostController) {
         lazyPagingItems
     ) { index: Int, data: Article ->
         SimpleCard {
-            SimpleCard {
-                ArticleItem(data) {
-                    navHostController.navigate("${KeyNavigationRoute.WEBVIEW.route}?url=${data.link}")
-                }
+            ArticleItem(data) {
+                navHostController.navigate("${KeyNavigationRoute.WEBVIEW.route}?url=${data.link}")
             }
+
         }
     }
 }
