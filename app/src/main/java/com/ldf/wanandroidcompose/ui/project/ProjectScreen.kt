@@ -2,6 +2,10 @@ package com.ldf.wanandroidcompose.ui.project
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
@@ -11,6 +15,7 @@ import com.blankj.utilcode.util.ToastUtils
 import com.ldf.wanandroidcompose.KeyNavigationRoute
 import com.ldf.wanandroidcompose.data.bean.Article
 import com.ldf.wanandroidcompose.ui.theme.Nav
+import com.ldf.wanandroidcompose.ui.viewmodel.CollectViewModel
 import com.ldf.wanandroidcompose.ui.viewmodel.ProjectViewModel
 import com.ldf.wanandroidcompose.ui.widget.SimpleCard
 
@@ -22,15 +27,14 @@ import com.ldf.wanandroidcompose.ui.widget.SimpleCard
 @Composable
 fun ProjectScreen(navHostController: NavHostController) {
     val projectViewModel: ProjectViewModel = viewModel()
+    val collectViewModel: CollectViewModel = viewModel()
     LogUtils.d("初始化项目界面————————》")
     //项目列表数据
     val projectListData = projectViewModel.projectListData.collectAsLazyPagingItems()
-    val context = LocalContext.current
     //TopBar的Index改变
     LaunchedEffect(Nav.projectTopBarIndex.value) {
-
-        if (Nav.projectTopBarIndex.value == projectViewModel.saveChangeProjectIndex) return@LaunchedEffect
-
+        if (Nav.projectTopBarIndex.value == projectViewModel.saveChangeProjectIndex)
+            return@LaunchedEffect
         projectViewModel.apply {
             LogUtils.d("刷新拉")
 
@@ -45,8 +49,17 @@ fun ProjectScreen(navHostController: NavHostController) {
         projectViewModel.projectLazyListState,
         projectListData
     ) { index: Int, data: Article ->
+        var collectState by remember { mutableStateOf(data.collect) }
+
         SimpleCard {
-            projectItemWidget(data, context) {
+            projectItemWidget(data, isCollect = collectState, onCollectClick = {
+                if (collectState) {
+                    collectViewModel.unCollectArticle(data.id)
+                } else {
+                    collectViewModel.collectArticle(data.id)
+                }
+                collectState = !collectState
+            }) {
                 navHostController.navigate("${KeyNavigationRoute.WEBVIEW.route}?url=${data.link}")
             }
         }

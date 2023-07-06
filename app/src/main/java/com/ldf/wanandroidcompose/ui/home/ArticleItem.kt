@@ -12,8 +12,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Divider
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -22,7 +20,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
@@ -33,13 +30,13 @@ import androidx.core.text.HtmlCompat
 import com.ldf.wanandroidcompose.R
 import com.ldf.wanandroidcompose.data.bean.Article
 import com.ldf.wanandroidcompose.data.bean.Tag
+import com.ldf.wanandroidcompose.ui.widget.CollectCompose
 
 /**
  * @Author : dongfang
  * @Created Time : 2023-06-05  15:55
  * @Description:
  */
-@OptIn(ExperimentalMaterialApi::class)
 @Preview
 @Composable
 fun PreviewArticleItem() {
@@ -58,8 +55,9 @@ fun PreviewArticleItem() {
 @Composable
 fun ArticleItem(
     itemBean: Article,
-    onClick: () -> Unit = {}
-
+    isCollect: Boolean = false,
+    onClick: () -> Unit = {},
+    onCollectClick: () -> Unit = {},
 ) {
     Column(
         modifier = Modifier
@@ -133,18 +131,9 @@ fun ArticleItem(
                 }
             )
             Spacer(modifier = Modifier.weight(weight = 1f, true))
-            if (itemBean.collect) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_collect),
-                    contentDescription = null,
-                )
-            } else {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_un_collect),
-                    tint = MaterialTheme.colors.primaryVariant,
-                    contentDescription = null,
-                )
-            }
+            CollectCompose(isCollect, onCollectClick)
         }
     }
 }
+
+

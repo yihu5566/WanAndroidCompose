@@ -1,4 +1,4 @@
-package com.ldf.wanandroidcompose.ui.profile
+package com.ldf.wanandroidcompose.ui.viewmodel
 
 import com.blankj.utilcode.util.LogUtils
 import com.ldf.wanandroidcompose.base.App

@@ -1,9 +1,5 @@
 package com.ldf.wanandroidcompose.ui.home
 
-import android.content.Context
-import androidx.compose.animation.animateContentSize
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,34 +10,27 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.FiberManualRecord
 import androidx.compose.material.icons.filled.Lens
-import androidx.compose.material.icons.filled.Palette
-import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.blankj.utilcode.util.LogUtils
@@ -49,23 +38,17 @@ import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.guru.composecookbook.carousel.PagerState
 import com.ldf.wanandroidcompose.KeyNavigationRoute
-import com.ldf.wanandroidcompose.R
 import com.ldf.wanandroidcompose.data.bean.Article
 import com.ldf.wanandroidcompose.data.bean.Banner
 import com.ldf.wanandroidcompose.ui.project.ProjectSwipeRefreshList
 import com.ldf.wanandroidcompose.ui.theme.AppThemeState
-import com.ldf.wanandroidcompose.ui.theme.ColorPallet
-import com.ldf.wanandroidcompose.ui.theme.blue500
-import com.ldf.wanandroidcompose.ui.theme.green500
-import com.ldf.wanandroidcompose.ui.theme.orange500
 import com.ldf.wanandroidcompose.ui.theme.typography
 import com.ldf.wanandroidcompose.ui.utils.TestTags
+import com.ldf.wanandroidcompose.ui.viewmodel.CollectViewModel
 import com.ldf.wanandroidcompose.ui.viewmodel.HomeViewModel
 import com.ldf.wanandroidcompose.ui.widget.SimpleCard
 import com.ldf.wanandroidcompose.ui.widget.carousel.CarouselDot
 import com.ldf.wanandroidcompose.ui.widget.carousel.Pager
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 
 
 /**
@@ -81,9 +64,8 @@ fun HomeScreen(
     navHostController: NavHostController,
     appThemeState: MutableState<AppThemeState>,
 ) {
-    val showMenu = remember { mutableStateOf(false) }
-    val coroutineScope = rememberCoroutineScope()
-    val homeViewModel = HomeViewModel()
+    val homeViewModel: HomeViewModel = viewModel()
+    val collectViewModel: CollectViewModel = viewModel()
     //获取轮播图
     homeViewModel.fetchBanners()
     Scaffold(modifier = Modifier.testTag(TestTags.HOME_SCREEN_ROOT),
@@ -91,7 +73,8 @@ fun HomeScreen(
             HomeScreenContent(
                 modifier = Modifier.padding(paddingValues),
                 homeViewModel = homeViewModel,
-                navHostController
+                navHostController,
+                collectViewModel
             )
         })
 }
@@ -100,13 +83,12 @@ fun HomeScreen(
 fun HomeScreenContent(
     modifier: Modifier = Modifier,
     homeViewModel: HomeViewModel,
-    navHostController: NavHostController
+    navHostController: NavHostController,
+    collectViewModel: CollectViewModel
 ) {
     var itemList = remember { homeViewModel.bannerListLiveData }
     LogUtils.d("列表数据" + itemList.size)
-    val context = LocalContext.current
     val screenWidth = LocalConfiguration.current.screenWidthDp
-    val isWiderScreen = screenWidth > 550 // Random number for now
     if (itemList.size == 0) {
         return
     }
@@ -126,21 +108,35 @@ fun HomeScreenContent(
                 pagingItems, {
                     articleTopData.value?.let { it ->
                         items(it) {
-                            SimpleCard {
-                                ArticleItem(it) {
-                                    navHostController.navigate("${KeyNavigationRoute.WEBVIEW.route}?url=${it.link}")
-                                }
-                            }
+                            HotArticleItem(it, navHostController, collectViewModel)
                         }
                     }
                 }
             ) { _: Int, data: Article ->
-                SimpleCard {
-                    ArticleItem(data) {
-                        navHostController.navigate("${KeyNavigationRoute.WEBVIEW.route}?url=${data.link}")
-                    }
-                }
+                HotArticleItem(data, navHostController, collectViewModel)
             }
+        }
+    }
+}
+
+@Composable
+private fun HotArticleItem(
+    it: Article,
+    navHostController: NavHostController,
+    collectViewModel: CollectViewModel
+) {
+    var collectState by remember { mutableStateOf(it.collect) }
+
+    SimpleCard {
+        ArticleItem(it, isCollect = collectState, onClick = {
+            navHostController.navigate("${KeyNavigationRoute.WEBVIEW.route}?url=${it.link}")
+        }) {
+            if (collectState) {
+                collectViewModel.unCollectArticle(it.id)
+            } else {
+                collectViewModel.collectArticle(it.id)
+            }
+            collectState = !collectState
         }
     }
 }
