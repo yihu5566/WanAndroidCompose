@@ -5,7 +5,7 @@ import android.content.Context
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStore
 import androidx.lifecycle.ViewModelStoreOwner
-import com.ldf.wanandroidcompose.ui.utils.LocalDataManage
+import com.ldf.wanandroidcompose.utils.LocalDataManage
 import kotlin.properties.Delegates
 
 /**

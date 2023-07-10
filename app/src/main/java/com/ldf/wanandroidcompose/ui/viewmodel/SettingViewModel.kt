@@ -7,8 +7,8 @@ import com.ldf.wanandroidcompose.base.ext.handleRequest
 import com.ldf.wanandroidcompose.base.ext.launch
 import com.ldf.wanandroidcompose.data.WanAndroidDataProvider
 import com.ldf.wanandroidcompose.http.RetrofitManager
-import com.ldf.wanandroidcompose.ui.utils.CommonConstant
-import com.ldf.wanandroidcompose.ui.utils.LocalDataManage
+import com.ldf.wanandroidcompose.utils.CommonConstant
+import com.ldf.wanandroidcompose.utils.LocalDataManage
 
 /**
  * @Author : dongfang

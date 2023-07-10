@@ -43,7 +43,7 @@ import com.ldf.wanandroidcompose.data.bean.Banner
 import com.ldf.wanandroidcompose.ui.project.ProjectSwipeRefreshList
 import com.ldf.wanandroidcompose.ui.theme.AppThemeState
 import com.ldf.wanandroidcompose.ui.theme.typography
-import com.ldf.wanandroidcompose.ui.utils.TestTags
+import com.ldf.wanandroidcompose.utils.TestTags
 import com.ldf.wanandroidcompose.ui.viewmodel.CollectViewModel
 import com.ldf.wanandroidcompose.ui.viewmodel.HomeViewModel
 import com.ldf.wanandroidcompose.ui.widget.SimpleCard
@@ -120,7 +120,7 @@ fun HomeScreenContent(
 }
 
 @Composable
-private fun HotArticleItem(
+fun HotArticleItem(
     it: Article,
     navHostController: NavHostController,
     collectViewModel: CollectViewModel

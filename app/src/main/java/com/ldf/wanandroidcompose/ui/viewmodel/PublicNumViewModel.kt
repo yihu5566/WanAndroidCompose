@@ -19,7 +19,7 @@ import com.ldf.wanandroidcompose.data.bean.Banner
 import com.ldf.wanandroidcompose.data.bean.Classify
 import com.ldf.wanandroidcompose.data.bean.ProjectTitle
 import com.ldf.wanandroidcompose.ui.theme.Nav
-import com.ldf.wanandroidcompose.ui.utils.CommonPagingSource
+import com.ldf.wanandroidcompose.utils.CommonPagingSource
 import com.ldf.wanandroidcompose.ui.widget.StoreData
 import kotlinx.coroutines.flow.Flow
 

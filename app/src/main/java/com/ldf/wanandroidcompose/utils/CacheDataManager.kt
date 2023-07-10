@@ -1,4 +1,4 @@
-package com.ldf.wanandroidcompose.ui.utils
+package com.ldf.wanandroidcompose.utils
 
 import android.content.Context
 import android.os.Environment

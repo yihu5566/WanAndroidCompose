@@ -46,11 +46,11 @@ import com.ldf.wanandroidcompose.ui.theme.blue500
 import com.ldf.wanandroidcompose.ui.theme.green500
 import com.ldf.wanandroidcompose.ui.theme.orange500
 import com.ldf.wanandroidcompose.ui.theme.purple500
-import com.ldf.wanandroidcompose.ui.utils.CacheDataManager
-import com.ldf.wanandroidcompose.ui.utils.CommonConstant
-import com.ldf.wanandroidcompose.ui.utils.HeadingSection
-import com.ldf.wanandroidcompose.ui.utils.LocalDataManage
-import com.ldf.wanandroidcompose.ui.utils.TitleText
+import com.ldf.wanandroidcompose.utils.CacheDataManager
+import com.ldf.wanandroidcompose.utils.CommonConstant
+import com.ldf.wanandroidcompose.utils.HeadingSection
+import com.ldf.wanandroidcompose.utils.LocalDataManage
+import com.ldf.wanandroidcompose.utils.TitleText
 import com.ldf.wanandroidcompose.ui.viewmodel.SettingViewModel
 import com.ldf.wanandroidcompose.ui.widget.AppBar
 import com.ldf.wanandroidcompose.ui.widget.BaseScreen

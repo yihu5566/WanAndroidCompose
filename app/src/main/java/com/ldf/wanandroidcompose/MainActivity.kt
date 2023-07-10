@@ -30,8 +30,8 @@ import com.ldf.wanandroidcompose.ui.theme.ColorPallet
 import com.ldf.wanandroidcompose.ui.theme.Nav
 import com.ldf.wanandroidcompose.ui.theme.SystemUiController
 import com.ldf.wanandroidcompose.ui.theme.WanAndroidComposeTheme
-import com.ldf.wanandroidcompose.ui.utils.CommonConstant
-import com.ldf.wanandroidcompose.ui.utils.LocalDataManage
+import com.ldf.wanandroidcompose.utils.CommonConstant
+import com.ldf.wanandroidcompose.utils.LocalDataManage
 
 class MainActivity : ComponentActivity() {
     private val themeName =

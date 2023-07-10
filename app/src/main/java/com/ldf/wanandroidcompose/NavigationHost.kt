@@ -22,8 +22,8 @@ import com.ldf.wanandroidcompose.ui.search.SearchScreen
 import com.ldf.wanandroidcompose.ui.square.SquareScreen
 import com.ldf.wanandroidcompose.ui.theme.AppThemeState
 import com.ldf.wanandroidcompose.ui.theme.Nav
-import com.ldf.wanandroidcompose.ui.utils.StatsBarUtil
-import com.ldf.wanandroidcompose.ui.utils.TwoBackFinish
+import com.ldf.wanandroidcompose.utils.StatsBarUtil
+import com.ldf.wanandroidcompose.utils.TwoBackFinish
 import com.ldf.wanandroidcompose.ui.webview.WebViewCompose
 import com.ldf.wanandroidcompose.ui.wechat.WechatScreen
 

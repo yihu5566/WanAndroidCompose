@@ -1,4 +1,4 @@
-package com.ldf.wanandroidcompose.ui.utils
+package com.ldf.wanandroidcompose.utils
 
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable

@@ -38,7 +38,7 @@ import com.blankj.utilcode.util.ToastUtils
 import com.ldf.wanandroidcompose.KeyNavigationRoute
 import com.ldf.wanandroidcompose.R
 import com.ldf.wanandroidcompose.base.App
-import com.ldf.wanandroidcompose.ui.utils.LocalDataManage
+import com.ldf.wanandroidcompose.utils.LocalDataManage
 
 /**
  * @Author : dongfang

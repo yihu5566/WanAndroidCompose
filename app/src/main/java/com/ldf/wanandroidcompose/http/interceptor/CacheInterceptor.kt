@@ -1,7 +1,7 @@
 package com.ldf.wanandroidcompose.http.interceptor
 
 import com.ldf.wanandroidcompose.base.App.Companion.appContext
-import com.ldf.wanandroidcompose.ui.utils.NetworkUtil
+import com.ldf.wanandroidcompose.utils.NetworkUtil
 import okhttp3.CacheControl
 import okhttp3.Interceptor
 import okhttp3.Response

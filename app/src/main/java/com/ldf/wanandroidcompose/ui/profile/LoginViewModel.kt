@@ -13,8 +13,8 @@ import com.ldf.wanandroidcompose.data.WanAndroidDataProvider
 import com.ldf.wanandroidcompose.data.bean.CoinInfo
 import com.ldf.wanandroidcompose.data.bean.User
 import com.ldf.wanandroidcompose.http.RetrofitManager
-import com.ldf.wanandroidcompose.ui.utils.CommonConstant
-import com.ldf.wanandroidcompose.ui.utils.LocalDataManage
+import com.ldf.wanandroidcompose.utils.CommonConstant
+import com.ldf.wanandroidcompose.utils.LocalDataManage
 import kotlinx.coroutines.flow.map
 
 /**

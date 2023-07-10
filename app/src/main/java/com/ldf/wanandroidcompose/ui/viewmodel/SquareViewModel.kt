@@ -17,7 +17,7 @@ import com.ldf.wanandroidcompose.data.bean.Article
 import com.ldf.wanandroidcompose.data.bean.Classify
 import com.ldf.wanandroidcompose.data.bean.MySystem
 import com.ldf.wanandroidcompose.data.bean.Navigation
-import com.ldf.wanandroidcompose.ui.utils.CommonPagingSource
+import com.ldf.wanandroidcompose.utils.CommonPagingSource
 import com.ldf.wanandroidcompose.ui.widget.StoreData
 import kotlinx.coroutines.flow.Flow
 

@@ -16,7 +16,7 @@ import com.ldf.wanandroidcompose.base.ext.launch
 import com.ldf.wanandroidcompose.data.WanAndroidDataProvider
 import com.ldf.wanandroidcompose.data.bean.Article
 import com.ldf.wanandroidcompose.data.bean.Banner
-import com.ldf.wanandroidcompose.ui.utils.CommonPagingSource
+import com.ldf.wanandroidcompose.utils.CommonPagingSource
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -55,10 +55,6 @@ class HomeViewModel : BaseViewModel() {
 
     override fun start() {
         fetchBanners()
-    }
-
-    fun sleepThreeTime(){
-
     }
 
     /** 请求首页轮播图 */
