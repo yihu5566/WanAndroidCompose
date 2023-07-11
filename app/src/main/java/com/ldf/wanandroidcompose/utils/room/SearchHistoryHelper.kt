@@ -39,16 +39,16 @@ object SearchHistoryHelper {
 //        SearchHistoryDB.getInstance(context).historySearchDao().queryLiveDataAll()
 //
 //
-//    /**
-//     * 删除room数据库中所有的搜索历史数据
-//     */
-//    fun CoroutineScope.deleteAll(context: Context) {
-//        launch(Dispatchers.IO) {
-//            getSearchHistoryAll(context)?.let {
-//                SearchHistoryDB.getInstance(context).historySearchDao().deleteAll()
-//            }
-//        }
-//    }
+    /**
+     * 删除room数据库中所有的搜索历史数据
+     */
+    fun CoroutineScope.deleteAll(context: Context) {
+        launch(Dispatchers.IO) {
+            getSearchHistoryAll(context)?.let {
+                SearchHistoryDB.getInstance(context).historySearchDao().deleteAll()
+            }
+        }
+    }
 
     /**
      * 删除某一项，根据id

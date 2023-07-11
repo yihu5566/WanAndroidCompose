@@ -12,6 +12,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
+import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Lens
@@ -86,23 +87,23 @@ fun HomeScreenContent(
     navHostController: NavHostController,
     collectViewModel: CollectViewModel
 ) {
-    var itemList = remember { homeViewModel.bannerListLiveData }
-    LogUtils.d("列表数据" + itemList.size)
+    var itemList = homeViewModel.bannerListLiveData.observeAsState()
+    LogUtils.d("banner列表数据" + itemList.value?.size)
     val screenWidth = LocalConfiguration.current.screenWidthDp
-    if (itemList.size == 0) {
+    if (itemList.value?.size == 0) {
         return
     }
     val pagerState: PagerState = run {
-        remember { PagerState(1, 0, itemList.size - 1) }
+        remember { PagerState(1, 0, itemList.value?.size!! - 1) }
     }
     val selectedPage = remember { mutableStateOf(2) }
     homeViewModel.fetchTopArticleList()
     val articleTopData = homeViewModel.articleTopList.observeAsState()
     //列表数据
     val pagingItems = homeViewModel.homeListData.collectAsLazyPagingItems()
-    Box(modifier = modifier) {
+    Surface(modifier = modifier) {
         Column {
-            PrepareFirstPager(pagerState, itemList, selectedPage)
+            PrepareFirstPager(pagerState, itemList.value!!, selectedPage)
             ProjectSwipeRefreshList(
                 homeViewModel.homeLazyListState,
                 pagingItems, {
@@ -149,7 +150,7 @@ fun PrepareFirstPager(
 ) {
     Pager(
         state = pagerState,
-        modifier = Modifier.height(200.dp)
+        modifier = Modifier.height(180.dp)
     ) {
         val item = items[commingPage]
         selectedPage.value = pagerState.currentPage
@@ -165,8 +166,7 @@ fun PrepareFirstPager(
             )
         }
     }
-
-    Spacer(modifier = Modifier.height(24.dp))
+    Spacer(modifier = Modifier.height(14.dp))
 }
 
 @OptIn(ExperimentalGlideComposeApi::class)
@@ -178,9 +178,9 @@ fun CarouselItem(item: Banner) {
             contentScale = ContentScale.Crop,
             contentDescription = null,
             modifier = Modifier
-                .padding(18.dp)
+                .padding(10.dp)
                 .fillMaxWidth()
-                .height(180.dp)
+                .height(160.dp)
                 .clip(RoundedCornerShape(12.dp))
         )
         Text(
@@ -188,7 +188,7 @@ fun CarouselItem(item: Banner) {
             style = typography.h6.copy(color = Color.White),
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(24.dp)
+                .padding(14.dp)
                 .align(Alignment.BottomStart),
         )
     }

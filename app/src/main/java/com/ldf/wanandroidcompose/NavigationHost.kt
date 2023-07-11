@@ -15,6 +15,7 @@ import androidx.navigation.compose.navArgument
 import androidx.navigation.navigation
 import com.ldf.wanandroidcompose.ui.home.HomeScreen
 import com.ldf.wanandroidcompose.ui.profile.LoginScreen
+import com.ldf.wanandroidcompose.ui.profile.MyCollectScreen
 import com.ldf.wanandroidcompose.ui.profile.ProfileScreen
 import com.ldf.wanandroidcompose.ui.profile.SettingScreen
 import com.ldf.wanandroidcompose.ui.project.ProjectScreen
@@ -140,6 +141,15 @@ fun NavigationHost(
             StatsBarUtil().StatsBarColor(false)
 
             SearchScreen(navHostController)
+
+            BackHandler { navHostController.navigateUp() }
+        }
+        //我的收藏页面
+        composable(route = KeyNavigationRoute.MY_COLLECT.route) {
+            //系统颜色的状态栏
+            StatsBarUtil().StatsBarColor(false)
+
+            MyCollectScreen(navHostController)
 
             BackHandler { navHostController.navigateUp() }
         }

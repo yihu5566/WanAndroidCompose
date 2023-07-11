@@ -18,6 +18,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -53,6 +54,7 @@ import com.ldf.wanandroidcompose.ui.widget.LabelCustom
 import com.ldf.wanandroidcompose.utils.room.HistorySearchKey
 import com.ldf.wanandroidcompose.utils.room.SearchHistoryHelper
 import com.ldf.wanandroidcompose.utils.room.SearchHistoryHelper.delete
+import com.ldf.wanandroidcompose.utils.room.SearchHistoryHelper.deleteAll
 import com.ldf.wanandroidcompose.utils.room.SearchHistoryHelper.insertSearchHistory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -135,10 +137,9 @@ fun SearchCompose(
 //搜索历史数据
     val searchHistoryListData =
         SearchHistoryHelper.getSearchHistoryAllForFlow(context).collectAsState(initial = listOf())
-    Column(modifier = Modifier.padding(paddingValues)) {
+    Column(modifier = Modifier.padding(10.dp)) {
         Text(
             text = "热门搜索",
-            modifier = Modifier.padding(6.dp),
             fontSize = 16.sp,
             color = MaterialTheme.colors.primary
         )
@@ -151,19 +152,30 @@ fun SearchCompose(
         } else {
             Text(text = "暂无内容")
         }
-        Text(
-            text = "历史搜索",
-            modifier = Modifier.padding(6.dp),
-            fontSize = 16.sp,
-            color = MaterialTheme.colors.primary
-        )
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(10.dp),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(
+                text = "历史搜索",
+                fontSize = 16.sp,
+                color = MaterialTheme.colors.primary
+            )
+            Icon(
+                imageVector = Icons.Default.Delete,
+                contentDescription = null,
+                modifier = Modifier
+                    .clickable {
+                        scope.deleteAll(context)
+                    })
+        }
+
         if (searchHistoryListData.value.isNotEmpty()) {
             LazyColumn {
                 items(searchHistoryListData.value) {
-
-                    DeleteHistoryKetItem(modifier = Modifier.clickable {
-
-                    }, it) {
+                    DeleteHistoryKetItem(it) {
                         scope.launch {
                             this.delete(context, it.id)
                         }
@@ -179,8 +191,8 @@ fun SearchCompose(
 
 @Composable
 private fun DeleteHistoryKetItem(
-    modifier: Modifier,
     it: HistorySearchKey,
+    modifier: Modifier = Modifier,
     //Icon图标
     imageVector: ImageVector = Icons.Default.Close,
     //图标点击事件
@@ -197,8 +209,8 @@ private fun DeleteHistoryKetItem(
     }
     Row(
         modifier = modifier
-            .padding(horizontal = 10.dp)
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .padding(horizontal = 10.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {

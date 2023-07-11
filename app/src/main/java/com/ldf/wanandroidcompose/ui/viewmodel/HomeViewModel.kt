@@ -35,7 +35,7 @@ class HomeViewModel : BaseViewModel() {
     val homeLazyListState: LazyListState = LazyListState()
 
     /** Banner列表 */
-    val bannerListLiveData = mutableStateListOf<Banner>()
+    val bannerListLiveData = MutableLiveData<List<Banner>>(mutableListOf())
 
     //首页列表
     val homeListData: Flow<PagingData<Article>>
@@ -61,7 +61,7 @@ class HomeViewModel : BaseViewModel() {
     fun fetchBanners() {
         launch({
             handleRequest(WanAndroidDataProvider.getBanner(), {
-                bannerListLiveData.addAll(it.data)
+                bannerListLiveData.postValue(it.data)
                 LogUtils.d(it.errorMsg)
             }, {
                 LogUtils.d(it.errorMsg)

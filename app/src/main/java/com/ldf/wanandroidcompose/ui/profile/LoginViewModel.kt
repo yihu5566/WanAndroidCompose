@@ -34,7 +34,12 @@ class LoginViewModel : BaseViewModel() {
         get() = _userData
 
     override fun start() {
-
+        launch({
+            LocalDataManage.getData(CommonConstant.USER, "").map {
+                val user = GsonUtils.fromJson(it, User::class.java)
+                _userData.postValue(user)
+            }
+        })
     }
 
     fun userLogin(userName: String, pwd: String, successCall: () -> Unit) {

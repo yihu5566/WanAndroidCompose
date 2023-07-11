@@ -47,8 +47,8 @@ interface HistorySearchDao {
     @Insert
     fun insertAll(historyKey: HistorySearchKey)
 
-    @Delete
-    fun delete(historyKey: HistorySearchKey)
+    @Query("delete from HistorySearchKey")
+    fun deleteAll()
 
     @Query("delete from HistorySearchKey where id = :id")
     fun delete(id: Int?)
