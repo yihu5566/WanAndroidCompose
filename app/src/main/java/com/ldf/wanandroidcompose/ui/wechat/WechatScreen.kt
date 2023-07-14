@@ -11,7 +11,6 @@ import com.ldf.wanandroidcompose.KeyNavigationRoute
 import com.ldf.wanandroidcompose.data.bean.Article
 import com.ldf.wanandroidcompose.ui.home.ArticleItem
 import com.ldf.wanandroidcompose.ui.project.ProjectSwipeRefreshList
-import com.ldf.wanandroidcompose.ui.project.projectItemWidget
 import com.ldf.wanandroidcompose.ui.theme.Nav
 import com.ldf.wanandroidcompose.ui.viewmodel.PublicNumViewModel
 import com.ldf.wanandroidcompose.ui.widget.SimpleCard

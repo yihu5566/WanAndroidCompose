@@ -69,28 +69,30 @@ fun MyCollectCompose(
         state = viewModel.collectLazyListState,
         pagingItems = pagingItems
     ) { _, data ->
-        var collectState by remember { mutableStateOf(true) }
+        var collectState by remember { mutableStateOf(data.visible) }
         SimpleCard {
             CollectArticleItem(
                 data,
                 onClick = {
                     navHostController.navigate("${KeyNavigationRoute.WEBVIEW.route}?url=${data.link}")
-                }) {
-                if (collectState) {
+                }, collectState
+            ) {
+                collectState = if (collectState == 0) {
                     collectViewModel.unCollectArticle(data.id)
+                    1
                 } else {
                     collectViewModel.collectArticle(data.id)
+                    0
                 }
-                collectState = !collectState
             }
         }
-
     }
 }
 
 @Composable
 fun CollectArticleItem(
     data: CollectArticle, onClick: () -> Unit = {},
+    collectState: Int,
     onCollectClick: () -> Unit = {},
 ) {
     Column(
@@ -138,7 +140,7 @@ fun CollectArticleItem(
                 }
             )
             Spacer(modifier = Modifier.weight(weight = 1f, true))
-            CollectCompose(true, onCollectClick)
+            CollectCompose(collectState == 0, onCollectClick)
         }
     }
 }

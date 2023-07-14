@@ -50,7 +50,6 @@ fun ProfileScreen(navHost: NavHostController) {
 
     val loginViewModel: LoginViewModel = viewModel()
 
-
     Column(
         modifier = Modifier
             .background(MaterialTheme.colors.primary)
@@ -71,11 +70,11 @@ fun ProfileScreen(navHost: NavHostController) {
 fun BottomWidget(navHost: NavHostController, loginViewModel: LoginViewModel) {
     Surface(
         color = MaterialTheme.colors.background,
-        modifier = Modifier
-            .fillMaxSize(),
+        modifier = Modifier.fillMaxSize(),
         shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)
     ) {
-        val user = loginViewModel.userData.observeAsState()
+        val user = loginViewModel.userIntegralData.observeAsState()
+
 
         Column(modifier = Modifier.padding(top = 10.dp)) {
             val observeAsState = loginViewModel.userIntegralData.observeAsState()

@@ -62,7 +62,6 @@ class HomeViewModel : BaseViewModel() {
         launch({
             handleRequest(WanAndroidDataProvider.getBanner(), {
                 bannerListLiveData.postValue(it.data)
-                LogUtils.d(it.errorMsg)
             }, {
                 LogUtils.d(it.errorMsg)
                 false

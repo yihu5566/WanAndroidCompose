@@ -52,7 +52,7 @@ fun ProjectScreen(navHostController: NavHostController) {
         var collectState by remember { mutableStateOf(data.collect) }
 
         SimpleCard {
-            projectItemWidget(data, isCollect = collectState, onCollectClick = {
+            ProjectItemWidget(data, isCollect = collectState, onCollectClick = {
                 if (collectState) {
                     collectViewModel.unCollectArticle(data.id)
                 } else {

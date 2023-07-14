@@ -38,6 +38,7 @@ class LoginViewModel : BaseViewModel() {
             LocalDataManage.getData(CommonConstant.USER, "").map {
                 val user = GsonUtils.fromJson(it, User::class.java)
                 _userData.postValue(user)
+                App.appViewModel.userEvent.postValue(user)
             }
         })
     }

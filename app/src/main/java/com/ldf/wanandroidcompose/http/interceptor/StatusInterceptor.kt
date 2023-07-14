@@ -27,8 +27,6 @@ class StatusInterceptor : Interceptor {
         if (!NetworkUtils.isAvailable()) {
             return response
         }
-        // 拦截请求，获取到该次请求的request
-        val path = request.url.toUrl().path
         // 执行本次网络请求操作，返回response信息
         val data = response.body?.string()
         var jsonstr: String?
@@ -43,12 +41,12 @@ class StatusInterceptor : Interceptor {
                 sb.delete(sb.length - 1, sb.length)
             }
             LogUtils.d(
-                "请求方式:Post 请求连接:${request.url} 请求头:${request.headers} 请求参数$sb 请求结果: $jsonstr"
+                "请求方式:Post 请求连接:${request.url}\n 请求头:${request.headers} \n 请求参数$sb \n 请求结果: $jsonstr"
             )
         } else {
             jsonstr = data
             LogUtils.d(
-                " 请求方式:Get 请求连接:${request.url} 请求头:${request.headers} 请求结果:$jsonstr"
+                " 请求方式:Get 请求连接:${request.url} \n 请求头:${request.headers}\n 请求结果:$jsonstr"
             )
         }
         try {

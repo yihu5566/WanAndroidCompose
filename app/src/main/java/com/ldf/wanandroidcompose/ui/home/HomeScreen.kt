@@ -59,11 +59,9 @@ import com.ldf.wanandroidcompose.ui.widget.carousel.Pager
  */
 
 
-@OptIn(ExperimentalMaterialApi::class, ExperimentalMaterialApi::class)
 @Composable
 fun HomeScreen(
-    navHostController: NavHostController,
-    appThemeState: MutableState<AppThemeState>,
+    navHostController: NavHostController
 ) {
     val homeViewModel: HomeViewModel = viewModel()
     val collectViewModel: CollectViewModel = viewModel()

@@ -30,7 +30,7 @@ import com.ldf.wanandroidcompose.ui.widget.CollectCompose
  */
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
-fun projectItemWidget(
+fun ProjectItemWidget(
     itemBean: Article,
     isCollect: Boolean = false,
     onCollectClick: () -> Unit = {},
@@ -67,7 +67,7 @@ fun projectItemWidget(
             Column(modifier = Modifier.padding(horizontal = 6.dp)) {
                 Text(
                     text = itemBean.title,
-                    style = MaterialTheme.typography.h4,
+                    style = MaterialTheme.typography.h4.copy(color=MaterialTheme.colors.onSurface),
                     maxLines = 2,
                     //超长以...结尾
                     overflow = TextOverflow.Ellipsis

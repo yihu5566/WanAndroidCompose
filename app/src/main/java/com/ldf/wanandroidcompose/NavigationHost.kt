@@ -56,7 +56,7 @@ fun NavigationHost(
                 //系统颜色的状态栏
                 StatsBarUtil().StatsBarColor(false)
 
-                HomeScreen(navHostController, appThemeState)
+                HomeScreen(navHostController)
 
                 //点击两次返回才关闭app
                 BackHandler {
@@ -131,7 +131,7 @@ fun NavigationHost(
             //系统颜色的状态栏
             StatsBarUtil().StatsBarColor(false)
 
-            SettingScreen(navHostController,appThemeState)
+            SettingScreen(navHostController, appThemeState)
 
             BackHandler { navHostController.navigateUp() }
         }
