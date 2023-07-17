@@ -86,6 +86,8 @@ fun BottomWidget(navHost: NavHostController, loginViewModel: LoginViewModel) {
                 if (user.value == null) {
                     ToastUtils.showLong("请先登录！！")
                 }
+                navHost.navigate(KeyNavigationRoute.INTEGRAL_RANK.route)
+
             }
             ProfileItem(painterResource(R.drawable.ic_collect), "我的收藏") {
                 if (user.value == null) {

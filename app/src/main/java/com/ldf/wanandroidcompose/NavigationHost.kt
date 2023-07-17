@@ -14,6 +14,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.navArgument
 import androidx.navigation.navigation
 import com.ldf.wanandroidcompose.ui.home.HomeScreen
+import com.ldf.wanandroidcompose.ui.profile.IntegralRankScreen
 import com.ldf.wanandroidcompose.ui.profile.LoginScreen
 import com.ldf.wanandroidcompose.ui.profile.MyCollectScreen
 import com.ldf.wanandroidcompose.ui.profile.ProfileScreen
@@ -150,6 +151,15 @@ fun NavigationHost(
             StatsBarUtil().StatsBarColor(false)
 
             MyCollectScreen(navHostController)
+
+            BackHandler { navHostController.navigateUp() }
+        }
+        //积分排行页面
+        composable(route = KeyNavigationRoute.INTEGRAL_RANK.route) {
+            //系统颜色的状态栏
+            StatsBarUtil().StatsBarColor(false)
+
+            IntegralRankScreen(navHostController)
 
             BackHandler { navHostController.navigateUp() }
         }

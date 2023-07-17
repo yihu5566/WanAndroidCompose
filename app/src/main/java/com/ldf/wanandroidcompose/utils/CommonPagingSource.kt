@@ -22,8 +22,8 @@ class CommonPagingSource<T : Any>(private val block: suspend (nextPage: Int) -> 
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, T> {
         return try {
-            //params.key为当前页码 页码从0开始
-            val nextPage = params.key ?: 0
+            //params.key为当前页码 页码从1开始
+            val nextPage = params.key ?: 1
             //更新页码后请求数据
             val response = block.invoke(nextPage)
             LogUtils.d("数据刷新---》${response.curPage}")
