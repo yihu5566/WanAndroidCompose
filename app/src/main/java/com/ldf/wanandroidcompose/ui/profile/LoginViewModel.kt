@@ -81,4 +81,35 @@ class LoginViewModel : BaseViewModel() {
             }
         })
     }
+
+    /**
+     * 用户注册
+     */
+    fun userRegister(userName: String, pwd: String, confirmPwd: String, successCall: () -> Unit) {
+        if (userName == "") {
+            ToastUtils.showLong("用户名不能为空")
+        }
+
+        if (pwd == "") {
+            ToastUtils.showLong("密码不能为空")
+        }
+        if (confirmPwd == "") {
+            ToastUtils.showLong("确认密码不能为空")
+        }
+        if (confirmPwd != pwd) {
+            ToastUtils.showLong("密码和确认密码不一致")
+        }
+        launch({
+            handleRequest(
+                WanAndroidDataProvider.register(userName, pwd, confirmPwd),
+                successBlock = {
+                    successCall.invoke()
+                },
+                errorBlock = {
+//                successCall.invoke()
+                    ToastUtils.showLong(it.errorMsg)
+                    false
+                })
+        })
+    }
 }

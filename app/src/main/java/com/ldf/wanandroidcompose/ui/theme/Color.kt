@@ -2,6 +2,7 @@ package com.ldf.wanandroidcompose.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
+//light
 val green200 = Color(0xffa5d6a7)
 val green500 = Color(0xff4caf50)
 val green700 = Color(0xff388e3c)
@@ -19,4 +20,6 @@ val orange500 = Color(0xFFf44336)
 val orange700 = Color(0xFFba000d)
 
 val teal200 = Color(0xff80deea)
+
+//dark
 

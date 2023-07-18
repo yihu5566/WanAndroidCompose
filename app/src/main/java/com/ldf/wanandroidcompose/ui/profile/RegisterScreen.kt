@@ -27,7 +27,6 @@ import androidx.compose.material.icons.rounded.Password
 import androidx.compose.material.icons.rounded.People
 import androidx.compose.material.icons.rounded.RemoveRedEye
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -37,6 +36,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
@@ -51,9 +51,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.currentBackStackEntryAsState
 import com.blankj.utilcode.util.LogUtils
+import com.google.accompanist.insets.statusBarsHeight
 import com.ldf.wanandroidcompose.KeyNavigationRoute
+import com.ldf.wanandroidcompose.R
 import com.ldf.wanandroidcompose.ui.widget.BaseScreen
 import com.ldf.wanandroidcompose.ui.widget.HorizontalDottedProgressBar
 import com.ldf.wanandroidcompose.ui.widget.lottie.LottieWorkingLoadingView
@@ -64,44 +65,38 @@ import com.ldf.wanandroidcompose.ui.widget.lottie.LottieWorkingLoadingView
  * @Description:
  */
 @Composable
-fun LoginScreen(controller: NavHostController) {
+fun RegisterScreen(navHostController: NavHostController) {
+    BaseScreen {
+        Scaffold(backgroundColor = Color.White) { padding ->
+            var userName by remember { mutableStateOf(TextFieldValue("")) }
+            var password by remember { mutableStateOf(TextFieldValue("")) }
+            var passwordConfirm by remember { mutableStateOf(TextFieldValue("")) }
+            var hasError by remember { mutableStateOf(false) }
+            val userNameInteractionState = remember { MutableInteractionSource() }
+            val passwordInteractionState = remember { MutableInteractionSource() }
+            val passwordConfirmInteractionState = remember { MutableInteractionSource() }
 
-    Scaffold(backgroundColor = Color.White) { padding ->
-        var userName by remember { mutableStateOf(TextFieldValue("")) }
-        var password by remember { mutableStateOf(TextFieldValue("")) }
-        var hasError by remember { mutableStateOf(false) }
-        val userNameInteractionState = remember { MutableInteractionSource() }
-        val passwordInteractionState = remember { MutableInteractionSource() }
-
-        var passwordVisualTransformation by remember {
-            mutableStateOf<VisualTransformation>(
-                PasswordVisualTransformation()
-            )
-        }
-        val bundle = controller.currentBackStackEntryAsState().value
-
-        LaunchedEffect(bundle) {
-            var userNameBack = bundle?.arguments?.getString("userName") ?: ""
-            var passWordBack = bundle?.arguments?.getString("passWord") ?: ""
-            LogUtils.d("回传数据===>$userNameBack==$passWordBack")
-            userName = TextFieldValue(userNameBack)
-            password = TextFieldValue(passWordBack)
-            return@LaunchedEffect
-        }
-        LogUtils.d("padding$padding")
-
-        BaseScreen {
+            var passwordVisualTransformation by remember {
+                mutableStateOf<VisualTransformation>(
+                    PasswordVisualTransformation()
+                )
+            }
+            var passwordConfirmVisualTransformation by remember {
+                mutableStateOf<VisualTransformation>(
+                    PasswordVisualTransformation()
+                )
+            }
+            LogUtils.d("padding$padding")
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(horizontal = 16.dp)
             ) {
-
                 item { Spacer(modifier = Modifier.height(20.dp)) }
                 item {
                     Text(
                         "关闭",
-                        modifier = Modifier.clickable { controller.navigateUp() },
+                        modifier = Modifier.clickable { navHostController.navigateUp() },
                         style = TextStyle(
                             Color.Black,
                             fontSize = 16.sp
@@ -183,14 +178,71 @@ fun LoginScreen(controller: NavHostController) {
                         )
 
                 }
-                //登录按钮
+                item {
+                    OutlinedTextField(
+                        value = passwordConfirm,
+                        leadingIcon = {
+                            Icon(
+                                Icons.Rounded.Password,
+                                contentDescription = ""
+                            )
+                        },
+                        trailingIcon = {
+                            Icon(
+                                Icons.Rounded.RemoveRedEye,
+                                contentDescription = "",
+                                modifier = Modifier.clickable {
+                                    passwordConfirmVisualTransformation =
+                                        if (passwordConfirmVisualTransformation != VisualTransformation.None) {
+                                            VisualTransformation.None
+                                        } else {
+                                            PasswordVisualTransformation()
+                                        }
+                                })
+                        },
+                        maxLines = 1,
+                        modifier = Modifier.fillMaxWidth(),
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Password,
+                            imeAction = ImeAction.Done
+                        ),
+//                    colors = TextFieldDefaultsMaterial.outlinedTextFieldColors(),
+                        label = { Text(text = "确认密码") },
+                        isError = hasError,
+                        placeholder = { Text(text = "请输入确认密码") },
+                        onValueChange = {
+                            passwordConfirm = it
+                        },
+                        interactionSource = passwordConfirmInteractionState,
+                        visualTransformation = passwordConfirmVisualTransformation,
+                    )
+
+                }
+                //注册按钮
                 item {
                     var loading by remember { mutableStateOf(false) }
                     val viewModel: LoginViewModel = viewModel()
                     Button(
                         onClick = {
-                            loginWanAndroid(userName.text, password.text, viewModel) { isLoading ->
-                                loading = isLoading
+                            if (invalidInput(userName.text, password.text)) {
+                                hasError = true
+                                loading = false
+                            } else {
+                                loading = true
+                                hasError = false
+                                viewModel.userRegister(
+                                    userName.text,
+                                    password.text,
+                                    passwordConfirm.text
+                                ) {
+                                    LogUtils.d("注册成功")
+                                    loading = false
+                                    navHostController.previousBackStackEntry?.arguments?.let {
+                                        it.putString("userName", userName.text)
+                                        it.putString("passWord", password.text)
+                                    }
+                                    navHostController.popBackStack()
+                                }
                             }
                         },
                         modifier = Modifier
@@ -202,53 +254,14 @@ fun LoginScreen(controller: NavHostController) {
                         if (loading) {
                             HorizontalDottedProgressBar()
                         } else {
-                            Text(text = "登录")
+                            Text(text = stringResource(R.string.register))
                         }
                     }
                 }
                 item {
-                    Box(modifier = Modifier.padding(vertical = 16.dp)) {
-                        Spacer(
-                            modifier = Modifier
-                                .align(Alignment.Center)
-                                .height(1.dp)
-                                .fillMaxWidth()
-                                .background(Color.LightGray)
-                        )
-                        Text(
-                            text = "三方登录",
-                            color = Color.LightGray,
-                            modifier = Modifier
-                                .align(Alignment.Center)
-                                .background(MaterialTheme.colors.background)
-                                .padding(horizontal = 16.dp)
-                        )
-                    }
-                }
-                item {
-                    OutlinedButton(
-                        onClick = { }, modifier = Modifier
-                            .fillMaxWidth()
-                            .height(50.dp)
-                    ) {
-                        Icon(
-                            Icons.Rounded.Chat,
-                            "",
-                            tint = LocalContentColor.current.copy(alpha = LocalContentAlpha.current),
-                        )
-                        Text(
-                            text = "登录微信",
-                            style = MaterialTheme.typography.h4.copy(fontSize = 14.sp),
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier.fillMaxWidth()
-                        )
-                    }
-                }
-                item { Spacer(modifier = Modifier.height(8.dp)) }
-                item {
                     val primaryColor = MaterialTheme.colors.primary
                     val annotatedString = remember {
-                        AnnotatedString.Builder("没有账户，去注册？")
+                        AnnotatedString.Builder("已有账户，去登录？")
                             .apply {
                                 addStyle(style = SpanStyle(color = primaryColor), 5, 9)
                             }
@@ -259,39 +272,13 @@ fun LoginScreen(controller: NavHostController) {
                             .fillMaxWidth()
                             .padding(vertical = 16.dp)
                             .clickable(onClick = {
-                                controller.navigate(KeyNavigationRoute.REGISTER.route)
+                                navHostController.popBackStack()
                             }),
                         textAlign = TextAlign.Center
                     )
                 }
-
-                item { Spacer(modifier = Modifier.height(100.dp)) }
+                item { Spacer(modifier = Modifier.height(10.dp)) }
             }
         }
     }
-
 }
-
-/**
- * 登录方法
- */
-fun loginWanAndroid(
-    userName: String,
-    password: String,
-    viewModel: LoginViewModel,
-    callback: (isLoading: Boolean) -> Unit
-) {
-    if (invalidInput(userName, password)) {
-        callback(false)
-    } else {
-        callback(true)
-        viewModel.userLogin(userName, password) {
-            LogUtils.d("登录成功")
-            callback(false)
-        }
-    }
-}
-
-//是否为空
-fun invalidInput(email: String, password: String) =
-    email.isBlank() || password.isBlank()
