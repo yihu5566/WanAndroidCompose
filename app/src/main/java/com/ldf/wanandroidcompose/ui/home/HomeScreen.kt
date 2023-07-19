@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
@@ -42,7 +41,6 @@ import com.ldf.wanandroidcompose.KeyNavigationRoute
 import com.ldf.wanandroidcompose.data.bean.Article
 import com.ldf.wanandroidcompose.data.bean.Banner
 import com.ldf.wanandroidcompose.ui.project.ProjectSwipeRefreshList
-import com.ldf.wanandroidcompose.ui.theme.AppThemeState
 import com.ldf.wanandroidcompose.ui.theme.typography
 import com.ldf.wanandroidcompose.utils.TestTags
 import com.ldf.wanandroidcompose.ui.viewmodel.CollectViewModel
@@ -124,18 +122,9 @@ fun HotArticleItem(
     navHostController: NavHostController,
     collectViewModel: CollectViewModel
 ) {
-    var collectState by remember { mutableStateOf(it.collect) }
-
     SimpleCard {
-        ArticleItem(it, isCollect = collectState, onClick = {
+        ArticleItem(it, collectViewModel) {
             navHostController.navigate("${KeyNavigationRoute.WEBVIEW.route}?url=${it.link}")
-        }) {
-            if (collectState) {
-                collectViewModel.unCollectArticle(it.id)
-            } else {
-                collectViewModel.collectArticle(it.id)
-            }
-            collectState = !collectState
         }
     }
 }

@@ -49,17 +49,8 @@ fun ProjectScreen(navHostController: NavHostController) {
         projectViewModel.projectLazyListState,
         projectListData
     ) { index: Int, data: Article ->
-        var collectState by remember { mutableStateOf(data.collect) }
-
         SimpleCard {
-            ProjectItemWidget(data, isCollect = collectState, onCollectClick = {
-                if (collectState) {
-                    collectViewModel.unCollectArticle(data.id)
-                } else {
-                    collectViewModel.collectArticle(data.id)
-                }
-                collectState = !collectState
-            }) {
+            ProjectItemWidget(data, collectViewModel) {
                 navHostController.navigate("${KeyNavigationRoute.WEBVIEW.route}?url=${data.link}")
             }
         }

@@ -15,6 +15,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -25,8 +29,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.text.HtmlCompat
+import com.blankj.utilcode.util.ToastUtils
+import com.ldf.wanandroidcompose.base.App
 import com.ldf.wanandroidcompose.data.bean.Article
 import com.ldf.wanandroidcompose.data.bean.Tag
+import com.ldf.wanandroidcompose.ui.viewmodel.CollectViewModel
 import com.ldf.wanandroidcompose.ui.widget.CollectCompose
 
 /**
@@ -52,10 +59,11 @@ fun PreviewArticleItem() {
 @Composable
 fun ArticleItem(
     itemBean: Article,
-    isCollect: Boolean = false,
+    viewModel: CollectViewModel? = null,
     onClick: () -> Unit = {},
-    onCollectClick: () -> Unit = {},
 ) {
+    var collectState by remember { mutableStateOf(itemBean.collect) }
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -128,7 +136,19 @@ fun ArticleItem(
                 }
             )
             Spacer(modifier = Modifier.weight(weight = 1f, true))
-            CollectCompose(isCollect, onCollectClick)
+
+            CollectCompose(collectState) {
+                if (App.appViewModel.userEvent.value == null) {
+                    ToastUtils.showLong("请先登录")
+                    return@CollectCompose
+                }
+                if (collectState) {
+                    viewModel?.unCollectArticle(itemBean.id)
+                } else {
+                    viewModel?.collectArticle(itemBean.id)
+                }
+                collectState = !collectState
+            }
         }
     }
 }

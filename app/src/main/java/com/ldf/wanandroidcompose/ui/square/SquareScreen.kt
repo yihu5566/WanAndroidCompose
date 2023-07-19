@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
@@ -23,6 +24,7 @@ import com.ldf.wanandroidcompose.data.bean.Navigation
 import com.ldf.wanandroidcompose.ui.home.ArticleItem
 import com.ldf.wanandroidcompose.ui.project.ProjectSwipeRefreshList
 import com.ldf.wanandroidcompose.ui.theme.Nav
+import com.ldf.wanandroidcompose.ui.viewmodel.CollectViewModel
 import com.ldf.wanandroidcompose.ui.viewmodel.SquareViewModel
 import com.ldf.wanandroidcompose.ui.widget.FlowBoxGap
 import com.ldf.wanandroidcompose.ui.widget.LabelCustom
@@ -36,6 +38,8 @@ import com.ldf.wanandroidcompose.ui.widget.SimpleCard
 @Composable
 fun SquareScreen(navHostController: NavHostController) {
     val squareViewModel: SquareViewModel = viewModel()
+    val viewModel: CollectViewModel = viewModel()
+
     val squareArticlePagingItems = squareViewModel.squareArticleData.collectAsLazyPagingItems()
     val askArticlePagingItems = squareViewModel.askArticleData.collectAsLazyPagingItems()
     val systemTreeData = squareViewModel.systemTreeData.observeAsState()
@@ -48,7 +52,7 @@ fun SquareScreen(navHostController: NavHostController) {
                 pagingItems = squareArticlePagingItems
             ) { index: Int, data: Article ->
                 SimpleCard {
-                    ArticleItem(data) {
+                    ArticleItem(data, viewModel) {
                         navHostController.navigate("${KeyNavigationRoute.WEBVIEW.route}?url=${data.link}")
                     }
                 }
@@ -61,7 +65,7 @@ fun SquareScreen(navHostController: NavHostController) {
                 pagingItems = askArticlePagingItems
             ) { index: Int, data: Article ->
                 SimpleCard {
-                    ArticleItem(data) {
+                    ArticleItem(data, viewModel) {
                         navHostController.navigate("${KeyNavigationRoute.WEBVIEW.route}?url=${data.link}")
                     }
                 }
@@ -87,9 +91,15 @@ fun NavigationCardItemContent(
     navigationState: LazyListState,
     navigationTreeData: State<List<Navigation>?>
 ) {
-    var count = navigationTreeData.value?.size ?: 0
-    var dataList = navigationTreeData.value
+    val count = navigationTreeData.value?.size ?: 0
+    val dataList = navigationTreeData.value
     LazyColumn(state = navigationState, content = {
+        if (count == 0) {
+            item {
+                Text(text = "暂无数据。。。", style = MaterialTheme.typography.h6.copy(Color.Black))
+            }
+            return@LazyColumn
+        }
         items(count = count) {
             val childItem = dataList?.get(it)?.articles
             val childName = dataList?.get(it)?.name
@@ -117,6 +127,12 @@ fun NavigationCardItemContent(
 fun SystemCardItemContent(systemState: LazyListState, data: State<List<MySystem>?>) {
     var count = data.value?.size ?: 0
     LazyColumn(state = systemState, content = {
+        if (count == 0) {
+            item {
+                Text(text = "暂无数据。。。", style = MaterialTheme.typography.h6.copy(Color.Black))
+            }
+            return@LazyColumn
+        }
         items(count = count) {
             val childItem = data.value?.get(it)?.children
             val childName = data.value?.get(it)?.name

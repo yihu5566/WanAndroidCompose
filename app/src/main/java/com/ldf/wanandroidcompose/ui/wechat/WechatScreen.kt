@@ -12,6 +12,7 @@ import com.ldf.wanandroidcompose.data.bean.Article
 import com.ldf.wanandroidcompose.ui.home.ArticleItem
 import com.ldf.wanandroidcompose.ui.project.ProjectSwipeRefreshList
 import com.ldf.wanandroidcompose.ui.theme.Nav
+import com.ldf.wanandroidcompose.ui.viewmodel.CollectViewModel
 import com.ldf.wanandroidcompose.ui.viewmodel.PublicNumViewModel
 import com.ldf.wanandroidcompose.ui.widget.SimpleCard
 
@@ -23,10 +24,10 @@ import com.ldf.wanandroidcompose.ui.widget.SimpleCard
 @Composable
 fun WechatScreen(navHostController: NavHostController) {
     val numViewModel: PublicNumViewModel = viewModel()
+    val collectViewModel: CollectViewModel = viewModel()
     val lazyPagingItems =
         numViewModel.wechatArticleListData.collectAsLazyPagingItems()
     val lazyListState = numViewModel.wechatLazyListState
-    val context = LocalContext.current
     //TopBar的Index改变
     LaunchedEffect(Nav.publicNumIndex.value) {
         if (Nav.publicNumIndex.value == numViewModel.saveChangeWechatIndex) return@LaunchedEffect
@@ -45,7 +46,7 @@ fun WechatScreen(navHostController: NavHostController) {
         lazyPagingItems
     ) { index: Int, data: Article ->
         SimpleCard {
-            ArticleItem(data) {
+            ArticleItem(data, collectViewModel) {
                 navHostController.navigate("${KeyNavigationRoute.WEBVIEW.route}?url=${data.link}")
             }
 
