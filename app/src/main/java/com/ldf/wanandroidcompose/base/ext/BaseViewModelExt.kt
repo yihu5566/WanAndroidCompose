@@ -1,9 +1,11 @@
 package com.ldf.wanandroidcompose.base.ext
 
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ldf.wanandroidcompose.base.BaseViewModel
 import com.ldf.wanandroidcompose.data.bean.ApiResponse
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 
@@ -60,5 +62,15 @@ suspend fun <T> BaseViewModel.handleRequest(
                 }
             }
         }
+    }
+}
+
+/**
+ * 开启一个IO线程，一段时间后执行代码
+ */
+fun ViewModel.sleepTime(millis: Long = 1500, block: () -> Unit) {
+    viewModelScope.launch(Dispatchers.IO) {
+        Thread.sleep(millis)
+        block()
     }
 }

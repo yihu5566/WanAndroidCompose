@@ -1,9 +1,8 @@
-package com.ldf.wanandroidcompose.ui.profile
+package com.ldf.wanandroidcompose.ui.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.blankj.utilcode.util.GsonUtils
-import com.blankj.utilcode.util.LogUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.ldf.wanandroidcompose.base.App
 import com.ldf.wanandroidcompose.base.BaseViewModel
@@ -12,7 +11,6 @@ import com.ldf.wanandroidcompose.base.ext.launch
 import com.ldf.wanandroidcompose.data.WanAndroidDataProvider
 import com.ldf.wanandroidcompose.data.bean.CoinInfo
 import com.ldf.wanandroidcompose.data.bean.User
-import com.ldf.wanandroidcompose.http.RetrofitManager
 import com.ldf.wanandroidcompose.utils.CommonConstant
 import com.ldf.wanandroidcompose.utils.LocalDataManage
 import kotlinx.coroutines.flow.map

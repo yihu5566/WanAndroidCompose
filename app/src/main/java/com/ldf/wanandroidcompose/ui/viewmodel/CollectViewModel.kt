@@ -1,16 +1,7 @@
 package com.ldf.wanandroidcompose.ui.viewmodel
 
-import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
-import androidx.paging.PagingData
-import androidx.paging.cachedIn
 import com.blankj.utilcode.util.GsonUtils
 import com.blankj.utilcode.util.LogUtils
 import com.blankj.utilcode.util.ToastUtils
@@ -19,14 +10,9 @@ import com.ldf.wanandroidcompose.base.BaseViewModel
 import com.ldf.wanandroidcompose.base.ext.handleRequest
 import com.ldf.wanandroidcompose.base.ext.launch
 import com.ldf.wanandroidcompose.data.WanAndroidDataProvider
-import com.ldf.wanandroidcompose.data.bean.Article
-import com.ldf.wanandroidcompose.data.bean.Banner
 import com.ldf.wanandroidcompose.data.bean.User
-import com.ldf.wanandroidcompose.ui.profile.LoginViewModel
 import com.ldf.wanandroidcompose.utils.CommonConstant
-import com.ldf.wanandroidcompose.utils.CommonPagingSource
 import com.ldf.wanandroidcompose.utils.LocalDataManage
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 /**

@@ -1,7 +1,6 @@
 package com.ldf.wanandroidcompose.ui.profile
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -20,7 +19,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.ldf.wanandroidcompose.data.bean.CoinInfo
-import com.ldf.wanandroidcompose.ui.project.ProjectSwipeRefreshList
+import com.ldf.wanandroidcompose.ui.project.SwipeRefreshList
 import com.ldf.wanandroidcompose.ui.viewmodel.IntegralRankListViewModel
 import com.ldf.wanandroidcompose.ui.widget.AppBar
 import com.ldf.wanandroidcompose.ui.widget.BaseScreen
@@ -38,7 +37,7 @@ fun IntegralRankScreen(navHostController: NavHostController) {
 
     BaseScreen {
         Scaffold(topBar = { AppBar(title = "积分排行") }) {
-            ProjectSwipeRefreshList(
+            SwipeRefreshList(
                 state = viewModel.integralRankLazyListState,
                 pagingItems = pagingItems
             ) { _, data ->

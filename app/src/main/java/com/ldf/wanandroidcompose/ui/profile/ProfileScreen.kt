@@ -16,29 +16,24 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import com.blankj.utilcode.util.LogUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.ldf.wanandroidcompose.KeyNavigationRoute
 import com.ldf.wanandroidcompose.R
 import com.ldf.wanandroidcompose.base.App
-import com.ldf.wanandroidcompose.utils.LocalDataManage
+import com.ldf.wanandroidcompose.ui.viewmodel.LoginViewModel
 
 /**
  * @Author : dongfang
@@ -101,6 +96,7 @@ fun BottomWidget(navHost: NavHostController, loginViewModel: LoginViewModel) {
                     ToastUtils.showLong("请先登录！！")
                     return@ProfileItem
                 }
+                navHost.navigate(KeyNavigationRoute.MY_SHARE_ARTICLES.route)
             }
             ProfileItem(painterResource(R.mipmap.ic_shezhi), "系统设置") {
                 navHost.navigate(KeyNavigationRoute.SETTING.route)

@@ -40,11 +40,10 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.blankj.utilcode.util.ToastUtils
 import com.ldf.wanandroidcompose.data.bean.Article
 import com.ldf.wanandroidcompose.data.bean.HotSearch
 import com.ldf.wanandroidcompose.ui.home.HotArticleItem
-import com.ldf.wanandroidcompose.ui.project.ProjectSwipeRefreshList
+import com.ldf.wanandroidcompose.ui.project.SwipeRefreshList
 import com.ldf.wanandroidcompose.ui.viewmodel.CollectViewModel
 import com.ldf.wanandroidcompose.ui.viewmodel.SearchViewModel
 import com.ldf.wanandroidcompose.ui.widget.AppBar
@@ -119,7 +118,7 @@ fun SearchComplete(
 ) {
     val pagingItems = searchViewModel.keySearchData.collectAsLazyPagingItems()
 
-    ProjectSwipeRefreshList(
+    SwipeRefreshList(
         searchViewModel.searchLazyListState,
         pagingItems
     ) { _: Int, data: Article ->

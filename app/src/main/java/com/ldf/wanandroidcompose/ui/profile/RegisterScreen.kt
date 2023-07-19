@@ -1,9 +1,7 @@
 package com.ldf.wanandroidcompose.ui.profile
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,15 +12,11 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
 import androidx.compose.material.Icon
-import androidx.compose.material.LocalContentAlpha
-import androidx.compose.material.LocalContentColor
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.OutlinedButton
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Chat
 import androidx.compose.material.icons.rounded.Password
 import androidx.compose.material.icons.rounded.People
 import androidx.compose.material.icons.rounded.RemoveRedEye
@@ -31,7 +25,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -52,9 +45,8 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.blankj.utilcode.util.LogUtils
-import com.google.accompanist.insets.statusBarsHeight
-import com.ldf.wanandroidcompose.KeyNavigationRoute
 import com.ldf.wanandroidcompose.R
+import com.ldf.wanandroidcompose.ui.viewmodel.LoginViewModel
 import com.ldf.wanandroidcompose.ui.widget.BaseScreen
 import com.ldf.wanandroidcompose.ui.widget.HorizontalDottedProgressBar
 import com.ldf.wanandroidcompose.ui.widget.lottie.LottieWorkingLoadingView

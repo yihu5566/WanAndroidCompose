@@ -27,7 +27,7 @@ import androidx.compose.ui.unit.dp
  * 无数据时候的布局
  */
 @Composable
-fun ErrorComposable(title: String = "网络不佳，请点击重试", block: () -> Unit) {
+fun Composable(title: String = "网络不佳，请点击重试", block: () -> Unit) {
 
     Column(
         modifier = Modifier

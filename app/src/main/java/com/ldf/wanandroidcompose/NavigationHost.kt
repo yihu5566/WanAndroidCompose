@@ -17,6 +17,7 @@ import com.ldf.wanandroidcompose.ui.home.HomeScreen
 import com.ldf.wanandroidcompose.ui.profile.IntegralRankScreen
 import com.ldf.wanandroidcompose.ui.profile.LoginScreen
 import com.ldf.wanandroidcompose.ui.profile.MyCollectScreen
+import com.ldf.wanandroidcompose.ui.profile.MyShareArticlesScreen
 import com.ldf.wanandroidcompose.ui.profile.ProfileScreen
 import com.ldf.wanandroidcompose.ui.profile.RegisterScreen
 import com.ldf.wanandroidcompose.ui.profile.SettingScreen
@@ -170,6 +171,15 @@ fun NavigationHost(
             StatsBarUtil().StatsBarColor(false)
 
             IntegralRankScreen(navHostController)
+
+            BackHandler { navHostController.navigateUp() }
+        }
+        //分享的文章页面
+        composable(route = KeyNavigationRoute.MY_SHARE_ARTICLES.route) {
+            //系统颜色的状态栏
+            StatsBarUtil().StatsBarColor(false)
+
+            MyShareArticlesScreen(navHostController)
 
             BackHandler { navHostController.navigateUp() }
         }

@@ -31,7 +31,7 @@ import androidx.navigation.NavHostController
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.ldf.wanandroidcompose.KeyNavigationRoute
 import com.ldf.wanandroidcompose.data.bean.CollectArticle
-import com.ldf.wanandroidcompose.ui.project.ProjectSwipeRefreshList
+import com.ldf.wanandroidcompose.ui.project.SwipeRefreshList
 import com.ldf.wanandroidcompose.ui.viewmodel.CollectListViewModel
 import com.ldf.wanandroidcompose.ui.viewmodel.CollectViewModel
 import com.ldf.wanandroidcompose.ui.widget.AppBar
@@ -65,7 +65,7 @@ fun MyCollectCompose(
 
     val pagingItems = viewModel.collectListData.collectAsLazyPagingItems()
 
-    ProjectSwipeRefreshList(
+    SwipeRefreshList(
         state = viewModel.collectLazyListState,
         pagingItems = pagingItems
     ) { _, data ->

@@ -2,7 +2,6 @@ package com.ldf.wanandroidcompose.ui.wechat
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.paging.compose.collectAsLazyPagingItems
@@ -10,7 +9,7 @@ import com.blankj.utilcode.util.LogUtils
 import com.ldf.wanandroidcompose.KeyNavigationRoute
 import com.ldf.wanandroidcompose.data.bean.Article
 import com.ldf.wanandroidcompose.ui.home.ArticleItem
-import com.ldf.wanandroidcompose.ui.project.ProjectSwipeRefreshList
+import com.ldf.wanandroidcompose.ui.project.SwipeRefreshList
 import com.ldf.wanandroidcompose.ui.theme.Nav
 import com.ldf.wanandroidcompose.ui.viewmodel.CollectViewModel
 import com.ldf.wanandroidcompose.ui.viewmodel.PublicNumViewModel
@@ -41,10 +40,10 @@ fun WechatScreen(navHostController: NavHostController) {
         }
     }
     // 列表数据
-    ProjectSwipeRefreshList(
+    SwipeRefreshList(
         lazyListState,
         lazyPagingItems
-    ) { index: Int, data: Article ->
+    ) { _: Int, data: Article ->
         SimpleCard {
             ArticleItem(data, collectViewModel) {
                 navHostController.navigate("${KeyNavigationRoute.WEBVIEW.route}?url=${data.link}")

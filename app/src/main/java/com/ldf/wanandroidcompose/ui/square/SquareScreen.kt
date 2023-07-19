@@ -22,7 +22,7 @@ import com.ldf.wanandroidcompose.data.bean.Article
 import com.ldf.wanandroidcompose.data.bean.MySystem
 import com.ldf.wanandroidcompose.data.bean.Navigation
 import com.ldf.wanandroidcompose.ui.home.ArticleItem
-import com.ldf.wanandroidcompose.ui.project.ProjectSwipeRefreshList
+import com.ldf.wanandroidcompose.ui.project.SwipeRefreshList
 import com.ldf.wanandroidcompose.ui.theme.Nav
 import com.ldf.wanandroidcompose.ui.viewmodel.CollectViewModel
 import com.ldf.wanandroidcompose.ui.viewmodel.SquareViewModel
@@ -47,7 +47,7 @@ fun SquareScreen(navHostController: NavHostController) {
 
     when (Nav.squareTopBarIndex.value) {
         0 -> {
-            ProjectSwipeRefreshList(
+            SwipeRefreshList(
                 squareViewModel.squareIndexState,
                 pagingItems = squareArticlePagingItems
             ) { index: Int, data: Article ->
@@ -60,7 +60,7 @@ fun SquareScreen(navHostController: NavHostController) {
         }
 
         1 -> {
-            ProjectSwipeRefreshList(
+            SwipeRefreshList(
                 squareViewModel.questionIndexState,
                 pagingItems = askArticlePagingItems
             ) { index: Int, data: Article ->

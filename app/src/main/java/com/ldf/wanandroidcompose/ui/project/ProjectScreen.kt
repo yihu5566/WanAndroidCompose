@@ -45,7 +45,7 @@ fun ProjectScreen(navHostController: NavHostController) {
         }
     }
     // 列表数据
-    ProjectSwipeRefreshList(
+    SwipeRefreshList(
         projectViewModel.projectLazyListState,
         projectListData
     ) { index: Int, data: Article ->
