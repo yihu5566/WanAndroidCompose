@@ -135,8 +135,9 @@ fun MainAppContent(
                 NavigationHost(appThemeState, navHostController, it, onFinish)
             }
         )
-    } else
+    } else {
         NavigationHost(appThemeState, navHostController = navHostController, onFinish = onFinish)
+    }
 }
 
 /**

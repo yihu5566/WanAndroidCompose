@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
@@ -14,6 +15,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
@@ -56,14 +59,21 @@ fun IntegralRankCompose(navHostController: NavHostController, modifier: Modifier
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(text = "${data.rank}.")
-            Text(text = data.username, modifier = Modifier.padding(start = 20.dp))
+            Text(
+                text = data.username, modifier = Modifier
+                    .padding(start = 20.dp)
+                    .fillMaxWidth(0.4f),
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+            )
             Text(text = " 积分：${data.coinCount}")
             Text(
                 modifier = Modifier
-                    .padding(10.dp)
+                    .padding(5.dp)
                     .clip(RoundedCornerShape(5.dp))
                     .background(color = MaterialTheme.colors.primary),
                 text = "LV：${data.level}",
+                maxLines = 1,
                 color = MaterialTheme.colors.onSecondary
             )
         }
