@@ -93,10 +93,12 @@ fun HomeScreenContent(
     val pagingItems = homeViewModel.homeListData.collectAsLazyPagingItems()
     Surface(modifier = modifier) {
         Column {
-            PrepareFirstPager(pagerState, itemList.value!!, selectedPage)
             SwipeRefreshList(
                 homeViewModel.homeLazyListState,
                 pagingItems, {
+                    item {
+                        PrepareFirstPager(pagerState, itemList.value!!, selectedPage)
+                    }
                     articleTopData.value?.let { it ->
                         items(it) {
                             HotArticleItem(it, navHostController, collectViewModel)

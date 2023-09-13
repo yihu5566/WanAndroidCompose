@@ -23,7 +23,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.ViewModel
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.itemsIndexed
@@ -32,7 +31,6 @@ import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.SwipeRefreshState
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.ldf.wanandroidcompose.R
-import com.ldf.wanandroidcompose.base.ext.sleepTime
 import java.util.Timer
 import kotlin.concurrent.timerTask
 
@@ -53,93 +51,101 @@ fun <T : Any> SwipeRefreshList(
     content: @Composable (index: Int, data: T) -> Unit
 ) {
     //刷新状态记录
-    val swipeableState = rememberSwipeRefreshState(false)
+    val refreshState = rememberSwipeRefreshState(false)
     Box(
         modifier = Modifier
             .padding(bottom = 6.dp, top = 6.dp)
             .padding(start = 8.dp, end = 8.dp)
     ) {
-        SwipeRefresh(state = swipeableState, onRefresh = {
-            swipeableState.isRefreshing = true
+        SwipeRefresh(state = refreshState, onRefresh = {
+            refreshState.isRefreshing = true
             pagingItems.refresh()
             LogUtils.d("下拉刷新拉")
             Timer().schedule(timerTask {
-                swipeableState.isRefreshing = false
+                refreshState.isRefreshing = false
             }, 3000)
         }) {
-            when (pagingItems.loadState.refresh) { //FIRST LOAD
-                //未加载且未观察到错误
-                is LoadState.NotLoading -> when (pagingItems.itemCount) {
-                    0 -> {
-                        ErrorComposable("暂无数据，请点击重试") {
-                            pagingItems.refresh()
-                        }
-                    }
-                }
-
-                is LoadState.Error -> {
-                    ErrorComposable {
-                        errorClick()
-                    }
-                }
-
-                is LoadState.Loading -> { // Loading UI
-                    LoadingCompose()
-                }
-
-                else -> {
-                    LazyColumn(state = state) {
-                        itemContent()
-                        itemsIndexed(pagingItems) { index, data ->
-                            content(index, data!!)
-                        }
+            pagingStateUtil(pagingItems, refreshState, errorClick) {
+                LazyColumn(state = state) {
+                    itemContent()
+                    itemsIndexed(pagingItems) { index, data ->
+                        content(index, data!!)
                     }
                 }
             }
-            when (pagingItems.loadState.append) { // Pagination
-                is LoadState.Error -> {
-                    ErrorComposable {
-                        errorClick()
-                    }
-                }
-
-                is LoadState.Loading -> { // Pagination Loading UI
-                    LoadingCompose()
-                }
-
-                else -> {
-                    LazyColumn(state = state) {
-                        itemContent()
-                        itemsIndexed(pagingItems) { index, data ->
-                            content(index, data!!)
-                        }
-                    }
-                }
-            }
-
         }
+    }
+}
+
+@Composable
+fun <T : Any> pagingStateUtil(
+    //paging数据
+    pagingItems: LazyPagingItems<T>,
+    //刷新状态
+    refreshState: SwipeRefreshState,
+    errorClick: () -> Unit = {},
+    content: @Composable () -> Unit
+) {
+
+    when (pagingItems.loadState.refresh) { //FIRST LOAD
+        //未加载且未观察到错误
+        is LoadState.NotLoading -> NotLoading(refreshState) {
+            when (pagingItems.itemCount) {
+                0 -> {
+                    ErrorComposable("暂无数据，请点击重试") {
+                        pagingItems.refresh()
+                    }
+                }
+
+                else -> content()
+            }
+        }
+
+        is LoadState.Error -> {
+            ErrorComposable {
+                errorClick()
+            }
+        }
+
+        is LoadState.Loading -> { // Loading UI
+            LoadingCompose()
+        }
+    }
+    when (pagingItems.loadState.append) { // Pagination
+        is LoadState.Error -> {
+            ErrorComposable {
+                errorClick()
+            }
+        }
+
+        is LoadState.Loading -> { // Pagination Loading UI
+            LoadingCompose()
+        }
+
+
+        else -> {}
     }
 }
 
 @Composable
 private fun NotLoading(
     refreshState: SwipeRefreshState,
-    viewModel: ViewModel,
     content: @Composable () -> Unit
 ) {
 
     content()
 
     //让刷新头停留一下子再收回去
-    viewModel.sleepTime {
+    Timer().schedule(timerTask {
         refreshState.isRefreshing = false
-    }
+    }, 3000)
 }
 
 @Composable
 private fun LoadingCompose() {
     Column(
         modifier = Modifier
+            .background(MaterialTheme.colors.background)
             .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,

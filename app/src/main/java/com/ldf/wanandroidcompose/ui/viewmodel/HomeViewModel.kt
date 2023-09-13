@@ -70,7 +70,7 @@ class HomeViewModel : BaseViewModel() {
     fun fetchTopArticleList() {
         launch({
             handleRequest(WanAndroidDataProvider.getArticleTopList(), {
-                _articleTopList.postValue(it.data)
+                _articleTopList.value = it.data
             })
         })
     }

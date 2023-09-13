@@ -4,7 +4,6 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.blankj.utilcode.util.LogUtils
 import com.ldf.wanandroidcompose.data.bean.PageResponse
-import java.lang.Exception
 
 /**
  * @Author : dongfang
@@ -13,12 +12,7 @@ import java.lang.Exception
  */
 class CommonPagingSource<T : Any>(private val block: suspend (nextPage: Int) -> PageResponse<T>) :
     PagingSource<Int, T>() {
-    override fun getRefreshKey(state: PagingState<Int, T>): Int? {
-        return state.anchorPosition?.let { anchorPosition ->
-            state.closestPageToPosition(anchorPosition)?.prevKey?.plus(1)
-                ?: state.closestPageToPosition(anchorPosition)?.nextKey?.minus(1)
-        }
-    }
+    override fun getRefreshKey(state: PagingState<Int, T>): Int? = null
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, T> {
         return try {
@@ -30,7 +24,7 @@ class CommonPagingSource<T : Any>(private val block: suspend (nextPage: Int) -> 
             LoadResult.Page(
                 data = response.datas,
                 //前一页页码
-                prevKey = if (nextPage == 0) null else nextPage - 1,
+                prevKey = if (nextPage > 1) nextPage - 1 else null,
                 //后一页页码
                 nextKey = if (nextPage < response.pageCount) nextPage + 1 else null
             )
