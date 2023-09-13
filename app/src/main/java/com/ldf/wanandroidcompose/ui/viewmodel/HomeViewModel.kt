@@ -1,7 +1,6 @@
 package com.ldf.wanandroidcompose.ui.viewmodel
 
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -28,7 +27,7 @@ import kotlinx.coroutines.flow.Flow
 class HomeViewModel : BaseViewModel() {
     companion object {
         /** 每页显示的条目大小 */
-        const val PAGE_SIZE = 10
+        const val PAGE_SIZE = 20
     }
 
     //首页列表状态
@@ -54,7 +53,6 @@ class HomeViewModel : BaseViewModel() {
         get() = _articleTopList
 
     override fun start() {
-        fetchBanners()
     }
 
     /** 请求首页轮播图 */

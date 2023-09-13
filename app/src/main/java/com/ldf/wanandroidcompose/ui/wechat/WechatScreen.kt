@@ -48,7 +48,6 @@ fun WechatScreen(navHostController: NavHostController) {
             ArticleItem(data, collectViewModel) {
                 navHostController.navigate("${KeyNavigationRoute.WEBVIEW.route}?url=${data.link}")
             }
-
         }
     }
 }

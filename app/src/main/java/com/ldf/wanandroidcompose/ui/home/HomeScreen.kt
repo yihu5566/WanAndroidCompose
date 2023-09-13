@@ -25,8 +25,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
@@ -45,7 +43,6 @@ import com.ldf.wanandroidcompose.ui.viewmodel.HomeViewModel
 import com.ldf.wanandroidcompose.ui.widget.SimpleCard
 import com.ldf.wanandroidcompose.ui.widget.carousel.CarouselDot
 import com.ldf.wanandroidcompose.ui.widget.carousel.Pager
-import com.ldf.wanandroidcompose.utils.TestTags
 
 
 /**
@@ -63,7 +60,8 @@ fun HomeScreen(
     val collectViewModel: CollectViewModel = viewModel()
     //获取轮播图
     homeViewModel.fetchBanners()
-    Scaffold(modifier = Modifier.testTag(TestTags.HOME_SCREEN_ROOT),
+    homeViewModel.fetchTopArticleList()
+    Scaffold(modifier = Modifier.fillMaxWidth(),
         content = { paddingValues ->
             HomeScreenContent(
                 modifier = Modifier.padding(paddingValues),
@@ -83,7 +81,6 @@ fun HomeScreenContent(
 ) {
     var itemList = homeViewModel.bannerListLiveData.observeAsState()
     LogUtils.d("banner列表数据" + itemList.value?.size)
-    val screenWidth = LocalConfiguration.current.screenWidthDp
     if (itemList.value?.size == 0) {
         return
     }
@@ -91,7 +88,6 @@ fun HomeScreenContent(
         remember { PagerState(1, 0, itemList.value?.size!! - 1) }
     }
     val selectedPage = remember { mutableStateOf(2) }
-    homeViewModel.fetchTopArticleList()
     val articleTopData = homeViewModel.articleTopList.observeAsState()
     //列表数据
     val pagingItems = homeViewModel.homeListData.collectAsLazyPagingItems()

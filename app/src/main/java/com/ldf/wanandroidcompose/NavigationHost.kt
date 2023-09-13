@@ -11,7 +11,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.navArgument
+import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import com.ldf.wanandroidcompose.ui.home.HomeScreen
 import com.ldf.wanandroidcompose.ui.profile.IntegralRankScreen
