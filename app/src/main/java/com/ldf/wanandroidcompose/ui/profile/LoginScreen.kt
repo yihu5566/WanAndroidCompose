@@ -54,6 +54,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.blankj.utilcode.util.LogUtils
 import com.ldf.wanandroidcompose.KeyNavigationRoute
+import com.ldf.wanandroidcompose.base.App
 import com.ldf.wanandroidcompose.ui.viewmodel.LoginViewModel
 import com.ldf.wanandroidcompose.ui.widget.BaseScreen
 import com.ldf.wanandroidcompose.ui.widget.HorizontalDottedProgressBar
@@ -192,6 +193,9 @@ fun LoginScreen(controller: NavHostController) {
                         onClick = {
                             loginWanAndroid(userName.text, password.text, viewModel) { isLoading ->
                                 loading = isLoading
+                                if (App.appViewModel.userEvent.value != null) {
+                                    controller.navigateUp()
+                                }
                             }
                         },
                         modifier = Modifier

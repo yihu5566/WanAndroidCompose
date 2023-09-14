@@ -32,13 +32,6 @@ class LoginViewModel : BaseViewModel() {
         get() = _userData
 
     override fun start() {
-        launch({
-            LocalDataManage.getData(CommonConstant.USER, "").map {
-                val user = GsonUtils.fromJson(it, User::class.java)
-                _userData.postValue(user)
-                App.appViewModel.userEvent.postValue(user)
-            }
-        })
     }
 
     fun userLogin(userName: String, pwd: String, successCall: () -> Unit) {
@@ -54,10 +47,6 @@ class LoginViewModel : BaseViewModel() {
                 LocalDataManage.saveStringData(CommonConstant.USER, GsonUtils.toJson(it.data))
                 App.appViewModel.userEvent.value = it.data
                 successCall.invoke()
-            }, errorBlock = {
-//                successCall.invoke()
-                ToastUtils.showLong(it.errorMsg)
-                false
             })
         })
     }
@@ -66,6 +55,9 @@ class LoginViewModel : BaseViewModel() {
         launch({
             handleRequest(WanAndroidDataProvider.getUserIntegral(), successBlock = {
                 _userIntegralData.postValue(it.data)
+            }, {
+                _userIntegralData.postValue(null)
+                false
             })
         })
     }

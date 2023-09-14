@@ -62,6 +62,47 @@ fun ProfileScreen(navHost: NavHostController) {
 }
 
 @Composable
+fun TopWidget(navHost: NavHostController, loginViewModel: LoginViewModel) {
+    val infoState = loginViewModel.userIntegralData.observeAsState()
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 20.dp, bottom = 60.dp)
+            .height(80.dp)
+            .clickable {
+                if (infoState.value == null) {
+                    navHost.navigate(KeyNavigationRoute.LOGIN.route)
+                }
+            }
+    ) {
+        Surface(
+            shape = CircleShape,
+            modifier = Modifier.size(80.dp)
+        ) {
+            Image(painterResource(R.mipmap.ic_account), contentDescription = null)
+        }
+        Column(
+            modifier = Modifier
+                .padding(start = 20.dp)
+                .weight(1f)
+                .fillMaxHeight(),
+            verticalArrangement = Arrangement.SpaceEvenly
+        ) {
+            Text(
+                infoState.value?.username ?: "请登录",
+                fontWeight = FontWeight.Bold,
+                fontSize = 20.sp
+            )
+            Row {
+                Text(text = "id:${infoState.value?.userId ?: ""}")
+                Spacer(modifier = Modifier.width(10.dp))
+                Text(text = "排名:${infoState.value?.rank ?: ""}")
+            }
+        }
+    }
+}
+
+@Composable
 fun BottomWidget(navHost: NavHostController, loginViewModel: LoginViewModel) {
     Surface(
         color = MaterialTheme.colors.background,
@@ -106,45 +147,4 @@ fun BottomWidget(navHost: NavHostController, loginViewModel: LoginViewModel) {
 
 }
 
-@Composable
-fun TopWidget(navHost: NavHostController, loginViewModel: LoginViewModel) {
-    val user = loginViewModel.userData.observeAsState()
-    val observeAsState = loginViewModel.userIntegralData.observeAsState()
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(start = 20.dp, bottom = 60.dp)
-            .height(80.dp)
-            .clickable {
-                if (user.value == null) {
-                    navHost.navigate(KeyNavigationRoute.LOGIN.route)
-                }
-            }
-    ) {
-        Surface(
-            shape = CircleShape,
-            modifier = Modifier.size(80.dp)
-        ) {
-            Image(painterResource(R.mipmap.ic_account), contentDescription = null)
-        }
-        Column(
-            modifier = Modifier
-                .padding(start = 20.dp)
-                .weight(1f)
-                .fillMaxHeight(),
-            verticalArrangement = Arrangement.SpaceEvenly
-        ) {
-            Text(
-                observeAsState.value?.username ?: "请登录",
-                fontWeight = FontWeight.Bold,
-                fontSize = 20.sp
-            )
-            Row {
-                Text(text = "id:${observeAsState.value?.userId ?: ""}")
-                Spacer(modifier = Modifier.width(10.dp))
-                Text(text = "排名:${observeAsState.value?.rank ?: ""}")
-            }
-        }
-    }
-}
 

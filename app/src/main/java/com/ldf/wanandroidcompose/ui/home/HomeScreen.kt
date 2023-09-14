@@ -79,7 +79,7 @@ fun HomeScreenContent(
     navHostController: NavHostController,
     collectViewModel: CollectViewModel
 ) {
-    var itemList = homeViewModel.bannerListLiveData.observeAsState()
+    val itemList = homeViewModel.bannerListLiveData.observeAsState()
     LogUtils.d("banner列表数据" + itemList.value?.size)
     if (itemList.value?.size == 0) {
         return

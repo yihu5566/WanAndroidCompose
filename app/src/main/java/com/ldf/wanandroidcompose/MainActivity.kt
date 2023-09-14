@@ -17,9 +17,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.view.WindowCompat
+import androidx.lifecycle.Observer
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.blankj.utilcode.util.ToastUtils
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.insets.navigationBarsHeight
 import com.google.accompanist.insets.statusBarsHeight
@@ -30,6 +32,7 @@ import com.ldf.wanandroidcompose.ui.theme.ColorPallet
 import com.ldf.wanandroidcompose.ui.theme.Nav
 import com.ldf.wanandroidcompose.ui.theme.SystemUiController
 import com.ldf.wanandroidcompose.ui.theme.WanAndroidComposeTheme
+import com.ldf.wanandroidcompose.ui.viewmodel.MainViewModel
 import com.ldf.wanandroidcompose.utils.CommonConstant
 import com.ldf.wanandroidcompose.utils.LocalDataManage
 
@@ -37,12 +40,15 @@ class MainActivity : ComponentActivity() {
     private val themeName =
         LocalDataManage.getSyncData(CommonConstant.THEME, ColorPallet.GREEN.name)
     private val themeSelect = mutableStateOf(AppThemeState())
+    val viewModel: MainViewModel by lazy { MainViewModel() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val switchTheme = switchTheme(themeName)
         themeSelect.value.pallet = switchTheme
-
+        viewModel.errorResponse.observe(this) {
+            ToastUtils.showLong(it?.errorMsg)
+        }
         setContent {
             //设置为沉浸式状态栏
             WindowCompat.setDecorFitsSystemWindows(window, false)
@@ -63,7 +69,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    fun switchTheme(themeName: String): ColorPallet {
+    private fun switchTheme(themeName: String): ColorPallet {
         var saveTheme: ColorPallet
         when (themeName) {
             ColorPallet.PURPLE.name -> {
