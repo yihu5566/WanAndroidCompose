@@ -11,5 +11,6 @@
     <string name="cd_dark_theme">黑暗主题</string>
     <string name="cd_change_color">变更主题色</string>
     <string name="register">注册</string>
+    <string name="app_widget_description">wan android glance</string>
 
 </resources>

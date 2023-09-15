@@ -34,7 +34,7 @@ class HomeViewModel : BaseViewModel() {
     val homeLazyListState: LazyListState = LazyListState()
 
     /** Banner列表 */
-    val bannerListLiveData = MutableLiveData<List<Banner>>(mutableListOf())
+    val bannerListLiveData = MutableLiveData<List<Banner>?>(mutableListOf())
 
     //首页列表
     val homeListData: Flow<PagingData<Article>>
@@ -48,8 +48,8 @@ class HomeViewModel : BaseViewModel() {
 
 
     //置顶文章列表数据
-    private val _articleTopList = MutableLiveData<List<Article>>()
-    val articleTopList: LiveData<List<Article>>
+    private val _articleTopList = MutableLiveData<List<Article>?>()
+    val articleTopList: MutableLiveData<List<Article>?>
         get() = _articleTopList
 
     override fun start() {

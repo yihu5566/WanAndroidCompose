@@ -15,7 +15,7 @@ import kotlin.properties.Delegates
  */
 class App : Application(), ViewModelStoreOwner {
 
-    private lateinit var mAppViewModelStore: ViewModelStore
+    override lateinit var viewModelStore: ViewModelStore
     private var mFactory: ViewModelProvider.Factory? = null
 
     companion object {
@@ -28,8 +28,8 @@ class App : Application(), ViewModelStoreOwner {
     override fun onCreate() {
         super.onCreate()
         appContext = applicationContext
-        mAppViewModelStore = ViewModelStore()
-        appViewModel = getAppViewModelProvider().get(AppViewModel::class.java)
+        viewModelStore = ViewModelStore()
+        appViewModel = getAppViewModelProvider()[AppViewModel::class.java]
         LocalDataManage.init(appContext)
     }
 
@@ -43,9 +43,5 @@ class App : Application(), ViewModelStoreOwner {
             mFactory = ViewModelProvider.AndroidViewModelFactory.getInstance(this)
         }
         return mFactory as ViewModelProvider.Factory
-    }
-
-    override fun getViewModelStore(): ViewModelStore {
-        return mAppViewModelStore
     }
 }
